@@ -2,6 +2,7 @@ import firebase from "firebase/app"
 import "firebase/analytics"
 import "firebase/auth"
 import "firebase/firestore"
+import { doc } from "prettier"
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxbnsUNTG2SYqUsC2QqIbBo1OLuKXeZ-g",
@@ -19,44 +20,38 @@ firebase.initializeApp(firebaseConfig)
 
 //abbreviation
 var db = firebase.firestore()
+const defaultID = "aJyjoGPEIH69isQ7QfYs"
 
 //////library//////
-export const test = () => {
-  getUserInfo("test").then(p)
-}
 
-export const update = (data) => {
-  db.collection("test").doc("2eddU3pn48Llu7Ji60Nz").update({
-    content: data,
-  })
+export const update = (collection, doc, fileds) => {
+  let docRef = db.collection(collection).doc(doc)
+
+  return docRef
+    .update(fileds)
+    .then(function () {
+      console.log("Document successfully updated!")
+    })
+    .then(docRef.update({ onChange: "" }))
+    .catch(function (error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error)
+    })
 }
 
 export const listenToData = (callback) => {
-  db.collection("test").onSnapshot(function (snapshot) {
-    snapshot.docChanges().forEach(function (change) {
-      if (change.type === "modified") {
-        let data = change.doc.data()
-        callback(data.content)
-        // if (data.receiver === defalutUser) {
-        //   searchInDb("users", "user_id", data.sender).then((users) => {
-        //     let user = users[0];
-        //     console.log(`${user.name} 對您傳送了交友邀請`);
-        //     displayRequest(user, change.doc.id);
-        //   });
-        // }
-      }
+  db.collection("test")
+    .doc("2eddU3pn48Llu7Ji60Nz")
+    .onSnapshot(function (doc) {
+      var source = doc.metadata.hasPendingWrites ? "Local" : "Server"
+      let data = doc.data()
+      callback(data)
     })
-  })
 }
 
-// db.collection("test")
-//   .add(data)
-//   .then(function (docRef) {
-//     docRef.update({
-//       id: docRef.id,
-//     })
-//     console.log("已經發出貼文:" + data)
-//   })
+export const test = () => {
+  getUserInfo("test").then(p)
+}
 
 export const getUserInfo = (email) => {
   return searchInDb("users", "email", "==", email).then((user) => {

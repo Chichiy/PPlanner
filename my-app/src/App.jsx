@@ -1,19 +1,20 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import logo from "./logo.svg"
 import { Counter } from "./features/counter/Counter"
 import styles from "./App.module.scss"
 import { test, update, listenToData } from "./firebase/Config"
 
 function App() {
-  const [content, setContent] = useState("")
+  const [data, setData] = useState({})
+  const [userId, setUserId] = useState("aJyjoGPEIH69isQ7QfYs")
 
-  // let data = {
-  //   title: "title",
-  //   content: content,
-  //   // created_time: firebase.firestore.FieldValue.serverTimestamp(),
-  // }
+  function switchUser(target) {
+    setUserId(target.value)
+  }
 
-  listenToData(setContent)
+  useEffect(() => {
+    listenToData(setData)
+  }, [])
 
   return (
     <div>
@@ -23,11 +24,36 @@ function App() {
         cols="30"
         rows="10"
         onChange={(e) => {
-          // setContent(e.target.value)
-          update(e.target.value)
+          if (!data.onChange || data.onChange === userId) {
+            update("test", "2eddU3pn48Llu7Ji60Nz", {
+              content: e.target.value,
+              onChange: userId,
+            })
+          } else {
+            console.log(`其他使用者${data.onChange}正在編輯`)
+          }
         }}
-        value={content}
+        value={data.content}
       ></textarea>
+      <br />
+
+      <input
+        type="radio"
+        name="tag"
+        value="aJyjoGPEIH69isQ7QfYs"
+        defaultChecked
+        onChange={(e) => switchUser(e.target)}
+      />
+      <label>test</label>
+      <input
+        type="radio"
+        name="tag"
+        value="jFz7tkCgR2bTkzHJd1jU"
+        onChange={(e) => switchUser(e.target)}
+      />
+      <label>tset2</label>
+      <br />
+
       <button onClick={test}>click</button>
     </div>
   )
