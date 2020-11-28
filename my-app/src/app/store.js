@@ -1,8 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
-import counterReducer from "../features/counter/counterSlice"
+
+import itineraryReducer from "../pages/Project/feature/itineraryBoard/itinerarySlice"
+import dayplanReducer from "../pages/Project/feature/itineraryBoard/dayplanSlice"
+import cardReducer from "../pages/Project/feature/CardBoard/cardSlice"
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
+    itinerary: itineraryReducer,
+    dayplans: dayplanReducer,
+    cards: cardReducer,
   },
 })

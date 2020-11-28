@@ -1,0 +1,166 @@
+@import "const.module.scss";
+
+.view {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.navBar {
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  background-color: $white;
+  border-bottom: 2px solid $gray;
+}
+
+.cardList {
+  width: 20%;
+  height: auto;
+  padding-top: 50px;
+  background-color: $white;
+  border-right: 2px solid $gray;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+
+  .card {
+    width: 80%;
+    height: 150px;
+    margin: 20px 0;
+    border-radius: 5px;
+    border: 2px solid $gray;
+    background-color: $white;
+    text-align: center;
+    line-height: 150px;
+  }
+}
+
+.itineraryBoard {
+  flex: auto;
+  padding-top: 50px;
+  background-color: $white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    width: 90%;
+    height: 90%;
+    border-radius: 5px;
+    border: 2px solid $gray;
+
+    text-align: center;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    grid-template-columns: 200px 1fr 1fr;
+    grid-template-rows: 10% 25% 25% 25% 15%;
+    grid-template-areas:
+      "year date_1 date_2 "
+      "morning  dayplan_1 dayplan_2 "
+      "afternoon dayplan_1 dayplan_2 "
+      "evening dayplan_1 dayplan_2 "
+      "hotel dayplan_1 dayplan_2 ";
+
+    //shared css
+    .centralizeItems {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .border_bottom {
+      border-bottom: 2px solid $gray;
+    }
+
+    .border_bottom_thin {
+      border-bottom: 1px solid $gray;
+    }
+
+    .border_right {
+      border-right: 2px solid $gray;
+    }
+
+    .dayplan_container {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 27.78% 27.78% 27.78% 16.66%;
+      background-color: $white;
+
+      // div {
+      //   width: 90%;
+      //   height: 90%;
+      //   border-radius: 5px;
+      //   border: 2px solid $gray;
+      //   background-color: $white;
+      //   @extend .centralizeItems;
+
+      .card {
+        width: 90%;
+        height: 90%;
+        border-radius: 5px;
+        border: 2px solid $gray;
+        background-color: $white;
+        justify-self: center;
+        align-self: center;
+        @extend .centralizeItems;
+      }
+      // }
+    }
+
+    //each items
+    .year {
+      grid-area: year;
+      background-color: $white;
+      @extend .border_bottom;
+      @extend .centralizeItems;
+    }
+    .morning {
+      grid-area: morning;
+      background-color: $white;
+      @extend .border_right;
+      @extend .centralizeItems;
+    }
+    .afternoon {
+      grid-area: afternoon;
+      background-color: $white;
+      @extend .border_right;
+      @extend .centralizeItems;
+    }
+    .evening {
+      grid-area: evening;
+      background-color: $white;
+      @extend .border_right;
+      @extend .centralizeItems;
+    }
+    .hotel {
+      grid-area: hotel;
+      background-color: $white;
+      @extend .border_right;
+      @extend .centralizeItems;
+    }
+    .date_1 {
+      grid-area: date_1;
+      background-color: $white;
+      @extend .border_bottom;
+      @extend .centralizeItems;
+    }
+    .date_2 {
+      grid-area: date_2;
+      @extend .border_bottom;
+      @extend .centralizeItems;
+    }
+    .dayplan_1 {
+      grid-area: dayplan_1;
+      @extend .dayplan_container;
+    }
+    .dayplan_2 {
+      grid-area: dayplan_2;
+      background-color: $white;
+      @extend .dayplan_container;
+    }
+  }
+}

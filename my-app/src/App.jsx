@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import logo from "./logo.svg"
 import { Counter } from "./features/counter/Counter"
 import styles from "./App.module.scss"
+
+import CardsList from "./pages/Project/component/CardsList"
 import { test, update, listenToData } from "./firebase/Config"
 
 function App() {
@@ -12,6 +14,7 @@ function App() {
     setUserId(target.value)
   }
 
+  //註冊一次監聽事件
   useEffect(() => {
     listenToData(setData)
   }, [])

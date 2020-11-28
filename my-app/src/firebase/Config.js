@@ -22,6 +22,8 @@ firebase.initializeApp(firebaseConfig)
 var db = firebase.firestore()
 const defaultID = "aJyjoGPEIH69isQ7QfYs"
 
+export const toDate = firebase.firestore.Timestamp.toDate
+
 //////library//////
 
 export const update = (collection, doc, fileds) => {
@@ -49,18 +51,44 @@ export const listenToData = (callback) => {
     })
 }
 
-export const test = () => {
-  getUserInfo("test").then(p)
+export const listenToCards = (callback) => {
+  db.collection("test")
+    .doc("2eddU3pn48Llu7Ji60Nz")
+    .onSnapshot(function (doc) {
+      var source = doc.metadata.hasPendingWrites ? "Local" : "Server"
+      let data = doc.data()
+      callback(data)
+    })
 }
 
-export const getUserInfo = (email) => {
-  return searchInDb("users", "email", "==", email).then((user) => {
-    return user
-  })
+export function getFsData_Cards(project_id, field, operators, value) {
+  return db
+    .collection("projects")
+    .doc(project_id)
+    .collection("cards")
+    .get()
+    .then(function (querySnapshot) {
+      let sigle,
+        counter = 0
+      let multi = []
+
+      querySnapshot.forEach(function (doc, index) {
+        sigle = doc.data()
+        multi.push(doc.data())
+        counter++
+      })
+
+      if (counter === 1) return sigle
+
+      return multi
+    })
+    .catch(function (error) {
+      console.log("Error getting documents: ", error)
+    })
 }
 
 //////basic functions//////
-function searchInDb(collection, field, operators, value) {
+export function getFsData(collection, field, operators, value) {
   return db
     .collection(collection)
     .where(field, operators, value)
