@@ -5,6 +5,7 @@
   height: 100vh;
   display: flex;
   flex-wrap: wrap;
+  flex: none;
 }
 
 .navBar {
@@ -17,14 +18,16 @@
 
 .cardList {
   width: 20%;
-  height: auto;
+  height: 100vh;
   padding-top: 50px;
+  box-sizing: border-box;
   background-color: $white;
   border-right: 2px solid $gray;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
+  overflow-y: scroll;
 
   .card {
     width: 80%;

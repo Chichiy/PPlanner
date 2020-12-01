@@ -1,0 +1,9 @@
+@import "../../scss/const.module.scss";
+
+.navBar {
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  background-color: $white;
+  border-bottom: 2px solid $gray;
+}

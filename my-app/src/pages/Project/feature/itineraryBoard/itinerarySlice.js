@@ -5,7 +5,7 @@ export const itinerarySlice = createSlice({
   name: "itinerary",
   initialState: {
     id: "MEvVXSW1Yxkz154mO8lL",
-    dayplans: ["6L0IuaOA29LoND2Q5wEB", "yFztnnBH32FlYhGOKnLf"],
+    dayplans: ["6L0IuaOA29LoND2Q5wEB", "quS9GhoumMnSIQc8yDd0"],
   },
   reducers: {
     getItinerary: (state, action) => {

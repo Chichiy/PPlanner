@@ -41,17 +41,45 @@ export const update = (collection, doc, fileds) => {
     })
 }
 
-export const listenToData = (callback) => {
-  db.collection("test")
-    .doc("2eddU3pn48Llu7Ji60Nz")
-    .onSnapshot(function (doc) {
-      var source = doc.metadata.hasPendingWrites ? "Local" : "Server"
-      let data = doc.data()
-      callback(data)
-    })
+export const updateCards = (projectId, cardId, changes) => {
+  let docRef = db
+    .collection("project")
+    .doc(projectId)
+    .collection("cards")
+    .doc(cardId)
+
+  return (
+    docRef
+      .update(changes)
+      .then(function () {
+        console.log("Document successfully updated!")
+      })
+      // .then(docRef.update({ onChange: "" }))
+      .catch(function (error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error)
+      })
+  )
 }
 
-export const listenToCards = (callback) => {
+export const updateSchedule = (dayplanId, changes) => {
+  let docRef = db.collection("dayplans").doc(dayplanId)
+
+  return (
+    docRef
+      .update({ schedule: changes })
+      .then(function () {
+        console.log("Document successfully updated!")
+      })
+      // .then(docRef.update({ onChange: "" }))
+      .catch(function (error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error)
+      })
+  )
+}
+
+export const listenToData_Cards = (callback) => {
   db.collection("test")
     .doc("2eddU3pn48Llu7Ji60Nz")
     .onSnapshot(function (doc) {
@@ -87,10 +115,44 @@ export function getFsData_Cards(project_id, field, operators, value) {
     })
 }
 
+export const listenToData = (callback) => {
+  db.collection("test")
+    .doc("2eddU3pn48Llu7Ji60Nz")
+    .onSnapshot(function (doc) {
+      var source = doc.metadata.hasPendingWrites ? "Local" : "Server"
+      let data = doc.data()
+      callback(data)
+    })
+}
+
 //////basic functions//////
 export function getFsData(collection, field, operators, value) {
   return db
     .collection(collection)
+    .where(field, operators, value)
+    .get()
+    .then(function (querySnapshot) {
+      let sigle,
+        counter = 0
+      let multi = []
+
+      querySnapshot.forEach(function (doc, index) {
+        sigle = doc.data()
+        multi.push(doc.data())
+        counter++
+      })
+
+      if (counter === 1) return sigle
+
+      return multi
+    })
+    .catch(function (error) {
+      console.log("Error getting documents: ", error)
+    })
+}
+
+export function getFsData2(collection, field, operators, value) {
+  db.collection(collection)
     .where(field, operators, value)
     .get()
     .then(function (querySnapshot) {
