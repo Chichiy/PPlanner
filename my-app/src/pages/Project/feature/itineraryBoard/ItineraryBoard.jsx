@@ -1,6 +1,14 @@
 //tools
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom"
 import { DragDropContext } from "react-beautiful-dnd"
 
 //components and scss
@@ -16,6 +24,10 @@ import { initCards } from "../CardBoard/cardSlice"
 import { OnDragEnd } from "./itineraryBoardLib"
 
 const ItineraryBoard = () => {
+  let { itineraryId } = useParams()
+
+  // console.log(itineraryId)
+
   //needed state
   const itinerary = useSelector((state) => state.itinerary)
   // const dayplans = useSelector((state) => state.dayplans)

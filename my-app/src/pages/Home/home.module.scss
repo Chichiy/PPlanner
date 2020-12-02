@@ -1,0 +1,36 @@
+@import "../../scss/const.module.scss";
+
+.view {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  .banner {
+    font-size: 40px;
+    text-align: center;
+    line-height: 70px;
+  }
+
+  .button {
+    padding: 2px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: $black;
+  }
+
+  .button_border {
+    @extend .button;
+    background-color: $main;
+    color: $white;
+    font-size: smaller;
+  }
+
+  .button_border:hover {
+    background-color: $main_lighter;
+  }
+}

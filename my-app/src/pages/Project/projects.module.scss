@@ -1,0 +1,75 @@
+@import "../../scss/const.module.scss";
+
+.view {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex: none;
+  justify-content: center;
+
+  .container {
+    margin-top: 200px;
+    max-width: 1000px;
+    width: 80%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .project {
+    width: 250px;
+    height: 350px;
+    padding: 20px;
+    margin: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 2px solid $gray;
+  }
+
+  .project:hover {
+    box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray_lighter;
+  }
+
+  .projectTitle {
+    font-weight: bold;
+    font-size: 28px;
+  }
+
+  .addProject {
+    @extend .project;
+    border: 2px solid $gray_lighter;
+
+    .projectTitle {
+      color: $gray_lighter;
+      font-weight: bold;
+      font-size: 28px;
+    }
+  }
+
+  .addProject:hover {
+    .projectTitle {
+      color: $gray;
+    }
+  }
+
+  // .button {
+  //   padding: 2px 20px;
+  //   border-radius: 5px;
+  //   text-decoration: none;
+  //   color: $black;
+  // }
+
+  // .button_border {
+  //   @extend .button;
+  //   background-color: $main;
+  //   color: $white;
+  //   font-size: smaller;
+  // }
+
+  // .button_border:hover {
+  //   background-color: $main_lighter;
+  // }
+}

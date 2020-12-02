@@ -1,0 +1,56 @@
+@import "../../scss/const.module.scss";
+
+.container {
+  max-width: 1000px;
+  width: 80%;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+
+  ul {
+    flex: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    text-align: center;
+
+    a {
+      width: 300px;
+      height: 300px;
+
+      margin: 20px;
+      line-height: 300px;
+      display: block;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 2px solid $gray;
+      align-self: center;
+      justify-self: center;
+    }
+
+    .li:hover {
+      box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray_lighter;
+    }
+  }
+}
+
+// .button {
+//   padding: 2px 20px;
+//   border-radius: 5px;
+//   text-decoration: none;
+//   color: $black;
+// }
+
+// .button_border {
+//   @extend .button;
+//   background-color: $main;
+//   color: $white;
+//   font-size: smaller;
+// }
+
+// .button_border:hover {
+//   background-color: $main_lighter;
+// }
