@@ -19,10 +19,17 @@ export const projectsSlice = createSlice({
         }
       )
     },
+
+    editProjectTitle: (state, action) => {
+      let target = state.find(
+        (project) => project.id === action.payload.projectId
+      )
+      target.title = action.payload.newTitle
+    },
   },
 })
 
-export const { getProjects } = projectsSlice.actions
+export const { getProjects, editProjectTitle } = projectsSlice.actions
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

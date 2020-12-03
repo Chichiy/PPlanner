@@ -30,7 +30,7 @@ const Project = () => {
   return (
     <Switch>
       <Route exact path={match.path}>
-        <Navbar />
+        <Navbar type="project" />
         <div className={styles.container}>
           <ul>
             <Link to={`${match.url}/todoList`}>待辦事項</Link>
@@ -44,19 +44,19 @@ const Project = () => {
         </div>
       </Route>
       <Route path={`${match.path}/itineraries/:itineraryId`}>
-        <Navbar />
+        <Navbar type="itineraries" />
         <ItineraryBoard />
       </Route>
       <Route path={`${match.path}/cards`}>
-        <Navbar />
+        <Navbar type="cards" />
         <CardBoard />
       </Route>
       <Route path={`${match.path}/expenditure`}>
-        <Navbar />
+        <Navbar type="expenditure" />
         <Expenditure />
       </Route>
       <Route path={`${match.path}/todoList`}>
-        <Navbar />
+        <Navbar type="todoList" />
         <TodoList />
       </Route>
     </Switch>

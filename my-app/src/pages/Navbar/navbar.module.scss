@@ -9,33 +9,51 @@
   background-color: $white;
   border-bottom: 2px solid $gray;
   display: flex;
+  align-items: center;
 
-  ul {
-    width: 100%;
-    display: flex;
-    align-items: center;
+  .item {
+    margin: 0 10px;
+    padding: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: $black;
+  }
 
-    li {
-      margin: 0 10px;
+  input {
+    color: $black;
+    border: 0px;
+    font-size: smaller;
+    font: inherit;
+  }
+  input:focus {
+    outline: none;
+  }
 
-      .button {
-        padding: 5px;
-        border-radius: 5px;
-        text-decoration: none;
-        color: $black;
-      }
+  .editTitle {
+    border: 1px solid $gray;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: inherit;
+  }
 
-      .button_border {
-        @extend .button;
-        background-color: $main;
-        color: $white;
-      }
-      .button_border:hover {
-        background-color: $main_lighter;
-      }
-    }
-    li:first-child {
-      flex: auto;
-    }
+  .searchCard {
+    @extend .item;
+    flex: auto;
+    font-size: smaller;
+  }
+  .searchCard .button {
+    padding: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: $black;
+  }
+
+  .button_border {
+    @extend .button;
+    background-color: $main;
+    color: $white;
+  }
+  .button_border:hover {
+    background-color: $main_lighter;
   }
 }

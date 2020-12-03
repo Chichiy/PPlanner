@@ -21,7 +21,7 @@ export default function App() {
             <Projects />
           </Route>
           <Route exact path="/">
-            <Navbar />
+            <Navbar type="default" />
             <Home />
           </Route>
         </Switch>

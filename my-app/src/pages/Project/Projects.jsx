@@ -25,7 +25,7 @@ const Projects = () => {
     <div className={styles.view}>
       <Switch>
         <Route exact path={match.path}>
-          <Navbar />
+          <Navbar type="default" />
           <div className={styles.container}>
             {projects.map((project) => {
               return (
