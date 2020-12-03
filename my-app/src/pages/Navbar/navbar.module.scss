@@ -36,24 +36,29 @@
     font-size: inherit;
   }
 
-  .searchCard {
-    @extend .item;
-    flex: auto;
-    font-size: smaller;
-  }
-  .searchCard .button {
+  .switchBar {
+    margin: 0 10px;
     padding: 5px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: $black;
+    flex: auto;
+    display: flex;
   }
 
-  .button_border {
-    @extend .button;
-    background-color: $main;
-    color: $white;
+  .search {
+    @extend .item;
+    font-size: smaller;
   }
-  .button_border:hover {
-    background-color: $main_lighter;
+
+  .searchBoard {
+    @extend .search;
+    width: 150px;
+  }
+
+  .searchCard {
+    @extend .search;
+    width: 300px;
+  }
+
+  .space {
+    flex: auto;
   }
 }

@@ -52,6 +52,7 @@ const Title = (props) => {
         onChange={(e) => setPending(e.target.value)}
         onBlur={handleTitleEdit}
         onKeyPress={handleTitleEdit}
+        autoFocus
       />
     )
   }
