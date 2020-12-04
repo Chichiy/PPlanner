@@ -1,9 +1,13 @@
 @import "reset.module";
 
-//color code
+@import "./fontawesomScss/fontawesome.scss"; //color code
+@import "./fontawesomScss/solid.scss";
+@import "./fontawesomScss/brands.scss";
+
 $white: #fff;
 $gray_lighter: #e6e8e6;
 $gray: #ced0ce;
+$gray_darker: #646864;
 $black: #191919;
 
 $main: #f15025;
@@ -15,3 +19,12 @@ $main_darker: #d3380d;
 a {
   color: $black;
 }
+
+//card tag
+$food: lightcoral;
+
+//fontawesome
+$fa-font-path: "../../public/webfonts";
+
+//user
+$user1: rgb(194, 103, 221);

@@ -1,0 +1,280 @@
+@import "../../../../../scss/const.module.scss";
+
+.card_large_background {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+
+  background-color: $black;
+  opacity: 70%;
+
+  overflow: scroll;
+  // display: flex;
+  // justify-content: center;
+  // align-content: flex-start;
+}
+
+.card_large {
+  width: 700px;
+  min-height: 500px;
+
+  margin: 100px auto 100px auto;
+  padding: 15px 10px 10px 10px;
+  box-sizing: border-box;
+
+  background-color: $white;
+  border-radius: 10px;
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 200px;
+  grid-template-rows: 40px auto;
+  grid-template-areas:
+    "header header"
+    "main sideBar";
+}
+
+.card_header {
+  grid-area: header;
+  padding-left: 30px;
+  box-sizing: border-box;
+  display: flex;
+
+  .card_title {
+    font-weight: bold;
+    font-size: larger;
+    flex: auto;
+
+    position: relative;
+    @extend %fa-icon;
+    @extend .fas;
+
+    &:before {
+      content: fa-content($fa-var-user);
+      position: absolute;
+      top: 0px;
+      left: -20px;
+      font-size: smaller;
+      line-height: 25px;
+    }
+  }
+
+  .card_close {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: larger;
+
+    &:hover {
+      color: $white;
+      background-color: $gray;
+    }
+  }
+}
+
+.card_main {
+  grid-area: main;
+  // background-color: $gray;
+
+  //////const module//////
+  .section {
+    width: 100%;
+    padding-left: 30px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: $gray_lighter;
+    color: $black;
+    font-size: 14px;
+    line-height: 14px;
+  }
+
+  //////tags section//////
+  .tags_section {
+    @extend .section;
+    height: 50px;
+
+    .title {
+      width: 100%;
+      font-weight: 400;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .container {
+      width: 100%;
+      display: flex;
+
+      .tag_module {
+        padding: 5px 10px;
+        font-size: 10px;
+        margin-right: 10px;
+        border-radius: 5px;
+        flex: none;
+        line-height: 14px;
+      }
+
+      .tag {
+        @extend .tag_module;
+        background-color: $food;
+      }
+
+      .new_tag {
+        @extend .tag_module;
+        background-color: $gray_lighter;
+      }
+    }
+  }
+
+  //////description section //////
+
+  .discription_section {
+    @extend .section;
+    align-content: flex-start;
+
+    .controll_bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .title {
+        font-weight: Bold;
+        margin-right: 10px;
+      }
+
+      .edit_button {
+        @extend .button;
+      }
+    }
+
+    .container {
+      width: 100%;
+
+      .discription {
+        font-size: 16px;
+        padding-bottom: 20px;
+      }
+    }
+  }
+
+  //////comments section //////
+
+  .comments_section {
+    @extend .section;
+    padding-left: 0;
+    align-content: flex-start;
+
+    .controll_bar {
+      width: 100%;
+      padding-left: 30px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .title {
+        font-weight: Bold;
+        margin-right: 10px;
+      }
+    }
+
+    .container {
+      width: 100%;
+
+      .comment {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+
+        .user {
+          width: 20px;
+          height: 20px;
+          margin: 0 5px;
+          border-radius: 50%;
+          background-color: $user1;
+
+          font-size: 14px;
+          color: $black;
+          line-height: 20px;
+          text-align: center;
+        }
+
+        .details {
+          flex: auto;
+          display: flex;
+          flex-wrap: wrap;
+          .info {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+
+            .name {
+              font-size: 14px;
+              font-weight: bold;
+              margin-right: 5px;
+            }
+            .time {
+              flex: auto;
+              font-size: 10px;
+            }
+          }
+          .message {
+            width: initial;
+            flex: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid $gray;
+            border-radius: 5px;
+            background-color: $white;
+          }
+          .tools {
+            width: 100%;
+            display: flex;
+            .edit_button {
+              font-size: 8px;
+              margin: 0 5px;
+              text-decoration: underline;
+              color: $gray_darker;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+//////side bar//////
+.card_sideBar {
+  grid-area: sideBar;
+
+  .title {
+    font-weight: 400;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .button {
+    padding: 10px 0 10px 30px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: $gray_lighter;
+    color: $black;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 16px;
+  }
+}

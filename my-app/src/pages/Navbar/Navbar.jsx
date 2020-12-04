@@ -135,7 +135,6 @@ const BoardSelect = (props) => {
 
   // console.log(match)
 
-  const animatedComponents = makeAnimated()
   let options = [
     { value: "cards", label: "卡片板" },
     { value: "itineraries", label: "行程板" },
