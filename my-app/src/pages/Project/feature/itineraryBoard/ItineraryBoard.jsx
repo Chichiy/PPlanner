@@ -43,20 +43,20 @@ const ItineraryBoard = () => {
     }
   }
 
-  //register needed dispatch
+  // //register needed dispatch
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    //initial dayplans
-    getFsData("dayplans", "itinerary_id", "==", itinerary.id).then((res) => {
-      dispatch(initDayplans(res))
-    })
+  // useEffect(() => {
+  //   //initial dayplans
+  //   getFsData("dayplans", "itinerary_id", "==", itinerary.id).then((res) => {
+  //     dispatch(initDayplans(res))
+  //   })
 
-    //initial cards
-    getFsData_Cards("mG06SIS2LbvuKWOXdNSE").then((res) => {
-      dispatch(initCards(res))
-    })
-  }, [itinerary.id])
+  //   //initial cards
+  //   getFsData_Cards("mG06SIS2LbvuKWOXdNSE").then((res) => {
+  //     dispatch(initCards(res))
+  //   })
+  // }, [itinerary.id])
 
   const handleOnDragEnd = (result) =>
     OnDragEnd(dispatch, result, itinerary, filterCards)

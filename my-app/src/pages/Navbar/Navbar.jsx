@@ -24,10 +24,6 @@ const Navbar = (props) => {
     state.projects.find((project) => project.id === projectId)
   let project = useSelector(thisProject)
 
-  // console.log(match)
-  // console.log("rerender")
-  // console.log(props.type)
-
   const renderSwitch = () => {
     switch (props.type) {
       case "cards": {
@@ -177,28 +173,49 @@ const BoardSelect = (props) => {
 const CardSelect = () => {
   let history = useHistory()
   let match = useRouteMatch()
+
   let location = useLocation()
   let { projectId } = useParams()
-
   const animatedComponents = makeAnimated()
-  let options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ]
+
+  console.log("fire2")
+
+  //prepare options
+  let cards = useSelector((state) => state.cards)
+  let [options, setOptions] = useState([])
+
+  useEffect(() => {
+    let tags = cards.reduce(function (prev, curr) {
+      return [...prev, ...curr.tags]
+    }, [])
+
+    const capitalize = (string) => {
+      return string.slice(0, 1).toUpperCase() + string.slice(1)
+    }
+    let temp = []
+    tags.forEach((tag) => {
+      temp.push({
+        value: tag,
+        label: capitalize(tag),
+      })
+      setOptions(temp)
+    })
+  }, [cards])
+
+  //get searched tags from URL
   const useQuery = () => {
     let tagString = new URLSearchParams(useLocation().search).get("tag")
     return tagString ? tagString.split(" ") : null
   }
-
-  let tags = useQuery()
-
+  let searchTags = useQuery()
   const handleValue = () => {
-    return tags ? options.filter((option) => tags.includes(option.value)) : null
+    return searchTags
+      ? options.filter((option) => searchTags.includes(option.value))
+      : null
   }
 
+  //update URL when search
   const handleChange = (e) => {
-    //update URL
     let params = []
     let location
     if (e) {
@@ -208,15 +225,15 @@ const CardSelect = () => {
       location = {
         pathname: `${match.url}/`,
         search: `?tag=${params.join("+")}`,
+        state: { tags: params },
       }
     } else {
       location = {
         pathname: `${match.url}`,
+        state: { tags: false },
       }
     }
     history.push(location)
-
-    //showCards
   }
 
   return (

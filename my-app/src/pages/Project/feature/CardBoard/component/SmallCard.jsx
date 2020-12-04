@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react"
 
 import styles from "../cardBoard.module.scss"
 
-const SmallCard = () => {
+const SmallCard = (props) => {
+  let card = props.card
+
   return (
     <div className={styles.card_small}>
       <div className={styles.mainTag}></div>
@@ -14,8 +16,8 @@ const SmallCard = () => {
           />
         </div>
         <div className={styles.details}>
-          <div className={styles.title}>烈日鬆餅</div>
-          <div className={styles.keywords}>超想吃</div>
+          <div className={styles.title}>{card.title}</div>
+          <div className={styles.keywords}>{card.description}</div>
         </div>
       </div>
     </div>
