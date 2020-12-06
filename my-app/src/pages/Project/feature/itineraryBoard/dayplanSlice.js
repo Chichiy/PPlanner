@@ -4,27 +4,46 @@ import { createSlice } from "@reduxjs/toolkit"
 export const dayplanSlice = createSlice({
   name: "dayplans",
   initialState: [
-    {
-      id: "",
-      date: "",
-      schedule: [{ card_id: "" }],
-      itinerary_id: "",
-    },
+    // {
+    //   id: "",
+    //   date: "",
+    //   schedule: [{ card_id: "" }],
+    //   itinerary_id: "",
+    // },
   ],
 
   reducers: {
-    initDayplans: (state, action) => {
-      let dayplans = action.payload
+    addDayplan: (state, action) => {
+      let target = action.payload
 
-      if (!dayplans instanceof Array) {
-        state.splice(0, 1, dayplans)
-      } else {
-        state.pop()
-        dayplans.forEach((dayplan) => {
-          state.push(dayplan)
-        })
+      //prevent repeatly adding
+      if (state.findIndex((dayplan) => dayplan.id === target.id) < 0) {
+        state.push(target)
       }
     },
+    removeDayplan: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((dayplan) => dayplan.id === target.id)
+      state.splice(index, 1)
+    },
+    modifyDayplan: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((dayplan) => dayplan.id === target.id)
+      state.splice(index, 1, target)
+    },
+
+    // initDayplans: (state, action) => {
+    //   let dayplans = action.payload
+
+    //   if (!dayplans instanceof Array) {
+    //     state.splice(0, 1, dayplans)
+    //   } else {
+    //     state.pop()
+    //     dayplans.forEach((dayplan) => {
+    //       state.push(dayplan)
+    //     })
+    //   }
+    // },
 
     updateScheduleOrder: (state, action) => {
       const result = action.payload.result
@@ -108,6 +127,11 @@ export const dayplanSlice = createSlice({
   },
 })
 
-export const { initDayplans, updateScheduleOrder } = dayplanSlice.actions
+export const {
+  addDayplan,
+  removeDayplan,
+  modifyDayplan,
+  updateScheduleOrder,
+} = dayplanSlice.actions
 
 export default dayplanSlice.reducer

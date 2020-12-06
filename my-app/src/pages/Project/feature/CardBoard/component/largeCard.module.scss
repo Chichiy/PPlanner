@@ -8,13 +8,9 @@
   top: 0;
   left: 0;
 
-  background-color: $black;
-  opacity: 70%;
+  background-color: rgba(0, 0, 0, 0.7);
 
   overflow: scroll;
-  // display: flex;
-  // justify-content: center;
-  // align-content: flex-start;
 }
 
 .card_large {

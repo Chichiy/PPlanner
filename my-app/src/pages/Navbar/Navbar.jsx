@@ -178,8 +178,6 @@ const CardSelect = () => {
   let { projectId } = useParams()
   const animatedComponents = makeAnimated()
 
-  console.log("fire2")
-
   //prepare options
   let cards = useSelector((state) => state.cards)
   let [options, setOptions] = useState([])

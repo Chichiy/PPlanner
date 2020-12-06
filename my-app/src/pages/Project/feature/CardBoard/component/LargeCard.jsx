@@ -2,14 +2,22 @@ import React, { useState, useEffect } from "react"
 
 import styles from "./largeCard.module.scss"
 
-const LargeCard = () => {
+const LargeCard = (props) => {
+  let toggleShowCard = props.toggleShowCard
+
   return (
-    <div className={styles.card_large_background}>
+    <div id="largeCardBackground" className={styles.card_large_background}>
       <div className={styles.card_large}>
         <div className={styles.card_header}>
           <div className={styles.tag_icon}></div>
           <div className={styles.card_title}>烈日鬆餅</div>
-          <div className={styles.card_close}>X</div>
+          <div
+            id="closeBtn"
+            className={styles.card_close}
+            onClick={toggleShowCard}
+          >
+            X
+          </div>
         </div>
 
         <div className={styles.card_main}>

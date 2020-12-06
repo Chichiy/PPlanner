@@ -4,7 +4,7 @@ import { getData, getFsData } from "../../firebase/Config"
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    id: "MEvVXSW1Yxkz154mO8lL",
+    id: "aJyjoGPEIH69isQ7QfYs",
     name: "",
     email: "test",
     picture: "",

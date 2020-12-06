@@ -32,19 +32,49 @@
   position: relative;
   flex-wrap: wrap;
 
-  .mainTag {
+  .tag {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: $food;
     width: 100%;
     height: 15px;
     border-radius: 10px 10px 0 0;
   }
+
+  .tag_food {
+    @extend .tag;
+    background-color: $food;
+  }
+
+  .tag_hotel {
+    @extend .tag;
+    background-color: $hotel;
+  }
+
+  .tag_country {
+    @extend .tag;
+    background-color: $country;
+  }
+
+  .tag_site {
+    @extend .tag;
+    background-color: $site;
+  }
+
+  .tag_commute {
+    @extend .tag;
+    background-color: $commute;
+  }
+
+  .tag_default {
+    @extend .tag;
+    background-color: $default;
+  }
+
   .info {
-    display: flex;
-    flex: auto;
+    width: 100%;
     padding-top: 10px;
+    display: flex;
     box-sizing: border-box;
     align-items: flex-start;
 
@@ -64,21 +94,55 @@
       }
     }
     .details {
-      flex: auto;
+      max-width: 105px;
       display: flex;
       flex-wrap: wrap;
-      line-height: 24px;
+      align-content: flex-start;
+      // line-height: 24px;
+      // overflow-wrap: break-word;
 
       .title {
         width: 100%;
-        font-size: 22px;
+        margin-bottom: 2px;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 18px;
+        line-height: 18px;
         color: $black;
       }
 
-      .keywords {
-        width: 100%;
-        font-size: 16px;
+      .inputTitle {
+        @extend .title;
+        border: 0;
+
+        &:focus {
+          outline: 1px solid $gray;
+        }
+      }
+
+      .description {
+        flex: auto;
+        max-height: 43px;
+        margin: auto 0;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 20px;
         color: $black;
+      }
+
+      .inputDescription {
+        @extend .description;
+        resize: none;
+        border: 0;
+        &:focus {
+          outline: 1px solid $gray;
+        }
       }
     }
   }
@@ -87,6 +151,62 @@
 .card_small:hover {
   box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray;
 }
+
+.selectCategory {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  position: absolute;
+  right: -205px;
+  top: 0px;
+  background-color: $white;
+  border-radius: 5px;
+
+  .option {
+    width: 100%;
+    height: 15px;
+    padding: 3px;
+    margin-bottom: 3px;
+    box-sizing: border-box;
+    line-height: 9px;
+    font-size: 10px;
+    color: $white;
+    border-radius: 5px;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+.category_food {
+  @extend .option;
+  background-color: $food;
+}
+
+.category_hotel {
+  @extend .option;
+  background-color: $hotel;
+}
+
+.category_country {
+  @extend .option;
+  background-color: $country;
+}
+
+.category_site {
+  @extend .option;
+  background-color: $site;
+}
+.category_commute {
+  @extend .option;
+  background-color: $commute;
+}
+.category_default {
+  @extend .option;
+  background-color: $default;
+}
+
 // .button {
 //   padding: 2px 20px;
 //   border-radius: 5px;

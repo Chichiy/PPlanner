@@ -11,10 +11,11 @@ import { useSelector, useDispatch } from "react-redux"
 
 import styles from "../navbar.module.scss"
 
+import { updateProjectTitle_Fs } from "../../../firebase/Config"
 import { editProjectTitle } from "../../Project/projectsSlice"
 
-const Title = (props) => {
-  let projectTitle = props.title ? props.title : null
+const Title = ({ projectId, title }) => {
+  let projectTitle = title ? title : null
   let [isEditing, setEditing] = useState(false)
   let [pending, setPending] = useState(projectTitle)
 
@@ -22,9 +23,13 @@ const Title = (props) => {
 
   const handleTitleEdit = (e) => {
     if (e.type === "blur" || e.key === "Enter") {
+      //update cloud data
+      updateProjectTitle_Fs(projectId, e.target.value)
+
+      //change local data
       dispatch(
         editProjectTitle({
-          projectId: props.projectId,
+          projectId: projectId,
           newTitle: e.target.value,
         })
       )

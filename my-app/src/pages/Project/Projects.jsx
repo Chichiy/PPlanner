@@ -14,12 +14,37 @@ import styles from "./projects.module.scss"
 
 import Navbar from "../Navbar/Navbar"
 import Project from "./Project"
-import ItineraryBoard from "./feature/itineraryBoard/ItineraryBoard"
 
+import { getFsData_Projects, listenToProjects } from "../../firebase/Config"
+import { addProjects, modifyProjects, removeProjects } from "./projectsSlice"
 const Projects = () => {
+  console.log("render projects")
+  let dispatch = useDispatch()
   let match = useRouteMatch()
   let projects = useSelector((state) => state.projects)
-  let itineraryId = useSelector((state) => state.itinerary.id)
+  let userId = useSelector((state) => state.user.id)
+
+  const handleAddProject = (res) => {
+    dispatch(addProjects(res))
+  }
+
+  const handleModifyProject = (res) => {
+    dispatch(modifyProjects(res))
+  }
+
+  const handleRemoveProject = (res) => {
+    dispatch(removeProjects(res))
+  }
+
+  //init and listen to changes
+  useEffect(() => {
+    listenToProjects(
+      userId,
+      handleAddProject,
+      handleModifyProject,
+      handleRemoveProject
+    )
+  }, [])
 
   return (
     <div className={styles.view}>

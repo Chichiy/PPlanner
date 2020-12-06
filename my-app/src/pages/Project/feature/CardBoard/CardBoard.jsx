@@ -8,17 +8,22 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
 
 import styles from "./cardBoard.module.scss"
 
-import SmallCard from "./component/SmallCard"
+import { SmallCard, AddCard } from "./component/SmallCard"
 import LargeCard from "./component/LargeCard"
-import { useSelector } from "react-redux"
+
+import { AddCard_Fs } from "../../../../firebase/Config"
 
 const CardBoard = () => {
+  console.log("re-cardBoard")
   const [showLargeCard, toggleShowCard] = useState(false)
+  const [addCard, toggleAddCard] = useState(false)
   let location = useLocation()
   let cards = useSelector((state) => state.cards)
+  let { projectId } = useParams()
 
   //get searched tags from URL
   const useQuery = () => {
@@ -40,13 +45,70 @@ const CardBoard = () => {
       : cards
   }
 
+  //show add card
+
+  const getPendingInfo = (pendingInfo) => {
+    return pendingInfo
+  }
+
+  //new card data
+  const emptyCard = {
+    title: "",
+    description: "",
+    category: "default",
+    tags: ["default"],
+    status: 0,
+    cover_pic: "https://fakeimg.pl/65x65/",
+  }
+
+  const [pendingInfo, setPendingInfo] = useState(emptyCard)
+  const dispatch = useDispatch()
+
+  const handleAddCard = (e) => {
+    let triggerElementId = ["cardBoardContainer"]
+    if (triggerElementId.includes(e.target.id)) {
+      let shouldAddCard = !(
+        JSON.stringify(pendingInfo) === JSON.stringify(emptyCard)
+      )
+
+      switch (shouldAddCard) {
+        case true: {
+          console.log("save")
+          console.log(pendingInfo)
+          AddCard_Fs(projectId, pendingInfo)
+          setPendingInfo(emptyCard)
+          toggleAddCard(!addCard)
+          break
+        }
+
+        default: {
+          toggleAddCard(!addCard)
+          break
+        }
+      }
+    }
+  }
+  //show large cards
+  const handleShowCard = (e) => {
+    let triggerElementId = ["closeBtn", "largeCardBackground"]
+    if (triggerElementId.includes(e.target.id)) {
+      toggleShowCard(!showLargeCard)
+    }
+  }
+
   return (
-    <div className={styles.container}>
+    <div
+      id="cardBoardContainer"
+      className={styles.container}
+      onClick={handleAddCard}
+    >
       {filteredCard().map((card) => {
         return <SmallCard key={card.id} card={card} />
       })}
-
-      {showLargeCard ? <LargeCard /> : null}
+      {addCard ? (
+        <AddCard pendingInfo={pendingInfo} setPendingInfo={setPendingInfo} />
+      ) : null}
+      {showLargeCard ? <LargeCard toggleShowCard={toggleShowCard} /> : null}
     </div>
   )
 }

@@ -4,21 +4,23 @@ export const cardSlice = createSlice({
   name: "cards",
   initialState: [],
   reducers: {
-    initCards: (state, action) => {
-      let cards = action.payload
+    addCard: (state, action) => {
+      let target = action.payload
 
-      if (!cards instanceof Array) {
-        state.splice(0, 1, cards)
-      } else {
-        state.pop()
-        cards.forEach((card) => {
-          state.push(card)
-        })
+      //prevent repeatly adding
+      if (state.findIndex((card) => card.id === target.id) < 0) {
+        state.push(target)
       }
     },
-
-    addCard: (state, action) => {
-      state.push(action.payload)
+    removeCard: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((card) => card.id === target.id)
+      state.splice(index, 1)
+    },
+    modifyCard: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((card) => card.id === target.id)
+      state.splice(index, 1, target)
     },
 
     updateCardsOrder: (state, action) => {
@@ -114,6 +116,11 @@ export const cardSlice = createSlice({
   },
 })
 
-export const { initCards, updateCardsOrder, addCard } = cardSlice.actions
+export const {
+  addCard,
+  removeCard,
+  modifyCard,
+  updateCardsOrder,
+} = cardSlice.actions
 
 export default cardSlice.reducer

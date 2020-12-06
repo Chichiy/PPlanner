@@ -3,21 +3,25 @@ import { getData, getFsData } from "../../firebase/Config"
 
 export const projectsSlice = createSlice({
   name: "projects",
-  initialState: [
-    {
-      id: "mG06SIS2LbvuKWOXdNSE",
-      title: "test_project",
-      creater: "aJyjoGPEIH69isQ7QfYs",
-      members: ["jFz7tkCgR2bTkzHJd1jU", "aJyjoGPEIH69isQ7QfYs"],
-    },
-  ],
+  initialState: [],
   reducers: {
-    getProjects: (state, action) => {
-      getFsData("projects", "id", "==", action.payload.project_id).then(
-        (dayplans) => {
-          state = dayplans
-        }
-      )
+    addProjects: (state, action) => {
+      let target = action.payload
+
+      //prevent repeatly adding
+      if (state.findIndex((project) => project.id === target.id) < 0) {
+        state.push(target)
+      }
+    },
+    removeProjects: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((project) => project.id === target.id)
+      state.splice(index, 1)
+    },
+    modifyProjects: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((project) => project.id === target.id)
+      state.splice(index, 1, target)
     },
 
     editProjectTitle: (state, action) => {
@@ -29,7 +33,12 @@ export const projectsSlice = createSlice({
   },
 })
 
-export const { getProjects, editProjectTitle } = projectsSlice.actions
+export const {
+  addProjects,
+  removeProjects,
+  modifyProjects,
+  editProjectTitle,
+} = projectsSlice.actions
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
