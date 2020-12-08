@@ -4,6 +4,15 @@
 @import "./fontawesomScss/solid.scss";
 @import "./fontawesomScss/brands.scss";
 
+//font size
+$h1: 42px;
+$h2: 30px;
+$h3: 24px;
+$h4: 16px;
+$h5: 14px;
+$h6: 10px;
+
+//color code
 $white: #fff;
 $gray_lighter: #e6e8e6;
 $gray: #ced0ce;
@@ -14,8 +23,7 @@ $main: #f15025;
 $main_lighter: #f47552;
 $main_darker: #d3380d;
 
-//font
-
+//reset polyfill
 a {
   color: $black;
 }

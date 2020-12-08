@@ -20,6 +20,7 @@ firebase.initializeApp(firebaseConfig)
 
 //abbreviation
 var db = firebase.firestore()
+
 const defaultID = "aJyjoGPEIH69isQ7QfYs"
 
 export const toDate = firebase.firestore.Timestamp.toDate
@@ -62,24 +63,37 @@ export const listenToDayplans = (
 ) => {
   db.collection("dayplans")
     .where("itinerary_id", "==", itineraryId)
-    .onSnapshot(function (snapshot) {
-      let temp = []
-      snapshot.docChanges().forEach(function (change) {
-        let changes = change.doc.data()
-        if (change.type === "added") {
-          // console.log("add ", changes, "to local state")
-          handleAdd(changes)
-        }
-        if (change.type === "modified") {
-          handleModify(changes)
-          console.log("modify ", changes, "to local state")
-        }
-        if (change.type === "removed") {
-          handleRemove(changes)
-          console.log("Removed: ", changes, "from local state")
-        }
-        temp.push(changes)
-      })
+    .orderBy("date", "asc")
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      var docChange = snapshot.docChanges()
+      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      //local data needs to be changed
+      if (docChange.length > 0) {
+        snapshot.docChanges().forEach(function (change) {
+          let type = change.type
+          let id = change.doc.id
+          let data = change.doc.data()
+
+          //add id to data
+          data.id = id
+          //conver time object to string
+          data.date = data.date.toDate().toString()
+
+          if (type === "added") {
+            handleAdd(data, source)
+          }
+          if (type === "modified") {
+            handleModify(data, source)
+          }
+          if (type === "removed") {
+            handleRemove(data, source)
+          }
+        })
+      } else {
+        //changes have been saved
+        console.log("data has been saved to cloud database")
+      }
     })
 }
 
@@ -92,24 +106,35 @@ export const listenToCard = (
   db.collection("projects")
     .doc(projectId)
     .collection("cards")
-    .onSnapshot(function (snapshot) {
-      let temp = []
-      snapshot.docChanges().forEach(function (change) {
-        let changes = change.doc.data()
-        if (change.type === "added") {
-          handleAdd(changes)
-          // console.log("add ", changes, "to local state")
-        }
-        if (change.type === "modified") {
-          handleModify(changes)
-          console.log("modify ", changes, "to local state")
-        }
-        if (change.type === "removed") {
-          handleRemove(changes)
-          console.log("Removed: ", changes, "from local state")
-        }
-        temp.push(changes)
-      })
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      var docChange = snapshot.docChanges()
+      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      //local data needs to be changed
+      if (docChange.length > 0) {
+        snapshot.docChanges().forEach(function (change) {
+          let type = change.type
+          let id = change.doc.id
+          let data = change.doc.data()
+
+          console.log(source, type, id, data)
+          //add id to data
+          data.id = id
+
+          if (type === "added") {
+            handleAdd(data, source)
+          }
+          if (type === "modified") {
+            handleModify(data, source)
+          }
+          if (type === "removed") {
+            handleRemove(data, source)
+          }
+        })
+      } else {
+        //changes have been saved
+        console.log("data has been saved to cloud database")
+      }
     })
 }
 
@@ -147,14 +172,40 @@ export const updateProjectTitle_Fs = (projectId, input) => {
     })
 }
 
+//////cards related//////
 export const AddCard_Fs = (projectId, input) => {
   let docRef = db.collection("projects").doc(projectId).collection("cards")
 
+  return docRef.add(input).catch(function (error) {
+    console.error("Error adding document: ", error)
+  })
+}
+
+export const updateCard_Fs = (projectId, cardId, change) => {
+  // expected format:
+  // let change = {
+  //   title: input,
+  // }
+
+  let docRef = db
+    .collection("projects")
+    .doc(projectId)
+    .collection("cards")
+    .doc(cardId)
+
+  return docRef.update(change).catch(function (error) {
+    console.error("Error updating document: ", error)
+  })
+}
+
+export const addDayplan_Fs = (input) => {
+  let docRef = db.collection("dayplans")
+
   return docRef
     .add(input)
-    .then(function (newCard) {
-      newCard.update({
-        id: newCard.id,
+    .then(function (newDayplan) {
+      newDayplan.update({
+        id: newDayplan.id,
       })
     })
     .catch(function (error) {

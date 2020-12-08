@@ -7,20 +7,20 @@ export const cardSlice = createSlice({
     addCard: (state, action) => {
       let target = action.payload
 
-      //prevent repeatly adding
+      //prevent repeatly adding when itinitallizing
       if (state.findIndex((card) => card.id === target.id) < 0) {
         state.push(target)
       }
-    },
-    removeCard: (state, action) => {
-      let target = action.payload
-      let index = state.findIndex((card) => card.id === target.id)
-      state.splice(index, 1)
     },
     modifyCard: (state, action) => {
       let target = action.payload
       let index = state.findIndex((card) => card.id === target.id)
       state.splice(index, 1, target)
+    },
+    removeCard: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((card) => card.id === target.id)
+      state.splice(index, 1)
     },
 
     updateCardsOrder: (state, action) => {

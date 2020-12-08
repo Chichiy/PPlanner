@@ -4,11 +4,9 @@ import styles from "../cardBoard.module.scss"
 
 const fakeImg = "https://fakeimg.pl/65x65/"
 
-export const SmallCard = (props) => {
-  let card = props.card
-
+export const SmallCard = ({ card }) => {
   return (
-    <div className={styles.card_small}>
+    <div id={card.id} className={styles.card_small}>
       <div className={styles[`tag_${card.category}`]}></div>
       <div className={styles.info}>
         <div className={styles.card_small_picture}>

@@ -39,12 +39,13 @@ import {
 } from "./feature/CardBoard/cardSlice"
 
 const Project = () => {
-  console.log("rerender Project component")
+  // console.log("rerender Project component")
 
   let { projectId } = useParams()
   let match = useRouteMatch()
   let projects = useSelector((state) => state.projects)
   let itineraryId = useSelector((state) => state.itinerary.id)
+  let cards = useSelector((state) => state.cards)
   const dispatch = useDispatch()
 
   const handleAddDayplan = (res) => {
@@ -59,15 +60,17 @@ const Project = () => {
     dispatch(removeDayplan(res))
   }
 
-  const handleAddCard = (res) => {
+  const handleAddCard = (res, source) => {
     dispatch(addCard(res))
+    // console.log("added " + res + " from " + source)
   }
 
-  const handleModifyCard = (res) => {
+  const handleModifyCard = (res, source) => {
     dispatch(modifyCard(res))
+    // console.log("modified " + res + " from " + source)
   }
 
-  const handleRemoveCard = (res) => {
+  const handleRemoveCard = (res, source) => {
     dispatch(removeCard(res))
   }
 

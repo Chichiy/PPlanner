@@ -18,7 +18,7 @@ import Project from "./Project"
 import { getFsData_Projects, listenToProjects } from "../../firebase/Config"
 import { addProjects, modifyProjects, removeProjects } from "./projectsSlice"
 const Projects = () => {
-  console.log("render projects")
+  // console.log("render projects")
   let dispatch = useDispatch()
   let match = useRouteMatch()
   let projects = useSelector((state) => state.projects)

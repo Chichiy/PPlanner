@@ -114,7 +114,7 @@
       width: 100%;
       display: flex;
 
-      .tag_module {
+      .tag {
         padding: 5px 10px;
         font-size: 10px;
         margin-right: 10px;
@@ -123,21 +123,45 @@
         line-height: 14px;
       }
 
-      .tag {
-        @extend .tag_module;
+      .new_tag {
+        @extend .tag;
+        background-color: $gray_lighter;
+      }
+
+      //each colors
+      .tag_food {
+        @extend .tag;
         background-color: $food;
       }
 
-      .new_tag {
-        @extend .tag_module;
-        background-color: $gray_lighter;
+      .tag_hotel {
+        @extend .tag;
+        background-color: $hotel;
+      }
+
+      .tag_country {
+        @extend .tag;
+        background-color: $country;
+      }
+
+      .tag_site {
+        @extend .tag;
+        background-color: $site;
+      }
+      .tag_commute {
+        @extend .tag;
+        background-color: $commute;
+      }
+      .tag_default {
+        @extend .tag;
+        background-color: $default;
       }
     }
   }
 
   //////description section //////
 
-  .discription_section {
+  .description_section {
     @extend .section;
     align-content: flex-start;
 
@@ -155,14 +179,30 @@
       .edit_button {
         @extend .button;
       }
+
+      .save_button {
+        @extend .button;
+        background-color: $main_lighter;
+      }
     }
 
     .container {
       width: 100%;
+      display: flex;
 
-      .discription {
-        font-size: 16px;
+      .description {
+        font-size: $h4;
         padding-bottom: 20px;
+      }
+
+      .inputDescription {
+        @extend .description;
+        flex: auto;
+        line-height: 140%;
+        padding: 5px;
+        box-sizing: border-box;
+        resize: none;
+        overflow: hidden;
       }
     }
   }
@@ -271,7 +311,7 @@
     background-color: $gray_lighter;
     color: $black;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 16px;
   }
 }

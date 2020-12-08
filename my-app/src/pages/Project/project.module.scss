@@ -11,6 +11,8 @@
   align-content: center;
 
   ul {
+    width: 80%;
+    height: 80%;
     flex: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -20,8 +22,9 @@
     a {
       width: 70%;
       height: 70%;
-      line-height: 300px;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       box-sizing: border-box;
       border-radius: 10px;
       border: 2px solid $gray;

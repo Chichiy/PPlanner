@@ -17,7 +17,12 @@ import { editProjectTitle } from "../../Project/projectsSlice"
 const Title = ({ projectId, title }) => {
   let projectTitle = title ? title : null
   let [isEditing, setEditing] = useState(false)
-  let [pending, setPending] = useState(projectTitle)
+  let [pending, setPending] = useState("")
+
+  //update pending
+  useEffect(() => {
+    setPending(projectTitle)
+  }, [projectTitle])
 
   let dispatch = useDispatch()
 
@@ -26,13 +31,6 @@ const Title = ({ projectId, title }) => {
       //update cloud data
       updateProjectTitle_Fs(projectId, e.target.value)
 
-      //change local data
-      dispatch(
-        editProjectTitle({
-          projectId: projectId,
-          newTitle: e.target.value,
-        })
-      )
       setEditing(!isEditing)
     }
   }
@@ -45,7 +43,7 @@ const Title = ({ projectId, title }) => {
           setEditing(!isEditing)
         }}
       >
-        {pending}
+        {projectTitle}
       </div>
     )
   } else {

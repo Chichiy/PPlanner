@@ -16,14 +16,16 @@ import { SmallCard, AddCard } from "./component/SmallCard"
 import LargeCard from "./component/LargeCard"
 
 import { AddCard_Fs } from "../../../../firebase/Config"
+import { wait } from "@testing-library/react"
 
 const CardBoard = () => {
-  console.log("re-cardBoard")
-  const [showLargeCard, toggleShowCard] = useState(false)
-  const [addCard, toggleAddCard] = useState(false)
-  let location = useLocation()
-  let cards = useSelector((state) => state.cards)
-  let { projectId } = useParams()
+  // console.log("re-cardBoard")
+
+  const cards = useSelector((state) => state.cards)
+  const { projectId } = useParams()
+  const match = useRouteMatch()
+
+  //////filter cards//////
 
   //get searched tags from URL
   const useQuery = () => {
@@ -32,7 +34,6 @@ const CardBoard = () => {
   }
   let searchTags = useQuery()
 
-  //filter cards
   const filteredCard = () => {
     return searchTags
       ? cards.filter((card) => {
@@ -45,13 +46,7 @@ const CardBoard = () => {
       : cards
   }
 
-  //show add card
-
-  const getPendingInfo = (pendingInfo) => {
-    return pendingInfo
-  }
-
-  //new card data
+  //////add new card//////
   const emptyCard = {
     title: "",
     description: "",
@@ -61,6 +56,7 @@ const CardBoard = () => {
     cover_pic: "https://fakeimg.pl/65x65/",
   }
 
+  const [addCard, toggleAddCard] = useState(false)
   const [pendingInfo, setPendingInfo] = useState(emptyCard)
   const dispatch = useDispatch()
 
@@ -73,26 +69,20 @@ const CardBoard = () => {
 
       switch (shouldAddCard) {
         case true: {
-          console.log("save")
-          console.log(pendingInfo)
           AddCard_Fs(projectId, pendingInfo)
-          setPendingInfo(emptyCard)
+
           toggleAddCard(!addCard)
+          setPendingInfo(emptyCard)
+
           break
         }
 
         default: {
+          // toggleAddCard(!addCard)
           toggleAddCard(!addCard)
           break
         }
       }
-    }
-  }
-  //show large cards
-  const handleShowCard = (e) => {
-    let triggerElementId = ["closeBtn", "largeCardBackground"]
-    if (triggerElementId.includes(e.target.id)) {
-      toggleShowCard(!showLargeCard)
     }
   }
 
@@ -100,15 +90,26 @@ const CardBoard = () => {
     <div
       id="cardBoardContainer"
       className={styles.container}
-      onClick={handleAddCard}
+      onDoubleClick={handleAddCard}
     >
       {filteredCard().map((card) => {
-        return <SmallCard key={card.id} card={card} />
+        return (
+          <Link to={`${match.url}/${card.id}`} key={card.id}>
+            <SmallCard card={card} />
+          </Link>
+        )
       })}
       {addCard ? (
         <AddCard pendingInfo={pendingInfo} setPendingInfo={setPendingInfo} />
       ) : null}
-      {showLargeCard ? <LargeCard toggleShowCard={toggleShowCard} /> : null}
+      <Switch>
+        <Route path={`${match.path}/:cardId`}>
+          <LargeCard />
+        </Route>
+      </Switch>
+      {/* {isShowing ? (
+        <LargeCard cardId={targetCardId} toggleShowCard={handleCloseCard} />
+      ) : null} */}
     </div>
   )
 }

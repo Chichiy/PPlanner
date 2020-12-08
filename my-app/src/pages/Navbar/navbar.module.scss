@@ -56,7 +56,9 @@
 
   .searchCard {
     @extend .search;
-    width: 300px;
+    max-width: 80%;
+    width: fit-content;
+    min-width: 400px;
   }
 
   .space {
