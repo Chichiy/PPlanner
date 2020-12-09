@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   Link,
@@ -12,8 +12,14 @@ import {
 
 import styles from "./largeCard.module.scss"
 
-import { updateCard_Fs } from "../../../../../firebase/Config"
-import { nanoid } from "@reduxjs/toolkit"
+import {
+  updateCard_Fs,
+  listenToComments,
+  addComment_Fs,
+  updateComment_Fs,
+  removeComment_Fs,
+} from "../../../../../firebase/Config"
+import { current, nanoid } from "@reduxjs/toolkit"
 
 const LargeCard = ({ CloseCard }) => {
   const { projectId, cardId } = useParams()
@@ -91,16 +97,7 @@ const LargeCard = ({ CloseCard }) => {
 
             {/* comments section */}
 
-            <div className={styles.comments_section}>
-              <div className={styles.controll_bar}>
-                <div className={styles.title}>留言</div>
-              </div>
-              <div className={styles.container}>
-                {/* comment */}
-                <Comment />
-                <Comment />
-              </div>
-            </div>
+            <Comments cardId={cardId} projectId={projectId} />
           </div>
           <div className={styles.card_sideBar}>
             <div className={styles.title}>新增至卡片</div>
@@ -173,25 +170,30 @@ const Description = ({ description, handleUpdateDescription }) => {
 
   const textAreaRef = useRef(0)
   const handleEdit = (e) => {
-    setPending(e.target.value)
+    try {
+      // console.log(e)
+      setPending(e.target.value)
 
-    //auto-grow textarea
-    let height = parseInt(getComputedStyle(e.target).height.slice(0, -2))
-    let lineHeight = parseInt(
-      getComputedStyle(e.target).lineHeight.slice(0, -2)
-    )
-    let padding = parseInt(getComputedStyle(e.target).padding.slice(0, -2))
+      //auto-grow textarea
+      let height = parseInt(getComputedStyle(e.target).height.slice(0, -2))
+      let lineHeight = parseInt(
+        getComputedStyle(e.target).lineHeight.slice(0, -2)
+      )
+      let padding = parseInt(getComputedStyle(e.target).padding.slice(0, -2))
 
-    if (e.target.scrollHeight > height) {
-      textAreaRef.current.style.height = `${
-        e.target.scrollHeight + padding * 2
-      }px`
-    } else {
-      while (height >= e.target.scrollHeight && e.target.scrollHeight >= 54) {
-        textAreaRef.current.style.height = `${height - lineHeight}px`
-        height -= lineHeight
+      if (e.target.scrollHeight > height) {
+        textAreaRef.current.style.height = `${
+          e.target.scrollHeight + padding * 2
+        }px`
+      } else {
+        while (height >= e.target.scrollHeight && e.target.scrollHeight >= 54) {
+          textAreaRef.current.style.height = `${height - lineHeight}px`
+          height -= lineHeight
+        }
+        textAreaRef.current.style.height = `${height + lineHeight}px`
       }
-      textAreaRef.current.style.height = `${height + lineHeight}px`
+    } catch {
+      console.error()
     }
   }
 
@@ -219,36 +221,245 @@ const Description = ({ description, handleUpdateDescription }) => {
         {/* textarea/display section */}
         {isEditing ? (
           <textarea
+            ref={textAreaRef}
             type="text"
             className={styles.inputDescription}
             value={pending}
             onChange={handleEdit}
-            ref={textAreaRef}
+            // onFocus={handleEdit}
+            onBlur={handleSave}
+            autoFocus
             // onBlur={handleEdit}
             // onKeyPress={handleEdit}
           />
         ) : (
-          <div className={styles.description}>{description}</div>
+          <pre className={styles.description}>{description}</pre>
         )}
       </div>
     </div>
   )
 }
 
-const Comment = () => {
+//////Comments//////
+
+const Comments = ({ cardId, projectId }) => {
+  const userId = useSelector((state) => state.user.id)
+  const [comments, setComments] = useState([])
+
+  //get data from cloud
+  useEffect(() => {
+    let unsubscribe = listenToComments(
+      cardId,
+      handleAdd,
+      handleModify,
+      handleRemove
+    )
+
+    return unsubscribe
+  }, [])
+
+  const handleAdd = (res, source) => {
+    //prevent repeatly adding when itinitallizing
+    if (comments.findIndex((comment) => comment.id === res.id) < 0) {
+      setComments((prev) => [...prev, res])
+      console.log("fire")
+    }
+  }
+
+  const handleModify = (res) => {
+    setComments((prev) =>
+      prev.map((comment) => {
+        return comment.id === res.id ? res : comment
+      })
+    )
+  }
+
+  const handleRemove = (res, source) => {
+    setComments((prev) => prev.filter((comment) => comment.id !== res.id))
+  }
+
+  return (
+    <div className={styles.comments_section}>
+      <div className={styles.controll_bar}>
+        <div className={styles.title}>留言</div>
+      </div>
+      <div className={styles.container}>
+        {/* comment */}
+        <AddComment cardId={cardId} userId={userId} />
+        {comments.map((comment) => {
+          return (
+            <Comment
+              key={nanoid()}
+              comment={comment}
+              userId={userId}
+              // handleEditComment={editComment}
+              // handleRemoveComment={removeComment}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+const AddComment = ({ cardId, userId }) => {
+  // const [isEditing, setEditing] = useState(false)
+  const [pending, setPending] = useState("")
+
+  const addComment = (e) => {
+    if (e.key === "Enter" && pending !== "") {
+      let input = {
+        card_id: cardId,
+        sender_id: userId,
+        content: pending,
+        date: new Date(),
+      }
+      //update cloud data
+      addComment_Fs(input)
+      setPending("")
+    }
+  }
+
   return (
     <div className={styles.comment}>
       <div className={styles.user}>煞</div>
       <div className={styles.details}>
+        <input
+          className={styles.message}
+          value={pending}
+          onChange={(e) => setPending(e.target.value)}
+          placeholder="撰寫留言"
+          onKeyPress={addComment}
+        />
+      </div>
+    </div>
+  )
+}
+
+const Comment = ({
+  comment,
+  userId,
+  // handleEditComment,
+  // handleRemoveComment,
+}) => {
+  const isMyComment = userId === comment.sender_id
+
+  //calculate comment time
+  let getTime = () => {
+    let commentedTime = new Date(comment.date).getTime()
+    let currentTime = new Date().getTime()
+
+    //to second
+    let interval = Math.floor((currentTime - commentedTime) / 1000)
+
+    if (interval < 5) {
+      return `目前`
+    }
+
+    if (interval < 60) {
+      return `${interval}秒前`
+    }
+
+    //to minute
+    interval = Math.floor(interval / 60)
+
+    if (interval < 60) {
+      return `${interval}分鐘前`
+    }
+
+    //to hour
+    interval = Math.floor(interval / 60)
+    if (interval < 24) {
+      return `${interval}小時前`
+    }
+
+    //to day
+    interval = Math.floor(interval / 24)
+    if (interval < 30) {
+      return `${interval}天前`
+    }
+
+    //to month
+    interval = Math.floor(interval / 30)
+    if (interval < 12) {
+      return `${interval}月前`
+    }
+
+    //to year
+    interval = Math.floor(interval / 12)
+    return `${interval}年前`
+  }
+
+  //edit comment
+  const [isEditing, setEditing] = useState(false)
+  const [pending, setPending] = useState(comment.content)
+  const handleEditComment = (e) => {
+    if ((e.target.ariaLabel = "editBtn")) {
+      if (isEditing) {
+        updateComment(pending)
+        setEditing(!isEditing)
+      } else {
+        setEditing(!isEditing)
+      }
+    }
+  }
+
+  const updateComment = (input) => {
+    let change = {
+      content: input,
+    }
+    updateComment_Fs(comment.id, change)
+  }
+
+  const removeComment = (e) => {
+    if ((e.target.ariaLabel = "removeBtn")) {
+      let yes = window.confirm("你確定要刪除這則留言嗎？")
+
+      if (yes) {
+        removeComment_Fs(comment.id)
+      }
+    }
+  }
+
+  return (
+    <div className={styles.comment}>
+      <div className={styles.user}>{comment.sender_id.slice(0, 1)}</div>
+      <div className={styles.details}>
         <div className={styles.info}>
-          <div className={styles.name}>煞氣a工程師</div>
-          <div className={styles.time}>30分鐘前</div>
+          <div className={styles.name}>{comment.sender_id}</div>
+          {/* <time>{comment.time}</time> */}
+          <div className={styles.time}>{getTime()}</div>
         </div>
-        <div className={styles.message}> 超想吃</div>
-        <div className={styles.tools}>
-          <div className={styles.edit_button}>編輯</div>
-          <div className={styles.edit_button}>刪除</div>
-        </div>
+
+        {isEditing ? (
+          <textarea
+            className={styles.message}
+            value={pending}
+            onChange={(e) => setPending(e.target.value)}
+            autoFocus
+          />
+        ) : (
+          <pre className={styles.message}>{comment.content} </pre>
+        )}
+
+        {isMyComment ? (
+          <div className={styles.tools}>
+            <div
+              aria-label="editBtn"
+              className={styles.edit_button}
+              onClick={handleEditComment}
+            >
+              編輯
+            </div>
+            <div
+              aria-label="removeBtn"
+              className={styles.edit_button}
+              onClick={removeComment}
+            >
+              刪除
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   )

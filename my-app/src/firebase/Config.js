@@ -138,6 +138,53 @@ export const listenToCard = (
     })
 }
 
+export const listenToComments = (
+  cardId,
+  handleAdd,
+  handleModify,
+  handleRemove
+) => {
+  let unsubscribe = db
+    .collection("comments")
+    .where("card_id", "==", cardId)
+    .orderBy("date", "asc")
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      var docChange = snapshot.docChanges()
+      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      console.log(source, snapshot, docChange)
+
+      //local data needs to be changed
+      if (docChange.length > 0) {
+        snapshot.docChanges().forEach(function (change) {
+          let type = change.type
+          let id = change.doc.id
+          let data = change.doc.data()
+          // console.log(source, type, id, data)
+
+          //add id to data
+          data.id = id
+          //conver time object to string
+          data.date = data.date.toDate().toString()
+
+          if (type === "added") {
+            handleAdd(data, source)
+          }
+          if (type === "modified") {
+            handleModify(data, source)
+          }
+          if (type === "removed") {
+            handleRemove(data, source)
+          }
+        })
+      } else {
+        //changes have been saved
+        console.log("data has been saved to cloud database")
+      }
+    })
+  return unsubscribe
+}
+
 //////update cloud data//////
 
 //basic function
@@ -195,6 +242,43 @@ export const updateCard_Fs = (projectId, cardId, change) => {
 
   return docRef.update(change).catch(function (error) {
     console.error("Error updating document: ", error)
+  })
+}
+
+export const addComment_Fs = (input) => {
+  // expected format:
+  // let input = {
+  // card_id: cardId,
+  // sender_id: userId,
+  // content: pending,
+  // date: date object,
+  // }
+
+  let docRef = db.collection("comments")
+
+  return docRef.add(input).catch(function (error) {
+    console.error("Error adding document: ", error)
+  })
+}
+
+export const updateComment_Fs = (commentId, change) => {
+  // expected format:
+  // let change = {
+  //   content: input,
+  // }
+
+  let docRef = db.collection("comments").doc(commentId)
+
+  return docRef.update(change).catch(function (error) {
+    console.error("Error updating document: ", error)
+  })
+}
+
+export const removeComment_Fs = (commentId) => {
+  let docRef = db.collection("comments").doc(commentId)
+
+  return docRef.delete().catch(function (error) {
+    console.error("Error deleting document: ", error)
   })
 }
 
