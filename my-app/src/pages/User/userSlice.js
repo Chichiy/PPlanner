@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getData, getFsData } from "../../firebase/Config"
 
 export const userSlice = createSlice({
   name: "user",
@@ -10,16 +9,10 @@ export const userSlice = createSlice({
     picture: "",
     projects: ["mG06SIS2LbvuKWOXdNSE"],
   },
-  reducers: {
-    getUserData: (state, action) => {
-      getFsData("users", "id", "==", action.payload.user_id).then((user) => {
-        state = user
-      })
-    },
-  },
+  reducers: {},
 })
 
-export const { getUserData } = userSlice.actions
+export const {} = userSlice.actions
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

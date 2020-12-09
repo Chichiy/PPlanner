@@ -18,11 +18,10 @@ import Expenditure from "./feature/Expenditure/Expenditure"
 import TodoList from "./feature/TodoList/TodoList"
 
 import {
-  getFsData,
-  getFsData_Cards,
   getFsData_Itinerary,
   listenToDayplans,
   listenToCard,
+  listenToMembers,
 } from "../../firebase/Config"
 
 import { initItinerary } from "./feature/itineraryBoard/itinerarySlice"
@@ -37,6 +36,8 @@ import {
   removeCard,
   initCards,
 } from "./feature/CardBoard/cardSlice"
+
+import { addMember, modifyMember, removeMember } from "../User/membersSlice"
 
 const Project = () => {
   // console.log("rerender Project component")
@@ -62,16 +63,41 @@ const Project = () => {
 
   const handleAddCard = (res, source) => {
     dispatch(addCard(res))
-    // console.log("added " + res + " from " + source)
   }
 
   const handleModifyCard = (res, source) => {
     dispatch(modifyCard(res))
-    // console.log("modified " + res + " from " + source)
   }
 
   const handleRemoveCard = (res, source) => {
     dispatch(removeCard(res))
+  }
+
+  const handleAddMember = (res, source) => {
+    let input = {
+      id: res.id,
+      name: res.name,
+      picture: res.picture,
+    }
+    dispatch(addMember(input))
+  }
+
+  const handleModifyMember = (res, source) => {
+    let input = {
+      id: res.id,
+      name: res.name,
+      picture: res.picture,
+    }
+    dispatch(modifyMember(input))
+  }
+
+  const handleRemoveMember = (res, source) => {
+    let input = {
+      id: res.id,
+      name: res.name,
+      picture: res.picture,
+    }
+    dispatch(removeMember(input))
   }
 
   //init and listen to changes
@@ -79,7 +105,7 @@ const Project = () => {
     // initial itinerary with latest version
     getFsData_Itinerary(projectId).then((itinerary) => {
       //initial and listen to dayplans
-      listenToDayplans(
+      let unsubscribeToDayplan = listenToDayplans(
         itinerary.id,
         handleAddDayplan,
         handleModifyDayplan,
@@ -88,7 +114,24 @@ const Project = () => {
       dispatch(initItinerary(itinerary))
     })
 
-    listenToCard(projectId, handleAddCard, handleModifyCard, handleRemoveCard)
+    let unsubscribeToCard = listenToCard(
+      projectId,
+      handleAddCard,
+      handleModifyCard,
+      handleRemoveCard
+    )
+
+    let unsubscribeToMembers = listenToMembers(
+      projectId,
+      handleAddMember,
+      handleModifyMember,
+      handleRemoveMember
+    )
+
+    return () => {
+      unsubscribeToCard()
+      unsubscribeToMembers()
+    }
   }, [])
 
   // useEffect(() => {

@@ -20,7 +20,7 @@ export default function App() {
           <Route path="/projects">
             <Projects />
           </Route>
-          <Route exact path="/">
+          <Route path="/">
             <Navbar type="default" />
             <Home />
           </Route>

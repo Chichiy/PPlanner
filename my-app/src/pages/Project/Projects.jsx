@@ -15,7 +15,7 @@ import styles from "./projects.module.scss"
 import Navbar from "../Navbar/Navbar"
 import Project from "./Project"
 
-import { getFsData_Projects, listenToProjects } from "../../firebase/Config"
+import { listenToProjects } from "../../firebase/Config"
 import { addProjects, modifyProjects, removeProjects } from "./projectsSlice"
 const Projects = () => {
   // console.log("render projects")

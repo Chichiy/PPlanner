@@ -421,12 +421,16 @@ const Comment = ({
     }
   }
 
+  const sender = useSelector((state) =>
+    state.members.find((member) => member.id === comment.sender_id)
+  )
+
   return (
     <div className={styles.comment}>
-      <div className={styles.user}>{comment.sender_id.slice(0, 1)}</div>
+      <div className={styles.user}>{sender.name.slice(0, 1)}</div>
       <div className={styles.details}>
         <div className={styles.info}>
-          <div className={styles.name}>{comment.sender_id}</div>
+          <div className={styles.name}>{sender.name}</div>
           {/* <time>{comment.time}</time> */}
           <div className={styles.time}>{getTime()}</div>
         </div>
