@@ -320,9 +320,17 @@ const AddComment = ({ cardId, userId }) => {
     }
   }
 
+  const getColor = () => {
+    let code = Math.floor(userId.charCodeAt(0) * 4.86 - 233.28)
+    let colorCode = `hsl(${code},95%, 75%)`
+    return colorCode
+  }
+
   return (
     <div className={styles.comment}>
-      <div className={styles.user}>煞</div>
+      <div className={styles.user} style={{ backgroundColor: getColor() }}>
+        煞
+      </div>
       <div className={styles.details}>
         <input
           className={styles.message}
@@ -425,9 +433,17 @@ const Comment = ({
     state.members.find((member) => member.id === comment.sender_id)
   )
 
+  const getColor = () => {
+    let code = Math.floor(sender.id.charCodeAt(0) * 4.86 - 233.28)
+    let colorCode = `hsl(${code},95%, 75%)`
+    return colorCode
+  }
+
   return (
     <div className={styles.comment}>
-      <div className={styles.user}>{sender.name.slice(0, 1)}</div>
+      <div className={styles.user} style={{ backgroundColor: getColor() }}>
+        {sender.name.slice(0, 1)}
+      </div>
       <div className={styles.details}>
         <div className={styles.info}>
           <div className={styles.name}>{sender.name}</div>
