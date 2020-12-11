@@ -162,7 +162,7 @@ export const listenToCard = (
           let id = change.doc.id
           let data = change.doc.data()
 
-          console.log(source, type, id, data)
+          // console.log(source, type, id, data)
           //add id to data
           data.id = id
 
@@ -198,7 +198,54 @@ export const listenToComments = (
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
 
-      console.log(source, snapshot, docChange)
+      // console.log(source, snapshot, docChange)
+
+      //local data needs to be changed
+      if (docChange.length > 0) {
+        snapshot.docChanges().forEach(function (change) {
+          let type = change.type
+          let id = change.doc.id
+          let data = change.doc.data()
+          // console.log(source, type, id, data)
+
+          //add id to data
+          data.id = id
+          //conver time object to string
+          data.date = data.date.toDate().toString()
+
+          if (type === "added") {
+            handleAdd(data, source)
+          }
+          if (type === "modified") {
+            handleModify(data, source)
+          }
+          if (type === "removed") {
+            handleRemove(data, source)
+          }
+        })
+      } else {
+        //changes have been saved
+        console.log("data has been saved to cloud database")
+      }
+    })
+  return unsubscribe
+}
+
+export const listenToLinks = (
+  cardId,
+  handleAdd,
+  handleModify,
+  handleRemove
+) => {
+  let unsubscribe = db
+    .collection("links")
+    .where("card_id", "==", cardId)
+    .orderBy("date", "asc")
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      var docChange = snapshot.docChanges()
+      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      // console.log(source, snapshot, docChange)
 
       //local data needs to be changed
       if (docChange.length > 0) {
@@ -328,6 +375,43 @@ export const removeComment_Fs = (commentId) => {
   })
 }
 
+export const addLink_Fs = (input) => {
+  // expected format:
+  // let input = {
+  // card_id: cardId,
+  // url: url,
+  // title: string,
+  // date: date object,
+  // }
+
+  let docRef = db.collection("links")
+
+  return docRef.add(input).catch(function (error) {
+    console.error("Error adding document: ", error)
+  })
+}
+
+export const updateLink_Fs = (linkId, change) => {
+  // expected format:
+  // let change = {
+  //   title: input,
+  // }
+
+  let docRef = db.collection("links").doc(linkId)
+
+  return docRef.update(change).catch(function (error) {
+    console.error("Error updating document: ", error)
+  })
+}
+
+export const removeLink_Fs = (linkId) => {
+  let docRef = db.collection("links").doc(linkId)
+
+  return docRef.delete().catch(function (error) {
+    console.error("Error deleting document: ", error)
+  })
+}
+
 export const addDayplan_Fs = (input) => {
   let docRef = db.collection("dayplans")
 
@@ -342,6 +426,16 @@ export const addDayplan_Fs = (input) => {
       console.error("Error adding document: ", error)
     })
 }
+
+// // Atomically add a new region to the "regions" array field.
+// washingtonRef.update({
+//   regions: firebase.firestore.FieldValue.arrayUnion("greater_virginia")
+// });
+
+// // Atomically remove a region from the "regions" array field.
+// washingtonRef.update({
+//   regions: firebase.firestore.FieldValue.arrayRemove("east_coast")
+// });
 
 //////initialize local data//////
 

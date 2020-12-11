@@ -1,5 +1,15 @@
 @import "../../../../../scss/const.module.scss";
 
+.button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: $gray_lighter;
+  color: $black;
+  font-size: 14px;
+  line-height: 14px;
+  cursor: pointer;
+}
+
 .card_large_background {
   width: 100%;
   height: 100%;
@@ -87,15 +97,7 @@
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-  }
-
-  .button {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: $gray_lighter;
-    color: $black;
-    font-size: 14px;
-    line-height: 14px;
+    flex: none;
   }
 
   //////tags section//////
@@ -287,11 +289,94 @@
               margin: 0 5px;
               text-decoration: underline;
               color: $gray_darker;
+              cursor: pointer;
             }
           }
         }
       }
     }
+  }
+}
+
+//////Links//////
+
+.link_section {
+  @extend .section;
+
+  .title {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: Bold;
+  }
+
+  .container {
+    width: 100%;
+
+    .link_container {
+      width: 100%;
+      display: flex;
+      flex: none;
+      margin-bottom: 10px;
+
+      .preview_img {
+        width: 80px;
+        height: 66px;
+        background-color: $gray;
+        border-radius: 5px;
+        margin-right: 10px;
+        overflow: hidden;
+        flex: none;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .info {
+        flex: auto;
+        display: flex;
+        flex-wrap: wrap;
+
+        .title {
+          width: auto;
+          max-height: 44px;
+          font-size: $h4;
+          font-weight: bold;
+          line-height: 140%;
+          overflow-wrap: break-word;
+        }
+
+        .tools {
+          width: 100%;
+          display: flex;
+
+          .time {
+            font-size: 8px;
+            margin: 0 5px 0 0;
+            color: $gray_darker;
+          }
+
+          .edit_button {
+            font-size: 8px;
+            margin: 0 5px;
+            text-decoration: underline;
+            color: $gray_darker;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .toggleAddLinkBtn {
+    @extend .button;
+    flex: none;
+    width: fit-content;
+    margin-bottom: 10px;
   }
 }
 
@@ -304,7 +389,7 @@
     font-size: 14px;
     margin-bottom: 10px;
   }
-  .button {
+  .button_sideBar {
     padding: 10px 0 10px 30px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -313,5 +398,40 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 16px;
+  }
+}
+
+//////float menu//////
+.addLink_container {
+  width: 300px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  background-color: $white;
+  border: 1 solid $gray_lighter;
+  box-shadow: 0 0 5px 2px $gray_lighter;
+
+  .addLink_span {
+    font-size: $h5;
+    color: $gray_darker;
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid $gray;
+  }
+
+  .addLink_input {
+    margin: 10px 0;
+    width: 100%;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    border: 1 solid $gray_lighter;
+  }
+
+  .addLink_button {
+    @extend .button;
+    margin: 10px 0;
+    width: fit-content;
+    padding: 10px;
+    box-sizing: border-box;
   }
 }

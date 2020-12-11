@@ -18,15 +18,10 @@ import Dayplans from "./Dayplans"
 import styles from "../../../../scss/itineraryBoard.module.scss"
 
 //functions
-import { getFsData, getFsData_Cards } from "../../../../firebase/Config"
-import { initDayplans } from "./dayplanSlice"
-import { initCards } from "../CardBoard/cardSlice"
 import { OnDragEnd } from "./itineraryBoardLib"
 
 const ItineraryBoard = () => {
   let { itineraryId } = useParams()
-
-  // console.log(itineraryId)
 
   //needed state
   const itinerary = useSelector((state) => state.itinerary)
@@ -45,18 +40,6 @@ const ItineraryBoard = () => {
 
   // //register needed dispatch
   const dispatch = useDispatch()
-
-  // useEffect(() => {
-  //   //initial dayplans
-  //   getFsData("dayplans", "itinerary_id", "==", itinerary.id).then((res) => {
-  //     dispatch(initDayplans(res))
-  //   })
-
-  //   //initial cards
-  //   getFsData_Cards("mG06SIS2LbvuKWOXdNSE").then((res) => {
-  //     dispatch(initCards(res))
-  //   })
-  // }, [itinerary.id])
 
   const handleOnDragEnd = (result) =>
     OnDragEnd(dispatch, result, itinerary, filterCards)

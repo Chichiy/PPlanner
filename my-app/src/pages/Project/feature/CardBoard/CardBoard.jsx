@@ -107,9 +107,6 @@ const CardBoard = () => {
           <LargeCard />
         </Route>
       </Switch>
-      {/* {isShowing ? (
-        <LargeCard cardId={targetCardId} toggleShowCard={handleCloseCard} />
-      ) : null} */}
     </div>
   )
 }
