@@ -166,6 +166,12 @@ export const listenToCard = (
           //add id to data
           data.id = id
 
+          if (data.start_time) {
+            //conver time object to string
+            data.start_time = data.start_time.toDate().toString()
+            data.end_time = data.end_time.toDate().toString()
+          }
+
           if (type === "added") {
             handleAdd(data, source)
           }

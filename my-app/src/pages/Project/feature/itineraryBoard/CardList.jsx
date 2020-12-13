@@ -38,7 +38,7 @@ const CardList = (props) => {
           {props.cards.map((card, index) => {
             return (
               <Draggable key={card.id} draggableId={card.id} index={index}>
-                {(provided) => (
+                {(provided, snapshot) => (
                   <div
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -46,7 +46,9 @@ const CardList = (props) => {
                     id={card.id}
                     className={styles.card}
                   >
-                    <div className={styles.cardTitle}>{card.title}</div>
+                    <div className={styles.cardTitle}>
+                      {card.title + snapshot.draggingOver}
+                    </div>
                   </div>
                 )}
               </Draggable>

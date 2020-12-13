@@ -19,9 +19,10 @@ import styles from "../../../../scss/itineraryBoard.module.scss"
 
 //functions
 import { OnDragEnd } from "./itineraryBoardLib"
+import { updateCard_Fs } from "../../../../firebase/Config"
 
 const ItineraryBoard = () => {
-  let { itineraryId } = useParams()
+  let { itineraryId, projectId } = useParams()
 
   //needed state
   const itinerary = useSelector((state) => state.itinerary)
@@ -41,12 +42,36 @@ const ItineraryBoard = () => {
   // //register needed dispatch
   const dispatch = useDispatch()
 
-  const handleOnDragEnd = (result) =>
-    OnDragEnd(dispatch, result, itinerary, filterCards)
+  const handleOnDragEnd = (result) => {
+    console.log("dragend")
+    // OnDragEnd(dispatch, result, itinerary, filterCards)
+    let targetCardId = result.draggableId
+    let target = cards.find((card) => card.id === targetCardId)
+    let startTime = new Date(target.start_time)
+    let endTime = new Date(target.end_time)
+    let timeSpan = endTime.getTime() - startTime.getTime()
+    let newStartTime = new Date()
+    newStartTime.setTime(result.destination.droppableId)
+    let newEndTime = new Date()
+    newEndTime.setTime(newStartTime.getTime() + timeSpan)
+
+    let change = {
+      start_time: newStartTime,
+      end_time: newEndTime,
+    }
+
+    updateCard_Fs(projectId, targetCardId, change)
+  }
+  const handleOnDragStart = (result) => {
+    console.log(result)
+  }
 
   return (
     <div className={styles.view}>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
+      <DragDropContext
+        onDragStart={handleOnDragStart}
+        onDragEnd={handleOnDragEnd}
+      >
         <CardList cards={filterCards()} />
         <Dayplans />
       </DragDropContext>

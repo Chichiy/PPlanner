@@ -64,14 +64,56 @@
 
 .itineraryBoard {
   flex: auto;
-  padding-top: 55px;
+  height: 100%;
+  padding-top: 50px;
+  box-sizing: border-box;
   background-color: $white;
 
   display: flex;
   justify-content: center;
-  align-items: center;
-
+  align-items: flex-start;
+  overflow-y: scroll;
   font-size: $h4;
+  position: relative;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid $gray;
+    text-align: center;
+  }
+
+  td {
+    width: 12.5%;
+    height: 10px;
+    padding: 10px;
+    vertical-align: middle;
+    border: 1px solid $gray;
+    box-sizing: border-box;
+    background-color: $white;
+  }
+
+  .fix_Droppable {
+    position: absolute;
+    padding-top: 50px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .fix_darggable {
+    width: 12.5%;
+    padding: 10px;
+    vertical-align: middle;
+    border: 1px solid $gray;
+    box-sizing: border-box;
+    background-color: $white;
+    // position: absolute;
+    // top: 100px;
+    // left: 200px;
+  }
 
   //////container for each columns senario//////
   .container {
