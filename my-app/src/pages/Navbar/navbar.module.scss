@@ -64,4 +64,46 @@
   .space {
     flex: auto;
   }
+
+  .daySelect_container {
+    @extend .search;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .daySelect {
+      @extend .item;
+      border: 1px solid $gray;
+    }
+
+    .hasPlan {
+      background-color: $main_lighter;
+      border-radius: 50%;
+    }
+  }
+
+  .modeSelect {
+    @extend .search;
+    width: 150px;
+  }
+
+  .userBtn {
+    @extend .item;
+    border-radius: 50%;
+    color: $white;
+    padding: 8px;
+    font-size: $h4;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      box-shadow: 0 0 3px 4px $gray_lighter;
+    }
+  }
+
+  .colorBtn {
+    @extend .item;
+    background-color: $main;
+    color: $white;
+  }
 }

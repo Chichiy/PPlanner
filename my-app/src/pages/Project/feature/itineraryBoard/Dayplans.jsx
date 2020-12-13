@@ -3,6 +3,15 @@ import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { nanoid } from "nanoid"
 import { Draggable, Droppable } from "react-beautiful-dnd"
+import {
+  Link,
+  useRouteMatch,
+  useParams,
+  useLocation,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom"
 
 //components and scss
 import styles from "../../../../scss/itineraryBoard.module.scss"
@@ -15,18 +24,16 @@ const Dayplans = () => {
   const cards = useSelector((state) =>
     state.cards.filter((card) => card.status === 1)
   )
-  const time = new Date(2020, 11, 28)
-  const [date, setDates] = useState(time)
-
+  const startDate = useLocation().state.startDate
   const getDates = () => {
     let temp = []
     for (let i = 0; i < 8; i++) {
-      let newDate = new Date()
-
       if (i === 0) {
         temp.push(<td></td>)
       } else {
-        newDate.setDate(date.getDate() + i - 1)
+        let newDate = new Date(
+          startDate.getTime() + (i - 1) * 24 * 60 * 60 * 1000
+        )
         temp.push(<td>{newDate.getMonth() + 1 + "/" + newDate.getDate()}</td>)
       }
     }
@@ -34,7 +41,6 @@ const Dayplans = () => {
   }
 
   const getRow = () => {
-    console.log("fire")
     let row = []
     for (let i = 0; i < 48; i++) {
       let temp = []
@@ -48,9 +54,9 @@ const Dayplans = () => {
             <Droppable
               key={nanoid()}
               droppableId={
-                // date and starttime
+                // startDate and starttime
                 `${
-                  date.getTime() +
+                  startDate.getTime() +
                   (j - 1) * 24 * 60 * 60 * 1000 +
                   i * 30 * 60 * 1000
                 }`
@@ -88,7 +94,7 @@ const Dayplans = () => {
     }
 
     let day = new Date(card.start_time)
-    let dayIndex = Math.floor(Math.abs(day - date) / 24 / 60 / 60 / 1000)
+    let dayIndex = Math.floor((day - startDate) / 24 / 60 / 60 / 1000)
 
     let startTime = day.getHours() * 2 + (day.getMinutes() >= 30 ? 1 : 0) + 1
 
@@ -99,14 +105,14 @@ const Dayplans = () => {
     temp = {
       position: "absolute",
       backgroundColor: colorCode[card.category],
+      borderRadius: "5px",
       top: `${startTime * 37 + 50}px`,
       left: `${(dayIndex + 1) * 12.5}%`,
       height: `${timeSpan * 37}px`,
       ...provided.draggableProps.style,
     }
 
-    console.log(card.title, `${(dayIndex + 1) * 12.5}%`)
-    return temp
+    return dayIndex > -1 ? temp : { display: "none" }
   }
 
   return (
@@ -234,10 +240,10 @@ export default Dayplans
 // const Dates = ({ dayplan, index, totalDays }) => {
 //   const dateConverter = (dateString) => {
 //     const dayNamesEn = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."]
-//     let date = new Date(dateString)
+//     let startDate = new Date(dateString)
 //     let temp = {
-//       MM_DD: `${date.getMonth() + 1}/${date.getDate()}`,
-//       Day: dayNamesEn[date.getDay()],
+//       MM_DD: `${startDate.getMonth() + 1}/${startDate.getDate()}`,
+//       Day: dayNamesEn[startDate.getDay()],
 //     }
 //     return temp
 //   }
@@ -253,8 +259,8 @@ export default Dayplans
 //add dayplan
 //   let itinerary_id = useSelector((state) => state.itinerary.id)
 
-//   const addDayplan = (type, date) => {
-//     let newDate = new Date(date)
+//   const addDayplan = (type, startDate) => {
+//     let newDate = new Date(startDate)
 
 //     switch (type) {
 //       case "before": {
@@ -262,7 +268,7 @@ export default Dayplans
 //         let input = {
 //           itinerary_id: itinerary_id,
 //           schedule: [],
-//           date: new Date(newDate),
+//           startDate: new Date(newDate),
 //         }
 
 //         console.log(input)
@@ -274,7 +280,7 @@ export default Dayplans
 //         let input = {
 //           itinerary_id: itinerary_id,
 //           schedule: [],
-//           date: new Date(newDate),
+//           startDate: new Date(newDate),
 //         }
 //         console.log(input)
 //         addDayplan_Fs(input)
@@ -293,17 +299,17 @@ export default Dayplans
 //         <div
 //           className={index === 0 ? styles.addDateBtn : styles.space}
 //           onClick={
-//             index === 0 ? () => addDayplan("before", dayplan.date) : null
+//             index === 0 ? () => addDayplan("before", dayplan.startDate) : null
 //           }
 //         ></div>
-//         <span className={styles.dateString}>{`${toMMDD(dayplan.date)} (${toDay(
-//           dayplan.date
+//         <span className={styles.dateString}>{`${toMMDD(dayplan.startDate)} (${toDay(
+//           dayplan.startDate
 //         )})`}</span>
 //         <div
 //           className={index === totalDays - 1 ? styles.addDateBtn : styles.space}
 //           onClick={
 //             index === totalDays - 1
-//               ? () => addDayplan("after", dayplan.date)
+//               ? () => addDayplan("after", dayplan.startDate)
 //               : null
 //           }
 //         ></div>

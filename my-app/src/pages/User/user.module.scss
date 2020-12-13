@@ -1,0 +1,186 @@
+@import "../../scss/const.module.scss";
+
+//user
+.user_container {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+
+  width: 250px;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid $gray;
+  border-radius: 10px;
+  background-color: $white;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    box-shadow: 0 0 5px 1px $gray_lighter;
+  }
+
+  .userInfo {
+    width: 100%;
+    padding-top: 20px;
+
+    .img_container {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 15px auto;
+      color: $white;
+      border-radius: 50%;
+      overflow: hidden;
+      font-size: $h2;
+      line-height: 70px;
+      // background-color: brown;
+      text-align: center;
+    }
+
+    .user_name {
+      font-size: $h4;
+      font-weight: bold;
+      color: $black;
+      margin: 0 auto 5px auto;
+      text-align: center;
+    }
+    .user_email {
+      font-size: $h5;
+      color: $gray_darker;
+      margin: 0 auto 20px auto;
+      text-align: center;
+    }
+  }
+  .tools {
+    width: 100%;
+    padding-bottom: 20px;
+
+    .project {
+      width: fit-content;
+      font-size: $h4;
+      padding: 10px;
+      border-radius: 26px;
+      border: 1px solid $gray;
+      color: $black;
+      margin: 0 auto 20px auto;
+      cursor: pointer;
+    }
+
+    .sign_out_btn {
+      width: fit-content;
+      font-size: $h4;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid $gray;
+      color: $black;
+      margin: 0 auto 0px auto;
+      cursor: pointer;
+    }
+  }
+}
+
+//sign in
+// <div
+// id="loginBackground"
+// className={styles.signInBackgroundd}
+// // onClick={closeCard}
+// >
+// <div className={styles.signIn_container}>
+//   <div className={styles.logo}>LOGO</div>
+//   <div>登入</div>
+//   <input type="text" placeholder="請輸入電子郵件地址" />
+//   <input type="password" placeholder="請輸入密碼" />
+//   <div className={styles.bottom}>
+//     <div className={styles.toSignUp}>建立新帳戶</div>
+//     <div className={styles.signIn}>登入</div>
+//   </div>
+// </div>
+// </div>
+
+.signInBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  .signInContainer {
+    position: relative;
+    width: 400px;
+    padding: 40px;
+    text-align: center;
+    background-color: $white;
+    border-radius: 10px;
+    border: 1px solid $gray;
+    &:hover {
+      box-shadow: 0 0 3px 1px $gray_lighter;
+    }
+
+    .close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 18px;
+      color: $gray;
+      cursor: pointer;
+
+      &:hover {
+        color: $black;
+      }
+    }
+
+    .logo {
+      margin: 10px auto 20px auto;
+      color: $black;
+    }
+    .title {
+      font-size: $h3;
+      color: $black;
+      margin: 0px auto 20px auto;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 0px auto 10px auto;
+      border: 1px solid $gray;
+      border-radius: 5px;
+
+      box-sizing: border-box;
+      color: $black;
+      font-size: $h4;
+
+      &:focus {
+        box-shadow: 0 0 3px 1px $gray;
+      }
+    }
+    .bottom {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .toSignUp {
+        color: $main;
+        font-size: $h5;
+        cursor: pointer;
+      }
+
+      .signIn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: $h4;
+        background-color: $main;
+        color: $white;
+        cursor: pointer;
+      }
+    }
+  }
+}

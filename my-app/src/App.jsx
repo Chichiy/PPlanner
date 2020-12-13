@@ -11,6 +11,7 @@ import {
 import Navbar from "./pages/Navbar/Navbar"
 import Projects from "./pages/Project/Projects"
 import Home from "./pages/Home/Home"
+import User from "./pages/User/User"
 
 export default function App() {
   return (

@@ -4,8 +4,8 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     id: "aJyjoGPEIH69isQ7QfYs",
-    name: "",
-    email: "test",
+    name: "煞氣a工程師",
+    email: "test@gmail.com",
     picture: "",
     projects: ["mG06SIS2LbvuKWOXdNSE"],
   },

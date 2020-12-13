@@ -43,3 +43,10 @@ export const getTime = (dateString) => {
   interval = Math.floor(interval / 12)
   return `${interval}年前`
 }
+
+//get user color
+export const getColor = (id) => {
+  let code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
+  let colorCode = `hsl(${code},95%, 70%)`
+  return colorCode
+}

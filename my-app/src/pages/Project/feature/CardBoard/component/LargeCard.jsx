@@ -25,7 +25,7 @@ import {
 } from "../../../../../firebase/Config"
 import { current, nanoid } from "@reduxjs/toolkit"
 
-import { getTime } from "../../../../lib"
+import { getTime, getColor } from "../../../../lib"
 
 const LargeCard = () => {
   const { projectId, cardId } = useParams()
@@ -705,15 +705,12 @@ const Comment = ({ comment, userId }) => {
     state.members.find((member) => member.id === comment.sender_id)
   )
 
-  const getColor = () => {
-    let code = Math.floor(sender.id.charCodeAt(0) * 4.86 - 233.28)
-    let colorCode = `hsl(${code},95%, 75%)`
-    return colorCode
-  }
-
   return (
     <div className={styles.comment}>
-      <div className={styles.user} style={{ backgroundColor: getColor() }}>
+      <div
+        className={styles.user}
+        style={{ backgroundColor: getColor(sender.id) }}
+      >
         {sender.name.slice(0, 1)}
       </div>
       <div className={styles.details}>
