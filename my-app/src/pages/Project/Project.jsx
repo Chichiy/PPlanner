@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from "react-redux"
 import { nanoid } from "@reduxjs/toolkit"
 
 import styles from "./project.module.scss"
+
+import { ReactComponent as CardsIcon } from "../../img/icon/cards.svg"
+import { ReactComponent as CalendarIcon } from "../../img/icon/calendar.svg"
 import Navbar from "../Navbar/Navbar"
 import ItineraryBoard from "./feature/itineraryBoard/ItineraryBoard"
 import CardBoard from "./feature/CardBoard/CardBoard"
@@ -159,13 +162,19 @@ const Project = () => {
         <Navbar type="project" />
         <div className={styles.container}>
           <ul>
-            <Link to={`${match.url}/todoList`}>待辦事項</Link>
+            {/* <Link to={`${match.url}/todoList`}>待辦事項</Link> */}
 
-            <Link to={`${match.url}/cards`}>卡片板</Link>
+            <Link to={`${match.url}/cards`}>
+              <CardsIcon className={styles.cardsIcon} />
+              <div className={styles.title}>卡片板 </div>
+            </Link>
 
-            <Link to={`${match.url}/itineraries/${itineraryId}`}>行程板</Link>
+            <Link to={`${match.url}/itineraries/${itineraryId}`}>
+              <CalendarIcon className={styles.itineraryIcon} />
+              <div className={styles.title}> 行程板 </div>
+            </Link>
 
-            <Link to={`${match.url}/expenditure`}>花費板</Link>
+            {/* <Link to={`${match.url}/expenditure`}>花費板</Link> */}
           </ul>
         </div>
       </Route>

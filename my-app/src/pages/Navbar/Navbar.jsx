@@ -168,8 +168,8 @@ const BoardSelect = (props) => {
   let options = [
     { value: "cards", label: "卡片板" },
     { value: "itineraries", label: "行程板" },
-    { value: "expenditure", label: "花費板" },
-    { value: "todoList", label: "待辦清單" },
+    // { value: "expenditure", label: "花費板" },
+    // { value: "todoList", label: "待辦清單" },
   ]
   const thisBoard = () => {
     return options.findIndex((option) => option.value === props.type)

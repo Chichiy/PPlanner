@@ -24,7 +24,16 @@ const Dayplans = () => {
   const cards = useSelector((state) =>
     state.cards.filter((card) => card.status === 1)
   )
-  const startDate = useLocation().state.startDate
+
+  const location = useLocation()
+
+  let startDate
+  try {
+    startDate = location.state.startDate
+  } catch {
+    startDate = new Date()
+  }
+
   const getDates = () => {
     let temp = []
     for (let i = 0; i < 8; i++) {
@@ -62,8 +71,16 @@ const Dayplans = () => {
                 }`
               }
             >
-              {(provided) => (
-                <td {...provided.droppableProps} ref={provided.innerRef}>
+              {(provided, snapshot) => (
+                <td
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{
+                    backgroundColor: snapshot.isDraggingOver
+                      ? "#ced0ce"
+                      : "white",
+                  }}
+                >
                   {i + 1}
                   {/* {provided.placeholder} */}
                 </td>
