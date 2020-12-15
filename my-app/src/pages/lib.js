@@ -1,4 +1,4 @@
-//calculate comment time
+//////calculate comment time//////
 export const getTime = (dateString) => {
   let commentedTime = new Date(dateString).getTime()
   let currentTime = new Date().getTime()
@@ -44,9 +44,35 @@ export const getTime = (dateString) => {
   return `${interval}年前`
 }
 
-//get user color
+//////get user color//////
 export const getColor = (id) => {
   let code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
   let colorCode = `hsl(${code},95%, 70%)`
   return colorCode
+}
+
+//////get Date Header//////
+export const getDateHeader = (dateObj, type) => {
+  const dateConverter = (dateObj) => {
+    const dayNamesEn = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."]
+    let temp = {
+      MM_DD: `${dateObj.getMonth() + 1}/${dateObj.getDate()}`,
+      Day: dayNamesEn[dateObj.getDay()],
+    }
+    return temp
+  }
+
+  switch (type) {
+    case "MMDD": {
+      return dateConverter(dateObj).MM_DD
+    }
+
+    case "Day": {
+      return dateConverter(dateObj).Day
+    }
+    default: {
+      console.log("wrong type")
+      break
+    }
+  }
 }

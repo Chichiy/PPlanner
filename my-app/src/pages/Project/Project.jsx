@@ -38,6 +38,7 @@ import {
   modifyCard,
   removeCard,
   initCards,
+  modifyCardWithCheck,
 } from "./feature/CardBoard/cardSlice"
 
 import { addMember, modifyMember, removeMember } from "../User/membersSlice"
@@ -49,7 +50,7 @@ const Project = () => {
   let match = useRouteMatch()
   let projects = useSelector((state) => state.projects)
   let itineraryId = useSelector((state) => state.itinerary.id)
-  let cards = useSelector((state) => state.cards)
+  const cards = useSelector((state) => state.cards)
   const dispatch = useDispatch()
 
   const handleAddDayplan = (res) => {
@@ -70,6 +71,10 @@ const Project = () => {
 
   const handleModifyCard = (res, source) => {
     dispatch(modifyCard(res))
+  }
+
+  const checkModifyCard = (res) => {
+    dispatch(modifyCardWithCheck(res))
   }
 
   const handleRemoveCard = (res, source) => {
@@ -108,19 +113,20 @@ const Project = () => {
     // initial itinerary with latest version
     getFsData_Itinerary(projectId).then((itinerary) => {
       //initial and listen to dayplans
-      let unsubscribeToDayplan = listenToDayplans(
-        itinerary.id,
-        handleAddDayplan,
-        handleModifyDayplan,
-        handleRemoveDayplan
-      )
+      // let unsubscribeToDayplan = listenToDayplans(
+      //   itinerary.id,
+      //   handleAddDayplan,
+      //   handleModifyDayplan,
+      //   handleRemoveDayplan
+      // )
       dispatch(initItinerary(itinerary))
     })
 
     let unsubscribeToCard = listenToCard(
       projectId,
       handleAddCard,
-      handleModifyCard,
+      checkModifyCard,
+      // handleModifyCard,
       handleRemoveCard
     )
 

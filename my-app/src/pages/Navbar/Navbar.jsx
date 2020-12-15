@@ -282,24 +282,47 @@ const CardSelect = () => {
 }
 
 const DaySelect = () => {
-  const restTime = (date) => {
+  // console.log("dayselect")
+
+  const resetTime = (date) => {
     let temp = new Date(date.getTime())
     temp.setHours(0)
     temp.setMinutes(0)
+    temp.setSeconds(0)
     temp.setMilliseconds(0)
     return temp
   }
 
+  const [startDate, setStartDate] = useState(resetTime(new Date()))
   const plannedCards = useSelector((state) => state.cards).filter(
     (card) => card.status === 1
   )
-  const [startDate, setStartDate] = useState(restTime(new Date()))
+  // let currentDateRange
+  // if (plannedCards.length > 0) {
+  //   currentDateRange = plannedCards.reduce((prev, curr) => {
+  //     try {
+  //       let currDate = new Date(curr.start_time)
+  //       let diffDay = Math.floor((currDate - startDate) / (24 * 60 * 60 * 1000))
+  //       if (diffDay > -1 && diffDay < 7) {
+  //         return [...prev, ...currDate]
+  //       }
+  //     } catch { }
+  //   }, [])
+  //   console.log(currentDateRange)
+  // }
 
-  useEffect(() => {
-    if (plannedCards.length > 0) {
-      setStartDate(restTime(new Date(plannedCards[0].start_time)))
-    }
-  }, [plannedCards[0]])
+  // useEffect(() => {
+  //   if (plannedCards.length > 0) {
+  //     // let currentDateRange = plannedCards.reduce(function (prev, curr) {
+  //     //   let currDate = new Date(curr.start_time)
+  //     //   let diffDay = Math.floor(((currDate - startDate) / 24) * 60 * 60 * 1000)
+  //     //   if (diffDay > -1 && diffDay < 7) {
+  //     //     return [...prev, ...currDate]
+  //     //   }
+  //     // }, [])
+  //     setStartDate(resetTime(new Date(plannedCards[0].start_time)))
+  //   }
+  // }, [plannedCards[0]])
 
   //update start date through location.state
   let history = useHistory()

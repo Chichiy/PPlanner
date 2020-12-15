@@ -1,4 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+
+export const modifyCardWithCheck = createAsyncThunk(
+  "cards/modifyCardWithCheck",
+  (res) => {
+    return res
+  },
+  {
+    condition: (res, { getState }) => {
+      const { cards } = getState()
+      const target = cards.find((card) => card.id === res.id)
+
+      let keys = Object.keys(target)
+      for (let i = 0; i < keys.length; i++) {
+        if (res[keys[i]] !== target[keys[i]]) {
+          return true
+        }
+      }
+      return false
+    },
+  }
+)
 
 export const cardSlice = createSlice({
   name: "cards",
@@ -17,6 +38,16 @@ export const cardSlice = createSlice({
       let index = state.findIndex((card) => card.id === target.id)
       state.splice(index, 1, target)
     },
+
+    modifyCardProperties: (state, action) => {
+      let target = action.payload
+      let change = target.change
+      let index = state.findIndex((card) => card.id === target.id)
+      for (let key in change) {
+        state[index][key] = change[key]
+      }
+    },
+
     removeCard: (state, action) => {
       let target = action.payload
       let index = state.findIndex((card) => card.id === target.id)
@@ -24,94 +55,29 @@ export const cardSlice = createSlice({
     },
 
     updateCardsOrder: (state, action) => {
-      switch (action.payload.type) {
-        case "cardsList": {
-          let result = action.payload.result
+      let result = action.payload.result
 
-          //use cardId to find original postion in whole cards array
-          let souIndex = state.findIndex(
-            (card) => card.id === result.draggableId
-          )
-          let desIndex = state.findIndex(
-            (card) => card.id === action.payload.destinationId
-          )
+      //use cardId to find original postion in whole cards array
+      let souIndex = state.findIndex((card) => card.id === result.draggableId)
+      let desIndex = state.findIndex(
+        (card) => card.id === action.payload.destinationId
+      )
 
-          //extract target from original position
-          let [reorderItem] = state.splice(souIndex, 1)
+      //extract target from original position
+      let [reorderItem] = state.splice(souIndex, 1)
 
-          //put in new position
-          state.splice(desIndex, 0, reorderItem)
-          break
-        }
-
-        case "cross/add": {
-          let result = action.payload.result
-
-          //prepare format
-          let targetIndex = state.findIndex(
-            (card) => card.id === result.draggableId
-          )
-          let target = state[targetIndex]
-          target.status = 0
-
-          //update locations info
-          let souId = result.source.droppableId
-          let locationIndex = target.locations.findIndex(
-            (location) => location.dayplan_id === souId
-          )
-          target.locations.splice(locationIndex, 1)
-
-          let desIndex =
-            state.findIndex(
-              (card) => card.id === action.payload.desId_Previous
-            ) + 1
-
-          //reorder
-          if (desIndex > targetIndex) {
-            let reorderItem = state[targetIndex]
-            state.splice(desIndex, 0, reorderItem)
-            state.splice(targetIndex, 1)
-          } else {
-            let reorderItem = state[targetIndex]
-            state.splice(desIndex, 0, reorderItem)
-            state.splice(targetIndex + 1, 1)
-          }
-
-          break
-        }
-
-        case "cross/remove": {
-          //find onChange schedule
-          let result = action.payload.result
-          let target = state.find((card) => card.id === result.draggableId)
-          target.status = 1
-
-          //add locations
-          let location = {
-            itinerary_id: action.payload.itineraryId,
-            dayplan_id: result.destination.droppableId,
-          }
-          if (!target.locations) {
-            target.locations = []
-          }
-          target.locations.push(location)
-          break
-        }
-
-        case "updateLocations": {
-          let result = action.payload.result
-          let target = state.find((card) => card.id === result.draggableId)
-          let location = target.locations.find(
-            (location) => location.dayplan_id === result.source.droppableId
-          )
-
-          location.dayplan_id = result.destination.droppableId
-          break
-        }
-
-        default: {
-        }
-      }
+      //put in new position
+      state.splice(desIndex, 0, reorderItem)
+    },
+  },
+  extraReducers: {
+    [modifyCardWithCheck.pending]: (state, action) => {
+      console.log("checking cards state")
+    },
+    [modifyCardWithCheck.fulfilled]: (state, action) => {
+      let target = action.payload
+      let index = state.findIndex((card) => card.id === target.id)
+      state.splice(index, 1, target)
     },
   },
 })
@@ -121,6 +87,7 @@ export const {
   removeCard,
   modifyCard,
   updateCardsOrder,
+  modifyCardProperties,
 } = cardSlice.actions
 
 export default cardSlice.reducer

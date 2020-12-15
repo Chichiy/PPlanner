@@ -44,6 +44,7 @@
   justify-content: center;
   align-content: flex-start;
   overflow-y: scroll;
+  z-index: 30;
 
   .card {
     //text view
@@ -59,6 +60,7 @@
     line-height: 40px;
     text-align: center;
     user-select: none;
+    z-index: 20;
   }
 }
 
@@ -77,6 +79,7 @@
   position: relative;
 
   table {
+    margin-top: 59px;
     width: 100%;
     border-collapse: collapse;
     border: 1px solid $gray;
@@ -85,34 +88,60 @@
 
   td {
     width: 12.5%;
-    height: 10px;
-    padding: 10px;
     vertical-align: middle;
     border: 1px solid $gray;
     box-sizing: border-box;
     background-color: $white;
   }
 
-  .fix_Droppable {
+  .datesHeader_row {
+    position: fixed;
+    top: 50px;
+    right: 0px;
+    width: 100%;
+    height: 56px;
+    background-color: $gray_lighter2;
+    z-index: 20;
+    display: flex;
+    border-bottom: 1px solid $gray;
+    // box-shadow: 0px 1px 1px 1px $gray_lighter;
+
+    td {
+      padding: 10px;
+      background-color: $gray_lighter2;
+      border-bottom: 1px solid $gray;
+      box-sizing: border-box;
+      height: 60px;
+      vertical-align: middle;
+    }
+  }
+
+  .datesHeader_space {
+    margin-left: 200px;
+  }
+  .datesHeader_date {
+    font-size: 18px;
+    color: $black;
+    margin-bottom: 5px;
+  }
+
+  .datesHeader_day {
+    font-size: $h6;
+    color: $gray;
+  }
+  .hourHeader {
+    font-size: $h4;
+    color: $black;
+  }
+
+  .appointments {
     position: absolute;
-    padding-top: 50px;
+    margin-top: 110px;
     box-sizing: border-box;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-  }
-
-  .fix_darggable {
-    width: 12.5%;
-    padding: 10px;
-    vertical-align: middle;
-    border: 1px solid $gray;
-    box-sizing: border-box;
-    background-color: $white;
-    // position: absolute;
-    // top: 100px;
-    // left: 200px;
+    height: 0;
   }
 
   //////container for each columns senario//////
