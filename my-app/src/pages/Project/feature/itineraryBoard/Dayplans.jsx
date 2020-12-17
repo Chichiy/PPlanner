@@ -17,7 +17,7 @@ import {
 import styles from "../../../../scss/itineraryBoard.module.scss"
 
 import DayJS from "react-dayjs"
-import { getDateHeader } from "../../../../pages/lib"
+import { getDateHeader, colorCode } from "../../../../pages/lib"
 import { addDayplan_Fs } from "../../../../firebase/Config"
 
 const Dayplans = () => {
@@ -59,15 +59,6 @@ const Appointments = React.memo(({ startDate, cards }) => {
   }
 
   const style = (card, snapshot, provided) => {
-    let colorCode = {
-      food: "#ff70a6",
-      hotel: "#020887",
-      country: "#ff9770",
-      commute: "#71a9f7",
-      site: "#ecdd7b",
-      default: "#e2e1df",
-    }
-
     let day = new Date(card.start_time)
     let dayIndex = Math.floor((day - startDate) / 24 / 60 / 60 / 1000)
 
@@ -82,11 +73,10 @@ const Appointments = React.memo(({ startDate, cards }) => {
       padding: "10px",
       border: "1px solid #ced0ce",
       boxSizing: "border-box",
-
       position: "absolute",
-      backgroundColor: colorCode[card.category],
       borderRadius: "5px",
 
+      backgroundColor: colorCode[card.category],
       top: `${startTime * 30 - 30}px`,
       left: `${(dayIndex + 1) * 12.5}%`,
       height: `${timeSpan * 30}px`,
@@ -111,16 +101,28 @@ const Appointments = React.memo(({ startDate, cards }) => {
           {cardHasPlan.map((card, index) => {
             return (
               <Draggable key={nanoid()} draggableId={card.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={style(card, snapshot, provided)}
-                    ref={provided.innerRef}
-                  >
-                    <div>{card.title}</div>
-                  </div>
-                )}
+                {(provided, snapshot) => {
+                  // console.log(snapshot.isDragging ? snapshot : null)
+                  return (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={style(card, snapshot, provided)}
+                      ref={provided.innerRef}
+                    >
+                      <div>{card.title}</div>
+                      <div
+                        className={styles.expandHandle_upper}
+                        aria-label="upper"
+                        // {...provided.dragHandleProps}
+                      ></div>
+                      <div
+                        className={styles.expandHandle_lower}
+                        aria-label="lower"
+                      ></div>
+                    </div>
+                  )
+                }}
               </Draggable>
             )
           })}

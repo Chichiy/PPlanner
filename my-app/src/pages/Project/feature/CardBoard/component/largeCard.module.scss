@@ -59,7 +59,7 @@
     @extend .fas;
 
     &:before {
-      content: fa-content($fa-var-user);
+      content: fa-content($fa-var-check);
       position: absolute;
       top: 0px;
       left: -20px;
@@ -117,46 +117,19 @@
       display: flex;
 
       .tag {
+        line-height: 26px;
+        height: 26px;
         padding: 5px 10px;
-        font-size: 10px;
+        font-size: $h6;
         margin-right: 10px;
         border-radius: 5px;
         flex: none;
         line-height: 14px;
-      }
-
-      .new_tag {
-        @extend .tag;
         background-color: $gray_lighter;
-      }
-
-      //each colors
-      .tag_food {
-        @extend .tag;
-        background-color: $food;
-      }
-
-      .tag_hotel {
-        @extend .tag;
-        background-color: $hotel;
-      }
-
-      .tag_country {
-        @extend .tag;
-        background-color: $country;
-      }
-
-      .tag_site {
-        @extend .tag;
-        background-color: $site;
-      }
-      .tag_commute {
-        @extend .tag;
-        background-color: $commute;
-      }
-      .tag_default {
-        @extend .tag;
-        background-color: $default;
+        cursor: pointer;
+        box-sizing: border-box;
+        color: $white;
+        font-weight: bold;
       }
     }
   }
@@ -398,6 +371,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 16px;
+    cursor: pointer;
   }
 }
 
@@ -434,4 +408,217 @@
     padding: 10px;
     box-sizing: border-box;
   }
+}
+
+.addTime_container {
+  width: 300px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  background-color: $white;
+  border: 1 solid $gray_lighter;
+  box-shadow: 0 0 5px 2px $gray_lighter;
+
+  .addLink_span {
+    font-size: $h5;
+    color: $gray_darker;
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid $gray;
+  }
+
+  .addLink_input {
+    margin: 10px 0;
+    width: 100%;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    border: 1 solid $gray_lighter;
+  }
+
+  .addLink_button {
+    @extend .button;
+    margin: 10px 0;
+    width: fit-content;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .item {
+    margin: 0 10px;
+    padding: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: $black;
+  }
+
+  .react_datepicker_wrapper {
+    width: 100%;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 1px solid $gray;
+    border-radius: 3px;
+  }
+
+  .input {
+    font-family: inherit;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: $h5;
+    color: $black;
+
+    &:hover {
+      box-shadow: 0 0 5px 1px $gray;
+    }
+    &:focus {
+      background-color: $white;
+    }
+  }
+
+  .popper {
+    width: 400px;
+  }
+
+  .hasPlan {
+    background-color: $main_lighter;
+    border-radius: 50%;
+  }
+}
+
+.addTag_container {
+  width: 200px;
+  padding: 10px;
+  margin-top: 5px;
+  box-sizing: border-box;
+
+  position: absolute;
+  background-color: $white;
+  border: 1px solid $gray_lighter;
+  box-shadow: 0 0 5px 2px $gray_lighter;
+
+  .addTag_span {
+    display: block;
+    text-align: center;
+    font-size: $h5;
+    color: $gray_darker;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $gray;
+    margin-top: 1px;
+    margin-bottom: 5px;
+    cursor: default;
+  }
+
+  .input {
+    font-family: inherit;
+    width: 100%;
+
+    padding: 5px 10px;
+    box-sizing: border-box;
+
+    color: $black;
+    border: 1px solid $gray_lighter;
+
+    &:hover {
+      border: 1px solid $gray_lighter;
+      box-shadow: 0 0 5px 1px $gray;
+    }
+
+    &:focus {
+      background-color: $white;
+    }
+  }
+
+  .addTag_button {
+    @extend .button;
+    margin: 10px 0;
+    width: fit-content;
+    box-sizing: border-box;
+  }
+
+  .tag_container {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    .tag {
+      flex: auto;
+      height: 30px;
+      padding: 5px 10px;
+      margin: 5px 0;
+
+      border-radius: 5px;
+      background-color: $gray_lighter;
+      box-sizing: border-box;
+      color: $white;
+      font-size: $h6;
+      font-weight: bold;
+      line-height: 20px;
+      cursor: pointer;
+
+      &:hover {
+        padding-left: 15px;
+        opacity: 80%;
+      }
+    }
+
+    .active {
+      position: relative;
+
+      &::after {
+        @extend %fa-icon;
+        @extend .fas;
+        content: fa-content($fa-var-check);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 10px;
+        font-size: smaller;
+      }
+    }
+
+    .editing {
+      padding-left: 15px;
+      opacity: 80%;
+    }
+
+    .edit {
+      width: 20px;
+      height: 20px;
+      margin-left: 5px;
+      position: relative;
+      flex: none;
+      color: $gray;
+
+      &::before {
+        @extend %fa-icon;
+        @extend .fas;
+        content: fa-content($fa-var-pencil-alt);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        font-size: $h6;
+      }
+
+      &:hover {
+        color: $gray_darker;
+      }
+    }
+
+    .onEdit {
+      @extend .edit;
+      color: $gray_darker;
+    }
+  }
+
+  // .item {
+  //   margin: 0 10px;
+  //   padding: 5px;
+  //   border-radius: 5px;
+  //   text-decoration: none;
+  //   color: $black;
+  // }
 }

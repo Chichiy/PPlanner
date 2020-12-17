@@ -55,7 +55,6 @@ export const AddCard = ({ pendingInfo, setPendingInfo, shouldAddCard }) => {
     setPendingInfo({
       ...pendingInfo,
       category: e.target.value,
-      tags: [e.target.value],
     })
     setCategory(!selectCategory)
   }

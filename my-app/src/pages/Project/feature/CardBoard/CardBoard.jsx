@@ -23,6 +23,9 @@ const CardBoard = () => {
 
   const cards = useSelector((state) => state.cards)
   const { projectId } = useParams()
+  const project = useSelector((state) =>
+    state.projects.find((project) => project.id === projectId)
+  )
   const match = useRouteMatch()
 
   //////filter cards//////
@@ -34,11 +37,19 @@ const CardBoard = () => {
   }
   let searchTags = useQuery()
 
+  const findTagId = (tagName) => {
+    try {
+      return project.tags.find((tag) => tag.name === tagName).id
+    } catch {
+      return null
+    }
+  }
+
   const filteredCard = () => {
     return searchTags
       ? cards.filter((card) => {
           for (let i = 0; i < searchTags.length; i++) {
-            if (card.tags.includes(searchTags[i])) {
+            if (card.tags.includes(findTagId(searchTags[i]))) {
               return true
             }
           }
@@ -51,7 +62,7 @@ const CardBoard = () => {
     title: "",
     description: "",
     category: "default",
-    tags: ["default"],
+    tags: [],
     status: 0,
     cover_pic: "https://fakeimg.pl/65x65/",
   }

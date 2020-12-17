@@ -23,9 +23,15 @@ import {
   updateLink_Fs,
   removeLink_Fs,
 } from "../../../../../firebase/Config"
-import { current, nanoid } from "@reduxjs/toolkit"
+import { nanoid } from "@reduxjs/toolkit"
 
-import { getTime, getColor } from "../../../../lib"
+import Tags, { AddTag } from "./Tags"
+
+//DatesPicker
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+
+import { getTime, getColor, resetTime, colorCode } from "../../../../lib"
 
 const LargeCard = () => {
   const { projectId, cardId } = useParams()
@@ -50,25 +56,45 @@ const LargeCard = () => {
     updateCard_Fs(projectId, cardId, change)
   }
 
-  //close large card
-  const closeCard = (e) => {
+  //handle close
+  const close = (e) => {
     let triggerElementId = ["closeBtn", "largeCardBackground"]
 
+    // close floating menu if onblur
+    if (isfloating && e.target.ariaLabel !== isfloating.type) {
+      //prevent close on react-datepicker
+      if (
+        e.target.className.slice(0, 5) === "react" ||
+        e.target.getAttribute("aria-labelledBy") === "addTime"
+      ) {
+        return
+      }
+
+      setFloat(false)
+      //close card if click on click btn
+      if (e.target.id === "closeBtn") {
+        history.goBack()
+      }
+      return
+    }
+
+    //close card
     if (triggerElementId.includes(e.target.id)) {
       history.goBack()
+      return
     }
   }
 
   //float menu
-  const sideBar_addLink = useRef(2)
   const [isfloating, setFloat] = useState(false)
+  const sideBar_addLink = useRef(null)
+  const sideBar_addTime = useRef(null)
 
   const handleFloatMenu = (type, ref) => {
     if (!isfloating) {
       let float = {
         type: type,
-        x: ref.current.getBoundingClientRect().x,
-        y: ref.current.getBoundingClientRect().y,
+        position: ref.current.getBoundingClientRect(),
       }
       setFloat(float)
     } else {
@@ -112,7 +138,7 @@ const LargeCard = () => {
       <div
         id="largeCardBackground"
         className={styles.card_large_background}
-        onClick={closeCard}
+        onClick={close}
       >
         <div className={styles.card_large}>
           {/* header */}
@@ -124,26 +150,17 @@ const LargeCard = () => {
             </div>
           </div>
 
+          {/* main */}
           <div className={styles.card_main}>
             {/* tag section */}
-
-            <div className={styles.tags_section}>
-              <div className={styles.title}>標籤</div>
-              <div className={styles.container}>
-                {card.tags.map((tag) => {
-                  return (
-                    <div key={nanoid()} className={styles[`tag_${tag}`]}>
-                      {tag}
-                    </div>
-                  )
-                })}
-
-                <div className={styles.new_tag}>+</div>
-              </div>
-            </div>
+            <Tags
+              card={card}
+              projectId={projectId}
+              isfloating={isfloating}
+              setFloat={setFloat}
+            />
 
             {/* discription section */}
-
             <Description
               description={card.description}
               handleUpdateDescription={updateDescription}
@@ -155,8 +172,8 @@ const LargeCard = () => {
                 setFloat={setFloat}
               />
             )}
-            {/* comments section */}
 
+            {/* comments section */}
             <Comments cardId={cardId} projectId={projectId} />
           </div>
 
@@ -166,6 +183,7 @@ const LargeCard = () => {
             <div className={styles.button_sideBar}>待辦事項</div>
             {card.links ? null : (
               <div
+                aria-label="addLink"
                 ref={sideBar_addLink}
                 className={styles.button_sideBar}
                 onClick={() => {
@@ -176,16 +194,24 @@ const LargeCard = () => {
               </div>
             )}
             <div className={styles.button_sideBar}>預估花費</div>
-            <div className={styles.button_sideBar}>預估時長</div>
+            <div
+              aria-label="addTime"
+              ref={sideBar_addTime}
+              className={styles.button_sideBar}
+              onClick={() => {
+                handleFloatMenu("addTime", sideBar_addTime)
+              }}
+            >
+              安排時間
+            </div>
           </div>
 
           {/* float menu */}
           <FloatMenu
+            card={card}
             cardId={cardId}
             isfloating={isfloating}
             setFloat={setFloat}
-            links={links}
-            setLinks={setLinks}
           />
         </div>
       </div>
@@ -197,66 +223,240 @@ const LargeCard = () => {
 export default LargeCard
 
 ////////////floating menu////////////
-const FloatMenu = ({ cardId, isfloating, setFloat, links, setLinks }) => {
-  const [url, setUrl] = useState("")
-  // const [loading, setLoading] = useState(false)
-  // const [links, setLinks] = useState([])
-
+const FloatMenu = ({ card, cardId, isfloating, setFloat }) => {
   switch (isfloating.type) {
     case "addLink": {
-      const handleSubmit = async (e) => {
-        // setLoading(true)
-        setFloat(false)
-        const cors = "https://cors-anywhere.herokuapp.com/"
-        // const url = "https://andy6804tw.github.io/2019/09/21/fix-cors-problem/"
-
-        const res = await fetch(cors + url)
-        const data = await res.text()
-
-        var parser = new DOMParser()
-        var doc = parser.parseFromString(data, "text/html")
-        let title = doc.querySelector("title").textContent
-        let img = doc.querySelector("body").querySelector("img")
-
-        //// img converter ////
-        // get src
-        img = img ? img.src : ""
-
-        //update domain if using relative path
-        let myOrigin = window.location.origin
-        if (img.slice(0, myOrigin.length) === myOrigin) {
-          let correctOrigin = new URL(url).origin
-          let correctImgPath = correctOrigin + img.slice(origin.length)
-          img = correctImgPath
-        }
-
-        let pending = {
-          card_id: cardId,
-          url: url,
-          title: title,
-          img: img,
-          date: new Date(),
-        }
-
-        ///update fiebase
-        addLink_Fs(pending)
-        // setLoading(false)
-        setUrl("")
-      }
-
       return (
-        <AddLink
-          url={url}
-          setUrl={setUrl}
-          handleSubmit={handleSubmit}
-          isfloating={isfloating}
-        />
+        <AddLink isfloating={isfloating} setFloat={setFloat} cardId={cardId} />
       )
+    }
+
+    case "addTime": {
+      return <AddTime card={card} isfloating={isfloating} setFloat={setFloat} />
+    }
+
+    case "addTag": {
+      return <AddTag card={card} isfloating={isfloating} setFloat={setFloat} />
     }
     default: {
       return null
     }
   }
+}
+
+const AddTime = ({ card, isfloating, setFloat }) => {
+  const { projectId, cardId } = useParams()
+
+  //input time holder
+  const [startDate, setStartDate] = useState(resetTime(new Date()))
+  const [endDate, setEndDate] = useState(resetTime(new Date()))
+
+  useEffect(() => {
+    //update time to the latest value
+    try {
+      if (card.start_time && card.end_time) {
+        setStartDate(new Date(card.start_time))
+        setEndDate(new Date(card.end_time))
+      }
+    } catch {}
+  }, [])
+
+  const handleAddTime = () => {
+    if (
+      //check is input valid
+      endDate - startDate < 0 ||
+      endDate - startDate > 24 * 60 * 60 * 1000 ||
+      endDate.getDate() !== startDate.getDate()
+    ) {
+      alert("日期格式有誤，目前僅接受在同一天開始與結束的時間")
+    } else {
+      //update to cloud database
+      let change = {
+        status: 1,
+        start_time: startDate,
+        end_time: endDate,
+      }
+      updateCard_Fs(projectId, cardId, change)
+    }
+  }
+
+  return (
+    <div
+      aria-label="addTime"
+      className={styles.addTime_container}
+      style={{
+        position: "fixed",
+        width: `${isfloating.position.width}px`,
+        left: `${isfloating.position.x}px`,
+        top: `${isfloating.position.y + 40}px`,
+      }}
+    >
+      <div aria-label="addTime" className={styles.addLink_span}>
+        開始時間
+      </div>
+      <DaySelect date={startDate} setDate={setStartDate} />
+      <div aria-label="addTime" className={styles.addLink_span}>
+        結束時間
+      </div>
+      <DaySelect date={endDate} setDate={setEndDate} />
+      <div
+        aria-label="addTime"
+        className={styles.addLink_button}
+        onClick={handleAddTime}
+      >
+        儲存
+      </div>
+    </div>
+  )
+}
+
+const DaySelect = ({ date, setDate }) => {
+  //show dates with plans
+  const plannedCards = useSelector((state) => state.cards).filter(
+    (card) => card.status === 1
+  )
+
+  const getDate = (type, string) => {
+    switch (type) {
+      case "dateObj": {
+        let time = new Date(string)
+        return time
+      }
+
+      case "date": {
+        let time = new Date(string)
+        return time.getDate()
+      }
+      case "month": {
+        let time = new Date(string)
+        return time.getMonth()
+      }
+      case "year": {
+        let time = new Date(string)
+        return time.getFullYear()
+      }
+      default: {
+        break
+      }
+    }
+  }
+
+  const hasPlan = (date) => {
+    if (
+      plannedCards.findIndex(
+        (card) =>
+          getDate("dateObj", card.start_time) - date < 24 * 60 * 60 * 1000 &&
+          getDate("dateObj", card.start_time) - date > 0
+      ) > -1
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  return (
+    <DatePicker
+      ariaLabelledBy="addTime"
+      selected={date}
+      onChange={(date) => setDate(date)}
+      className={styles.input}
+      showTimeSelect
+      dateFormat="Pp"
+      popperClassName={styles.popper}
+      popperModifiers={{
+        offset: {
+          enabled: true,
+          offset: "-10px, -5px",
+        },
+        preventOverflow: {
+          enabled: true,
+          escapeWithReference: true,
+          boundariesElement: "viewport",
+        },
+      }}
+      wrapperClassName={styles.react_datepicker_wrapper}
+      dayClassName={(date) => (hasPlan(date) ? styles.hasPlan : undefined)}
+    />
+  )
+}
+
+const AddLink = ({ isfloating, setFloat, cardId }) => {
+  //input link holder
+  const [url, setUrl] = useState("")
+  // const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    // setLoading(true)
+    setFloat(false)
+    const cors = "https://cors-anywhere.herokuapp.com/"
+    // const url = "https://andy6804tw.github.io/2019/09/21/fix-cors-problem/"
+
+    const res = await fetch(cors + url)
+    const data = await res.text()
+
+    var parser = new DOMParser()
+    var doc = parser.parseFromString(data, "text/html")
+    let title = doc.querySelector("title").textContent
+    let img = doc.querySelector("body").querySelector("img")
+
+    //// img converter ////
+    // get src
+    img = img ? img.src : ""
+
+    //update domain if using relative path
+    let myOrigin = window.location.origin
+    if (img.slice(0, myOrigin.length) === myOrigin) {
+      let correctOrigin = new URL(url).origin
+      let correctImgPath = correctOrigin + img.slice(origin.length)
+      img = correctImgPath
+    }
+
+    let pending = {
+      card_id: cardId,
+      url: url,
+      title: title,
+      img: img,
+      date: new Date(),
+    }
+
+    ///update fiebase
+    addLink_Fs(pending)
+    // setLoading(false)
+    setUrl("")
+  }
+
+  return (
+    <div
+      aria-label="addLink"
+      className={styles.addLink_container}
+      style={{
+        position: "fixed",
+        left: `${isfloating.position.x}px`,
+        top: `${isfloating.position.y + 40}px`,
+      }}
+    >
+      <div aria-label="addLink" className={styles.addLink_span}>
+        附加連結
+      </div>
+      <input
+        aria-label="addLink"
+        type="text"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="請貼上連結"
+        className={styles.addLink_input}
+        autoFocus
+      />
+      <div
+        aria-label="addLink"
+        className={styles.addLink_button}
+        onClick={url ? handleSubmit : null}
+      >
+        附加
+      </div>
+    </div>
+  )
 }
 
 ////////////Title////////////
@@ -395,8 +595,7 @@ const Links = ({ links, isfloating, setFloat }) => {
     } else {
       let float = {
         type: "addLink",
-        x: toggleAddLinkBtnRef.current.getBoundingClientRect().x,
-        y: toggleAddLinkBtnRef.current.getBoundingClientRect().y,
+        position: toggleAddLinkBtnRef.current.getBoundingClientRect(),
       }
 
       setFloat(float)
@@ -503,8 +702,13 @@ const LinkItem = ({ data }) => {
   }
 
   return (
-    <div className={styles.link_container} target="_blank" rel="noreferrer">
-      <a className={styles.preview_img} href={data.url}>
+    <div className={styles.link_container}>
+      <a
+        className={styles.preview_img}
+        href={data.url}
+        target="_blank"
+        rel="noreferrer"
+      >
         <img src={data.img} alt="link's thumbnail" />
       </a>
       <div className={styles.info}>
@@ -516,7 +720,13 @@ const LinkItem = ({ data }) => {
             autoFocus
           />
         ) : (
-          <a className={styles.title} ref={title} href={data.url}>
+          <a
+            className={styles.title}
+            ref={title}
+            href={data.url}
+            target="_blank"
+            rel="noreferrer"
+          >
             {getTitle()}
           </a>
         )}
@@ -538,35 +748,6 @@ const LinkItem = ({ data }) => {
             編輯
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
-const AddLink = ({ url, setUrl, handleSubmit, isfloating }) => {
-  return (
-    <div
-      className={styles.addLink_container}
-      style={{
-        position: "fixed",
-        left: `${isfloating.x}px`,
-        top: `${isfloating.y + 30}px`,
-      }}
-    >
-      <div className={styles.addLink_span}>附加連結</div>
-      <input
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="請貼上連結"
-        className={styles.addLink_input}
-        autoFocus
-      />
-      <div
-        className={styles.addLink_button}
-        onClick={url ? handleSubmit : null}
-      >
-        附加
       </div>
     </div>
   )

@@ -42,7 +42,7 @@ const Navbar = (props) => {
             </div>
 
             <div className={styles.searchCard}>
-              <CardSelect />
+              <CardSelect project={project && project} />
             </div>
           </div>
         )
@@ -204,7 +204,7 @@ const BoardSelect = (props) => {
   )
 }
 
-const CardSelect = () => {
+const CardSelect = ({ project }) => {
   let history = useHistory()
   let match = useRouteMatch()
 
@@ -213,26 +213,41 @@ const CardSelect = () => {
   const animatedComponents = makeAnimated()
 
   //prepare options
-  let cards = useSelector((state) => state.cards)
-  let [options, setOptions] = useState([])
+  const tags = project ? project.tags : []
+  const cards = useSelector((state) => state.cards)
+  const [options, setOptions] = useState([])
 
   useEffect(() => {
-    let tags = cards.reduce(function (prev, curr) {
-      return [...prev, ...curr.tags]
+    //get all added tag's id from each card
+    let tagList = cards.reduce(function (prev, curr) {
+      curr.tags.forEach((tag) => {
+        if (!prev.includes(tag)) {
+          prev.push(tag)
+        }
+      })
+      return prev
     }, [])
 
+    try {
+      tagList.forEach((tagId, index) => {
+        tagList[index] = tags.find((tag) => tag.id === tagId).name
+      })
+    } catch {
+      tagList = []
+    }
     const capitalize = (string) => {
       return string.slice(0, 1).toUpperCase() + string.slice(1)
     }
+
     let temp = []
-    tags.forEach((tag) => {
+    tagList.forEach((tag) => {
       temp.push({
         value: tag,
         label: capitalize(tag),
       })
       setOptions(temp)
     })
-  }, [cards])
+  }, [cards, tags])
 
   //get searched tags from URL
   const useQuery = () => {
@@ -255,14 +270,14 @@ const CardSelect = () => {
         params.push(tag.value)
       })
       location = {
-        pathname: `${match.url}/`,
+        pathname: `${match.url}` + `${match.url.slice(-1) === "/" ? "" : "/"}`,
         search: `?tag=${params.join("+")}`,
-        state: { tags: params },
+        // state: { tags: params },
       }
     } else {
       location = {
         pathname: `${match.url}`,
-        state: { tags: false },
+        // state: { tags: false },
       }
     }
     history.push(location)

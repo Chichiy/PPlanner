@@ -9,6 +9,7 @@ import styles from "../../../../scss/itineraryBoard.module.scss"
 
 //functions
 import { addCard } from "../CardBoard/cardSlice"
+import { colorCode } from "../../../lib"
 
 const CardList = (props) => {
   //dispatch
@@ -46,9 +47,11 @@ const CardList = (props) => {
                     id={card.id}
                     className={styles.card}
                   >
-                    <div className={styles.cardTitle}>
-                      {card.title + snapshot.draggingOver}
-                    </div>
+                    <div
+                      className={styles.category}
+                      style={{ backgroundColor: colorCode[card.category] }}
+                    ></div>
+                    <div className={styles.title}>{card.title}</div>
                   </div>
                 )}
               </Draggable>

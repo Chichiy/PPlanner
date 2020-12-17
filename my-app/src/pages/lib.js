@@ -1,3 +1,49 @@
+//
+//
+//     COLOR
+//
+//
+
+//////get user color//////
+export const getColor = (id) => {
+  let code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
+  let colorCode = `hsl(${code},95%, 70%)`
+  return colorCode
+}
+
+//category color code
+export const colorCode = {
+  //category
+  food: "#ff70a6",
+  hotel: "#020887",
+  country: "#ff9770",
+  commute: "#71a9f7",
+  site: "#ecdd7b",
+  default: "#e2e1df",
+
+  //tag
+  green: "#61bd4f",
+  yellow: "#F2D600",
+  pink: "#FF78CB",
+  blue: "#00E2C0",
+  orange: "#FF9F1A",
+}
+
+export const colorCode_tags = {
+  //tag
+  green: "#61bd4f",
+  yellow: "#F2D600",
+  pink: "#FF78CB",
+  blue: "#00E2C0",
+  orange: "#FF9F1A",
+}
+
+//
+//
+//     TIME
+//
+//
+
 //////calculate comment time//////
 export const getTime = (dateString) => {
   let commentedTime = new Date(dateString).getTime()
@@ -44,13 +90,6 @@ export const getTime = (dateString) => {
   return `${interval}年前`
 }
 
-//////get user color//////
-export const getColor = (id) => {
-  let code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
-  let colorCode = `hsl(${code},95%, 70%)`
-  return colorCode
-}
-
 //////get Date Header//////
 export const getDateHeader = (dateObj, type) => {
   const dateConverter = (dateObj) => {
@@ -75,4 +114,14 @@ export const getDateHeader = (dateObj, type) => {
       break
     }
   }
+}
+
+//get pure date with hour, minute, second and millisecond
+export const resetTime = (date) => {
+  let temp = new Date(date.getTime())
+  temp.setHours(0)
+  temp.setMinutes(0)
+  temp.setSeconds(0)
+  temp.setMilliseconds(0)
+  return temp
 }
