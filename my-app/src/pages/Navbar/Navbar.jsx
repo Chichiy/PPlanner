@@ -22,12 +22,14 @@ import styles from "./navbar.module.scss"
 import User from "../User/User"
 import Title from "./component/Title"
 import { getColor } from "../lib"
+import { checkUserStatus } from "../../firebase/Config"
 
 const Navbar = (props) => {
   const user = useSelector((state) => state.user)
-  let [login, setLogin] = useState(true)
+  const login = user.id ? true : false
   let { projectId } = useParams()
   let match = useRouteMatch()
+  const history = useHistory()
   let thisProject = (state) =>
     state.projects.find((project) => project.id === projectId)
   let project = useSelector(thisProject)
@@ -122,14 +124,14 @@ const Navbar = (props) => {
           {user.name[0]}
         </div>
       ) : (
-        <div>
+        <div className={styles.buttons}>
           <div
             className={styles.button}
             onClick={() => {
               setShowing("signIn")
             }}
           >
-            Sign in
+            登入
           </div>
 
           <div
@@ -138,7 +140,7 @@ const Navbar = (props) => {
               setShowing("signUp")
             }}
           >
-            Sign up
+            註冊
           </div>
         </div>
       )}

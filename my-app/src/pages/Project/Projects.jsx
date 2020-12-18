@@ -29,6 +29,7 @@ const Projects = () => {
   const projects = useSelector((state) => state.projects)
   const userId = useSelector((state) => state.user.id)
 
+  console.log(userId)
   const handleAddProject = (res) => {
     dispatch(addProjects(res))
   }
@@ -89,7 +90,7 @@ const Projects = () => {
           <div className={styles.container}>
             {/* projects sections */}
             {projects.map((project) => {
-              console.log(project)
+              // console.log(project)
               return (
                 // <Link to={`${match.url}/${project.id}`} >
                 <div

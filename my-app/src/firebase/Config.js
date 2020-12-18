@@ -19,12 +19,95 @@ firebase.initializeApp(firebaseConfig)
 
 //abbreviation
 var db = firebase.firestore()
+var au = firebase.auth()
 
-const defaultID = "aJyjoGPEIH69isQ7QfYs"
+////////////////////////////////////
+//          user-related          //
+////////////////////////////////////
+
+export const checkUserStatus = (handleUser, handleNoUser) => {
+  au.onAuthStateChanged(function (user) {
+    if (user) {
+      // User is signed in.
+      handleUser(user)
+    } else {
+      // No user is signed in.
+      handleNoUser()
+    }
+  })
+}
+
+export const signUp_Native = (input, handleSuccess) => {
+  au.createUserWithEmailAndPassword(input.email, input.password)
+    .then((result) => {
+      let user = result.user
+      let docRef = db.collection("users").doc(user.uid)
+
+      let update = {
+        name: input.name,
+        email: user.email,
+        picture: user.photoURL,
+      }
+      docRef.set(update).catch(function (error) {
+        console.error("Error adding document: ", error)
+      })
+    })
+    .then((res) => {
+      console.log(res)
+      handleSuccess()
+    })
+    .catch((error) => {
+      var errorCode = error.code
+      var errorMessage = error.message
+      console.log(errorMessage)
+      // ..
+    })
+}
+
+export const signIn_Native = (email, password) => {
+  return au
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      console.log(user)
+      // Signed in
+      // ...
+    })
+    .catch((error) => {
+      var errorCode = error.code
+      var errorMessage = error.message
+      console.log(errorMessage)
+    })
+}
+
+export const signOut = (redirect) => {
+  return au
+    .signOut()
+    .then(function () {
+      // Sign-out successful.
+      redirect()
+    })
+    .catch(function (error) {
+      // An error happened.
+    })
+}
 
 export const toDate = firebase.firestore.Timestamp.toDate
 
 //////listening to cloud data///////
+export const listenToUser = (userId, updateState) => {
+  let unsubscribe = db
+    .collection("users")
+    .doc(userId)
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      let data = snapshot.data()
+      data.id = snapshot.id
+      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      updateState(data)
+    })
+  return unsubscribe
+}
+
 export const listenToMembers = (
   projectId,
   handleAdd,

@@ -18,6 +18,8 @@
     border-radius: 5px;
     text-decoration: none;
     color: $black;
+    user-select: none;
+    cursor: pointer;
   }
 
   input {
@@ -94,10 +96,24 @@
     color: $white;
     padding: 8px;
     font-size: $h4;
-    cursor: pointer;
+
     user-select: none;
     &:hover {
       box-shadow: 0 0 3px 4px $gray_lighter;
+    }
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  .button {
+    @extend .item;
+    padding: 5px 10px;
+    box-sizing: border-box;
+
+    &:hover {
+      background-color: $gray_lighter;
     }
   }
 
@@ -105,5 +121,11 @@
     @extend .item;
     background-color: $main;
     color: $white;
+    padding: 5px 10px;
+    box-sizing: border-box;
+
+    &:hover {
+      opacity: 80%;
+    }
   }
 }

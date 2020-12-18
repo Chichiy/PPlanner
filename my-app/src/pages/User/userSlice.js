@@ -3,16 +3,27 @@ import { createSlice } from "@reduxjs/toolkit"
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    id: "aJyjoGPEIH69isQ7QfYs",
-    name: "煞氣a工程師",
-    email: "test@gmail.com",
+    id: "",
+    name: "",
+    email: "",
     picture: "",
-    projects: ["mG06SIS2LbvuKWOXdNSE"],
   },
-  reducers: {},
+  reducers: {
+    initUser: (state, action) => {
+      let target = action.payload
+
+      //prevent repeatly adding when itinitallizing
+      if (state.id !== target.id) {
+        let keys = Object.keys(target)
+        keys.forEach((key) => {
+          state[key] = target[key]
+        })
+      }
+    },
+  },
 })
 
-export const {} = userSlice.actions
+export const { initUser } = userSlice.actions
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

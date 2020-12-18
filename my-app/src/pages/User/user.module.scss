@@ -100,7 +100,7 @@
 // </div>
 // </div>
 
-.signInBackground {
+.popUpBackground {
   position: fixed;
   top: 0;
   left: 0;
@@ -111,7 +111,7 @@
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.7);
 
-  .signInContainer {
+  .popUpContainer {
     position: relative;
     width: 400px;
     padding: 40px;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import styles from "./user.module.scss"
 
@@ -13,7 +13,15 @@ import {
   useHistory,
 } from "react-router-dom"
 
+import {
+  signIn_Native,
+  signUp_Native,
+  checkUserStatus,
+  listenToUser,
+  signOut,
+} from "../../firebase/Config"
 import { getColor } from "../lib"
+import { initUser } from "../User/userSlice"
 
 const User = ({ type, showUserPage, setShowing }) => {
   const user = useSelector((state) => state.user)
@@ -26,9 +34,20 @@ const User = ({ type, showUserPage, setShowing }) => {
     setShowing(false)
   }
 
+  const handleSignOut = () => {
+    const backToHome = () => {
+      history.push({
+        pathname: "/",
+      })
+      history.go(0)
+    }
+
+    signOut(backToHome)
+  }
+
   //close sign in block
-  const closeSignIn = (e) => {
-    let triggerElementId = ["closeBtn", "signInBackground"]
+  const closePopUp = (e) => {
+    let triggerElementId = ["closeBtn", "popUpBackground"]
 
     if (triggerElementId.includes(e.target.id)) {
       setShowing(false)
@@ -38,64 +57,11 @@ const User = ({ type, showUserPage, setShowing }) => {
   const content = () => {
     switch (type) {
       case "signIn": {
-        return (
-          <div
-            id="signInBackground"
-            className={styles.signInBackground}
-            onClick={closeSignIn}
-          >
-            <div className={styles.signInContainer}>
-              <div id="closeBtn" className={styles.close}>
-                X
-              </div>
-              <div className={styles.logo}>LOGO</div>
-              <div className={styles.title}>登入</div>
-              <input type="text" placeholder="請輸入電子郵件地址" />
-              <input type="password" placeholder="請輸入密碼" />
-              <div className={styles.bottom}>
-                <div
-                  className={styles.toSignUp}
-                  onClick={() => {
-                    setShowing("signUp")
-                  }}
-                >
-                  建立新帳戶
-                </div>
-                <div className={styles.signIn}>繼續</div>
-              </div>
-            </div>
-          </div>
-        )
+        return <SignIn closePopUp={closePopUp} setShowing={setShowing} />
       }
+
       case "signUp": {
-        return (
-          <div
-            id="signInBackground"
-            className={styles.signInBackground}
-            onClick={closeSignIn}
-          >
-            <div className={styles.signInContainer}>
-              <div id="closeBtn" className={styles.close}>
-                X
-              </div>
-              <div className={styles.logo}>LOGO</div>
-              <div className={styles.title}>登入</div>
-              <input type="text" placeholder="請輸入電子郵件地址" />
-              <input type="password" placeholder="請輸入密碼" />
-              <div className={styles.bottom}>
-                <div
-                  className={styles.toSignUp}
-                  onClick={() => {
-                    setShowing("signUp")
-                  }}
-                >
-                  建立新帳戶
-                </div>
-                <div className={styles.signIn}>繼續</div>
-              </div>
-            </div>
-          </div>
-        )
+        return <SignUp closePopUp={closePopUp} setShowing={setShowing} />
       }
       default: {
         return (
@@ -115,12 +81,7 @@ const User = ({ type, showUserPage, setShowing }) => {
               <div className={styles.project} onClick={toProjects}>
                 管理您的旅行計畫
               </div>
-              <div
-                className={styles.sign_out_btn}
-                onClick={() => {
-                  setShowing("signIn")
-                }}
-              >
+              <div className={styles.sign_out_btn} onClick={handleSignOut}>
                 登出
               </div>
             </div>
@@ -138,3 +99,165 @@ const User = ({ type, showUserPage, setShowing }) => {
 }
 
 export default User
+
+const SignUp = ({ closePopUp, setShowing }) => {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSignUp = () => {
+    const handleSuccess = () => {
+      setShowing(false)
+    }
+
+    let input = {
+      email: email,
+      password: password,
+      name: name,
+    }
+    signUp_Native(input, handleSuccess)
+  }
+
+  return (
+    <div
+      id="popUpBackground"
+      className={styles.popUpBackground}
+      onClick={closePopUp}
+    >
+      <div className={styles.popUpContainer}>
+        <div id="closeBtn" className={styles.close}>
+          X
+        </div>
+        <div className={styles.logo}>LOGO</div>
+        <div className={styles.title}>註冊</div>
+        <input
+          type="text"
+          placeholder="請輸入電子郵件地址"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+          }}
+        />
+        <input
+          type="password"
+          placeholder="請輸入密碼"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value)
+          }}
+        />
+        <input
+          type="text"
+          placeholder="請輸入用戶暱稱"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value)
+          }}
+        />
+        <div className={styles.bottom}>
+          <div
+            className={styles.toSignUp}
+            onClick={() => {
+              setShowing("signIn")
+            }}
+          >
+            利用現有帳戶登入
+          </div>
+          <div className={styles.signIn} onClick={handleSignUp}>
+            繼續
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const SignIn = ({ closePopUp, setShowing }) => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSignIn = () => {
+    signIn_Native(email, password)
+  }
+
+  return (
+    <div
+      id="popUpBackground"
+      className={styles.popUpBackground}
+      onClick={closePopUp}
+    >
+      <div className={styles.popUpContainer}>
+        <div id="closeBtn" className={styles.close}>
+          X
+        </div>
+        <div className={styles.logo}>LOGO</div>
+        <div className={styles.title}>登入</div>
+        <input
+          type="text"
+          placeholder="請輸入電子郵件地址"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+          }}
+        />
+        <input
+          type="password"
+          placeholder="請輸入密碼"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value)
+          }}
+        />
+        <div className={styles.bottom}>
+          <div
+            className={styles.toSignUp}
+            onClick={() => {
+              setShowing("signUp")
+            }}
+          >
+            建立新帳戶
+          </div>
+          <div className={styles.signIn} onClick={handleSignIn}>
+            繼續
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const CheckUser = () => {
+  const history = useHistory()
+  const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+
+  const handleUpdate = (res) => {
+    dispatch(initUser(res))
+  }
+
+  const handleUser = (currentUser) => {
+    if (user.id !== currentUser.uid) {
+      listenToUser(currentUser.uid, handleUpdate)
+    }
+  }
+
+  const handleNoUser = () => {
+    let location = {
+      pathname: `/`,
+    }
+
+    history.push(location)
+  }
+
+  //check login
+  checkUserStatus(handleUser, handleNoUser)
+
+  // useEffect(()=>{
+
+  //   const unsubscribe=listenToUser()
+
+  //   return unsubscribe
+  // },[])
+
+  return <div></div>
+}
