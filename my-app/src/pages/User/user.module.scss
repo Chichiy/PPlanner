@@ -1,5 +1,15 @@
 @import "../../scss/const.module.scss";
 
+//listen to onClick event
+// .popup_background {
+//   position: fixed;
+//   width: 100vw;
+//   height: 100vh;
+//   top: 0;
+//   left: 0;
+//   z-index: 1;
+// }
+
 //user
 .user_container {
   position: absolute;
@@ -82,24 +92,6 @@
   }
 }
 
-//sign in
-// <div
-// id="loginBackground"
-// className={styles.signInBackgroundd}
-// // onClick={closeCard}
-// >
-// <div className={styles.signIn_container}>
-//   <div className={styles.logo}>LOGO</div>
-//   <div>登入</div>
-//   <input type="text" placeholder="請輸入電子郵件地址" />
-//   <input type="password" placeholder="請輸入密碼" />
-//   <div className={styles.bottom}>
-//     <div className={styles.toSignUp}>建立新帳戶</div>
-//     <div className={styles.signIn}>登入</div>
-//   </div>
-// </div>
-// </div>
-
 .popUpBackground {
   position: fixed;
   top: 0;
@@ -137,8 +129,15 @@
     }
 
     .logo {
+      height: 20px;
+      width: 100px;
       margin: 10px auto 20px auto;
       color: $black;
+
+      background-image: url("../../img/icon/logo.png");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
     }
     .title {
       font-size: $h3;
@@ -180,6 +179,94 @@
         background-color: $main;
         color: $white;
         cursor: pointer;
+      }
+    }
+  }
+}
+
+//JoinProject
+.join_background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  .popUp_container {
+    width: 50%;
+    max-width: 700px;
+    height: 50%;
+    max-height: 400px;
+    padding: 3% 5%;
+    box-sizing: border-box;
+    border-radius: 3%;
+    background-color: $white;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+
+    .text {
+      width: 100%;
+      padding-left: 130px;
+      box-sizing: border-box;
+
+      line-height: 140%;
+      font-size: $h3;
+      text-align: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex: auto;
+
+      &::before {
+        @extend %fa-icon;
+        @extend .fas;
+        content: fa-content($fa-var-suitcase);
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+        color: $black;
+        font-size: 110px;
+      }
+    }
+
+    .tools {
+      width: 100%;
+      height: fit-content;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      .button {
+        padding: 15px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: $h4;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+
+      .cancel {
+        @extend .button;
+        background-color: $gray;
+        color: $black;
+      }
+
+      .join {
+        @extend .button;
+        background-color: $main;
+        color: $white;
       }
     }
   }

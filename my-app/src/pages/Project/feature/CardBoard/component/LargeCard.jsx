@@ -180,12 +180,12 @@ const LargeCard = () => {
           {/* side bar */}
           <div className={styles.card_sideBar}>
             <div className={styles.title}>新增至卡片</div>
-            <div className={styles.button_sideBar}>待辦事項</div>
+            <div className={styles.sidebar_button_todo}>待辦事項</div>
             {card.links ? null : (
               <div
                 aria-label="addLink"
                 ref={sideBar_addLink}
-                className={styles.button_sideBar}
+                className={styles.sidebar_button_addlink}
                 onClick={() => {
                   handleFloatMenu("addLink", sideBar_addLink)
                 }}
@@ -193,11 +193,11 @@ const LargeCard = () => {
                 附件
               </div>
             )}
-            <div className={styles.button_sideBar}>預估花費</div>
+            <div className={styles.sidebar_button_expenditure}>預估花費</div>
             <div
               aria-label="addTime"
               ref={sideBar_addTime}
-              className={styles.button_sideBar}
+              className={styles.sidebar_button_addtime}
               onClick={() => {
                 handleFloatMenu("addTime", sideBar_addTime)
               }}
@@ -758,7 +758,6 @@ const LinkItem = ({ data }) => {
 const Comments = ({ cardId, projectId }) => {
   const userId = useSelector((state) => state.user.id)
   const [comments, setComments] = useState([])
-
   //get data from cloud
   useEffect(() => {
     let unsubscribe = listenToComments(
@@ -807,7 +806,7 @@ const Comments = ({ cardId, projectId }) => {
 }
 
 const AddComment = ({ cardId, userId }) => {
-  // const [isEditing, setEditing] = useState(false)
+  const userName = useSelector((state) => state.user.name)
   const [pending, setPending] = useState("")
 
   const addComment = (e) => {
@@ -832,8 +831,14 @@ const AddComment = ({ cardId, userId }) => {
 
   return (
     <div className={styles.comment}>
-      <div className={styles.user} style={{ backgroundColor: getColor() }}>
-        煞
+      <div
+        className={styles.user}
+        style={{
+          marginTop: "12px",
+          backgroundColor: getColor(),
+        }}
+      >
+        {userName[0]}
       </div>
       <div className={styles.details}>
         <input
@@ -886,51 +891,55 @@ const Comment = ({ comment, userId }) => {
     state.members.find((member) => member.id === comment.sender_id)
   )
 
-  return (
-    <div className={styles.comment}>
-      <div
-        className={styles.user}
-        style={{ backgroundColor: getColor(sender.id) }}
-      >
-        {sender.name.slice(0, 1)}
-      </div>
-      <div className={styles.details}>
-        <div className={styles.info}>
-          <div className={styles.name}>{sender.name}</div>
-          {/* <time>{comment.time}</time> */}
-          <div className={styles.time}>{getTime(comment.date)}</div>
+  try {
+    return (
+      <div className={styles.comment}>
+        <div
+          className={styles.user}
+          style={{ backgroundColor: getColor(sender.id) }}
+        >
+          {sender.name[0]}
         </div>
-
-        {isEditing ? (
-          <textarea
-            className={styles.message}
-            value={pending}
-            onChange={(e) => setPending(e.target.value)}
-            autoFocus
-          />
-        ) : (
-          <pre className={styles.message}>{comment.content} </pre>
-        )}
-
-        {isMyComment ? (
-          <div className={styles.tools}>
-            <div
-              aria-label="editBtn"
-              className={styles.edit_button}
-              onClick={handleEditComment}
-            >
-              編輯
-            </div>
-            <div
-              aria-label="removeBtn"
-              className={styles.edit_button}
-              onClick={removeComment}
-            >
-              刪除
-            </div>
+        <div className={styles.details}>
+          <div className={styles.info}>
+            <div className={styles.name}>{sender.name}</div>
+            {/* <time>{comment.time}</time> */}
+            <div className={styles.time}>{getTime(comment.date)}</div>
           </div>
-        ) : null}
+
+          {isEditing ? (
+            <textarea
+              className={styles.message}
+              value={pending}
+              onChange={(e) => setPending(e.target.value)}
+              autoFocus
+            />
+          ) : (
+            <pre className={styles.message}>{comment.content} </pre>
+          )}
+
+          {isMyComment ? (
+            <div className={styles.tools}>
+              <div
+                aria-label="editBtn"
+                className={styles.edit_button}
+                onClick={handleEditComment}
+              >
+                編輯
+              </div>
+              <div
+                aria-label="removeBtn"
+                className={styles.edit_button}
+                onClick={removeComment}
+              >
+                刪除
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
-  )
+    )
+  } catch {
+    return null
+  }
 }

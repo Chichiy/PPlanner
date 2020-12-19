@@ -21,6 +21,7 @@ import {
   listenToProjects,
   addProject_Fs,
   removeProject_Fs,
+  addProjectInUser_Fs,
 } from "../../firebase/Config"
 import { addProjects, modifyProjects, removeProjects } from "./projectsSlice"
 const Projects = () => {
@@ -29,7 +30,6 @@ const Projects = () => {
   const projects = useSelector((state) => state.projects)
   const userId = useSelector((state) => state.user.id)
 
-  console.log(userId)
   const handleAddProject = (res) => {
     dispatch(addProjects(res))
   }
@@ -50,8 +50,12 @@ const Projects = () => {
       handleModifyProject,
       handleRemoveProject
     )
+    if (!userId) {
+      //unsubscribe before user check
+      unsubscribe()
+    }
     return unsubscribe
-  }, [])
+  }, [userId])
 
   const history = useHistory()
   const [isConfirming, setConfirm] = useState(false)
@@ -198,7 +202,10 @@ const AddProject = ({ userId }) => {
       projectFormat.title = pendingTitle
       projectFormat.members.push(userId)
       projectFormat.created_time = new Date()
-      addProject_Fs(projectFormat)
+      addProject_Fs(projectFormat).then((res) => {
+        addProjectInUser_Fs(userId, res.id)
+      })
+
       setEditing(!isEditing)
       setPendingTitle("")
     }

@@ -98,6 +98,7 @@
     display: flex;
     flex-wrap: wrap;
     flex: none;
+    color: $black;
   }
 
   //////tags section//////
@@ -149,6 +150,20 @@
       .title {
         font-weight: Bold;
         margin-right: 10px;
+
+        position: relative;
+        @extend %fa-icon;
+        @extend .fas;
+
+        &:before {
+          content: fa-content($fa-var-align-justify);
+          position: absolute;
+          top: 0px;
+          left: -25px;
+
+          font-size: 20px;
+          line-height: 20px;
+        }
       }
 
       .edit_button {
@@ -199,6 +214,20 @@
       .title {
         font-weight: Bold;
         margin-right: 10px;
+
+        position: relative;
+        @extend %fa-icon;
+        @extend .fas;
+
+        &:before {
+          content: fa-content($fa-var-comment-alt);
+          position: absolute;
+          top: 0px;
+          left: -25px;
+
+          font-size: 18px;
+          line-height: 20px;
+        }
       }
     }
 
@@ -216,7 +245,6 @@
           height: 20px;
           margin: 0 5px;
           border-radius: 50%;
-          // background-color: $user1;
 
           font-size: 14px;
           color: $black;
@@ -282,6 +310,20 @@
     align-items: center;
     margin-bottom: 10px;
     font-weight: Bold;
+
+    position: relative;
+    @extend %fa-icon;
+    @extend .fas;
+
+    &:before {
+      content: fa-content($fa-var-paperclip);
+      position: absolute;
+      top: 0px;
+      left: -25px;
+
+      font-size: 18px;
+      line-height: 20px;
+    }
   }
 
   .container {
@@ -362,9 +404,12 @@
     font-size: 14px;
     margin-bottom: 10px;
   }
-  .button_sideBar {
+
+  .sidebar_button {
+    width: 100%;
     padding: 10px 0 10px 30px;
     margin-bottom: 10px;
+    box-sizing: border-box;
     border-radius: 5px;
     background-color: $gray_lighter;
     color: $black;
@@ -372,6 +417,78 @@
     font-weight: 400;
     line-height: 16px;
     cursor: pointer;
+  }
+
+  .sidebar_button_todo {
+    @extend .sidebar_button;
+    position: relative;
+    @extend %fa-icon;
+    @extend .fas;
+
+    &:before {
+      content: fa-content($fa-var-check-square);
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      transform: translateY(-50%);
+
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+
+  .sidebar_button_addlink {
+    @extend .sidebar_button;
+    position: relative;
+    @extend %fa-icon;
+    @extend .fas;
+
+    &:before {
+      content: fa-content($fa-var-paperclip);
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      transform: translateY(-50%);
+
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+
+  .sidebar_button_expenditure {
+    @extend .sidebar_button;
+    position: relative;
+    @extend %fa-icon;
+    @extend .fas;
+
+    &:before {
+      content: fa-content($fa-var-dollar-sign);
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+
+  .sidebar_button_addtime {
+    @extend .sidebar_button;
+    position: relative;
+    @extend %fa-icon;
+    @extend .fas;
+
+    &:before {
+      content: fa-content($fa-var-calendar-alt);
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      transform: translateY(-50%);
+
+      font-size: 16px;
+      line-height: 20px;
+    }
   }
 }
 

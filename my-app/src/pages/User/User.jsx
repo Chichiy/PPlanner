@@ -19,11 +19,14 @@ import {
   checkUserStatus,
   listenToUser,
   signOut,
+  getProject_Fs,
+  updateProjectMember_Fs,
+  addProjectInUser_Fs,
 } from "../../firebase/Config"
 import { getColor } from "../lib"
 import { initUser } from "../User/userSlice"
 
-const User = ({ type, showUserPage, setShowing }) => {
+const User = ({ isShowing, setShowing }) => {
   const user = useSelector((state) => state.user)
   const history = useHistory()
 
@@ -47,15 +50,16 @@ const User = ({ type, showUserPage, setShowing }) => {
 
   //close sign in block
   const closePopUp = (e) => {
-    let triggerElementId = ["closeBtn", "popUpBackground"]
+    let triggerElementId = ["closeBtn", "popupBackground"]
 
     if (triggerElementId.includes(e.target.id)) {
+      console.log(e)
       setShowing(false)
     }
   }
 
   const content = () => {
-    switch (type) {
+    switch (isShowing) {
       case "signIn": {
         return <SignIn closePopUp={closePopUp} setShowing={setShowing} />
       }
@@ -63,7 +67,8 @@ const User = ({ type, showUserPage, setShowing }) => {
       case "signUp": {
         return <SignUp closePopUp={closePopUp} setShowing={setShowing} />
       }
-      default: {
+
+      case "user": {
         return (
           <div className={styles.user_container}>
             <div className={styles.userInfo}>
@@ -88,12 +93,19 @@ const User = ({ type, showUserPage, setShowing }) => {
           </div>
         )
       }
+      default: {
+        return null
+      }
     }
   }
 
   return (
-    <div className={styles.view}>
-      <div className={styles.banner}>{content()}</div>
+    <div
+      // id="popupBackground"
+      // className={styles.popup_background}
+      onClick={closePopUp}
+    >
+      {content()}
     </div>
   )
 }
@@ -120,7 +132,7 @@ const SignUp = ({ closePopUp, setShowing }) => {
 
   return (
     <div
-      id="popUpBackground"
+      id="popupBackground"
       className={styles.popUpBackground}
       onClick={closePopUp}
     >
@@ -128,7 +140,7 @@ const SignUp = ({ closePopUp, setShowing }) => {
         <div id="closeBtn" className={styles.close}>
           X
         </div>
-        <div className={styles.logo}>LOGO</div>
+        <div className={styles.logo}></div>
         <div className={styles.title}>註冊</div>
         <input
           type="text"
@@ -161,7 +173,7 @@ const SignUp = ({ closePopUp, setShowing }) => {
               setShowing("signIn")
             }}
           >
-            利用現有帳戶登入
+            以現有帳戶登入
           </div>
           <div className={styles.signIn} onClick={handleSignUp}>
             繼續
@@ -177,12 +189,21 @@ const SignIn = ({ closePopUp, setShowing }) => {
   const [password, setPassword] = useState("")
 
   const handleSignIn = () => {
-    signIn_Native(email, password)
+    let input = {
+      email: email,
+      password: password,
+    }
+
+    const handleSuccess = () => {
+      setShowing(false)
+    }
+
+    signIn_Native(input, handleSuccess)
   }
 
   return (
     <div
-      id="popUpBackground"
+      id="popupBackground"
       className={styles.popUpBackground}
       onClick={closePopUp}
     >
@@ -190,7 +211,7 @@ const SignIn = ({ closePopUp, setShowing }) => {
         <div id="closeBtn" className={styles.close}>
           X
         </div>
-        <div className={styles.logo}>LOGO</div>
+        <div className={styles.logo}></div>
         <div className={styles.title}>登入</div>
         <input
           type="text"
@@ -260,4 +281,63 @@ export const CheckUser = () => {
   // },[])
 
   return <div></div>
+}
+
+export const Join = () => {
+  const { projectId } = useParams()
+  const user = useSelector((state) => state.user)
+  const [popUp, setPopUp] = useState(false)
+  const [projectTitle, setProjectTitle] = useState("")
+  const history = useHistory()
+
+  useEffect(() => {
+    if (user.id) {
+      getProject_Fs(projectId).then((res) => {
+        if (res) {
+          setProjectTitle(res.title)
+        } else {
+          alert("邀請連結有誤")
+          history.push({ pathname: "/" })
+          history.go(0)
+        }
+      })
+    }
+  }, [user.id])
+
+  const handleAccept = () => {
+    updateProjectMember_Fs(projectId, "add", user.id).then((res) => {
+      addProjectInUser_Fs(user.id, projectId).then((res) => {
+        history.replace({ pathname: `/projects/${projectId}` })
+      })
+    })
+  }
+
+  const handleCancel = () => {
+    history.replace({ pathname: "/projects" })
+  }
+
+  return (
+    <div className={styles.join_background}>
+      {!popUp ? (
+        <div className={styles.popUp_container}>
+          <div className={styles.text}>
+            您受到邀請加入
+            <br />
+            {projectTitle} 的旅行計劃，
+            <br />
+            確定要加入嗎？
+          </div>
+
+          <div className={styles.tools}>
+            <div className={styles.cancel} onClick={handleCancel}>
+              拒絕
+            </div>
+            <div className={styles.join} onClick={handleAccept}>
+              加入
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
 }

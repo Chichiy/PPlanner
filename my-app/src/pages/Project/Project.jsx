@@ -6,6 +6,7 @@ import {
   Link,
   useRouteMatch,
   useParams,
+  useHistory,
 } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { nanoid } from "@reduxjs/toolkit"
@@ -48,7 +49,7 @@ const Project = () => {
 
   let { projectId } = useParams()
   let match = useRouteMatch()
-  let projects = useSelector((state) => state.projects)
+  const user = useSelector((state) => state.user)
   let itineraryId = useSelector((state) => state.itinerary.id)
   const cards = useSelector((state) => state.cards)
   const dispatch = useDispatch()
@@ -111,16 +112,16 @@ const Project = () => {
   //init and listen to changes
   useEffect(() => {
     // initial itinerary with latest version
-    getFsData_Itinerary(projectId).then((itinerary) => {
-      //initial and listen to dayplans
-      // let unsubscribeToDayplan = listenToDayplans(
-      //   itinerary.id,
-      //   handleAddDayplan,
-      //   handleModifyDayplan,
-      //   handleRemoveDayplan
-      // )
-      dispatch(initItinerary(itinerary))
-    })
+    // getFsData_Itinerary(projectId).then((itinerary) => {
+    //   //initial and listen to dayplans
+    //   // let unsubscribeToDayplan = listenToDayplans(
+    //   //   itinerary.id,
+    //   //   handleAddDayplan,
+    //   //   handleModifyDayplan,
+    //   //   handleRemoveDayplan
+    //   // )
+    //   dispatch(initItinerary(itinerary))
+    // })
 
     let unsubscribeToCard = listenToCard(
       projectId,
@@ -143,24 +144,14 @@ const Project = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   // initial itinerary with latest version
-  //   getFsData_Itinerary(projectId).then((itinerary) => {
-  //     //initial dayplans
-  //     getFsData("dayplans", "itinerary_id", "==", itinerary.id).then(
-  //       (dayplan) => {
-  //         dispatch(initItinerary(itinerary))
-  //         dispatch(initDayplans(dayplan))
-  //       }
-  //     )
-  //   })
-
-  //initial cards
-  //   getFsData_Cards(projectId).then((res) => {
-  //     dispatch(initCards(res))
-  //   })
-  //   console.log("init dayplans and cards")
-  // }, [projectId])
+  //check if user is in the project or not
+  const history = useHistory()
+  useEffect(() => {
+    if (user.id && !user.projects.includes(projectId)) {
+      alert("您沒有訪問這個旅行計劃的權限")
+      history.replace({ pathname: "/projects" })
+    }
+  }, [user])
 
   return (
     <Switch>
@@ -175,7 +166,8 @@ const Project = () => {
               <div className={styles.title}>卡片板 </div>
             </Link>
 
-            <Link to={`${match.url}/itineraries/${itineraryId}`}>
+            {/* <Link to={`${match.url}/itineraries/${itineraryId}`}> */}
+            <Link to={`${match.url}/itineraries/`}>
               <CalendarIcon className={styles.itineraryIcon} />
               <div className={styles.title}> 行程板 </div>
             </Link>
@@ -184,7 +176,7 @@ const Project = () => {
           </ul>
         </div>
       </Route>
-      <Route path={`${match.path}/itineraries/:itineraryId`}>
+      <Route path={`${match.path}/itineraries`}>
         <Navbar type="itineraries" />
         <ItineraryBoard />
       </Route>

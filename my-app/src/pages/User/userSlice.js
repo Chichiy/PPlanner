@@ -7,6 +7,7 @@ export const userSlice = createSlice({
     name: "",
     email: "",
     picture: "",
+    projects: [],
   },
   reducers: {
     initUser: (state, action) => {

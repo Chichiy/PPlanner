@@ -11,7 +11,7 @@ import {
 import Navbar from "./pages/Navbar/Navbar"
 import Projects from "./pages/Project/Projects"
 import Home from "./pages/Home/Home"
-import User, { CheckUser } from "./pages/User/User"
+import User, { CheckUser, Join } from "./pages/User/User"
 
 export default function App() {
   return (
@@ -21,6 +21,11 @@ export default function App() {
         <Switch>
           <Route path="/projects">
             <Projects />
+          </Route>
+
+          <Route path="/joinProject/:projectId">
+            <Navbar type="default" />
+            <Join />
           </Route>
           <Route path="/">
             <Navbar type="default" />

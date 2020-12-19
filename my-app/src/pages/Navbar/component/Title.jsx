@@ -41,19 +41,20 @@ const Title = ({ projectId, title }) => {
   if (!isEditing) {
     return (
       <div
-        className={styles.item}
+        className={`${styles.project_title} ${styles.tooltip}`}
         onClick={() => {
           setEditing(!isEditing)
         }}
       >
         {projectTitle}
+        <div className={styles.tooltip_text}>編輯名稱</div>
       </div>
     )
   } else {
     return (
       <input
         type="text"
-        className={styles.editTitle}
+        className={styles.project_title__edit}
         value={pending}
         onChange={(e) => setPending(e.target.value)}
         onBlur={handleTitleEdit}

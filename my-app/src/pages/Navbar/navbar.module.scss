@@ -1,6 +1,18 @@
 @import "../../scss/const.module.scss";
 
-.navBar {
+//reset default css on tag
+input {
+  color: $black;
+  border: 0px;
+  font-size: smaller;
+  font: inherit;
+}
+input:focus {
+  outline: none;
+}
+
+//custom css
+.navbar {
   width: 100%;
   height: 50px;
   padding: 0 10px;
@@ -12,63 +24,155 @@
   display: flex;
   align-items: center;
 
+  //basic setting of items in navbar
   .item {
+    height: 30px;
     margin: 0 10px;
-    padding: 5px;
+    padding: 5px 7px;
+    box-sizing: border-box;
     border-radius: 5px;
+    font-size: $h4;
+    color: $black;
+    line-height: 20px;
     text-decoration: none;
-    color: $black;
-    user-select: none;
+    flex: none;
     cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background-color: $gray_lighter;
+    }
   }
 
-  input {
-    color: $black;
-    border: 0px;
-    font-size: smaller;
-    font: inherit;
-  }
-  input:focus {
-    outline: none;
+  .logo {
+    @extend .item;
+    width: 120px;
+
+    background-image: url("../../img/icon/logo.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
   }
 
-  .editTitle {
-    border: 1px solid $gray;
-    border-radius: 5px;
-    padding: 2px 5px;
-    font-size: inherit;
-  }
-
-  .switchBar {
-    margin: 0 10px;
+  .home {
+    width: 30px;
+    height: 30px;
     padding: 5px;
+    color: $gray_darker;
+    position: relative;
+
+    background-image: url("../../img/icon/logo192.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  //tool tip
+  .tooltip {
+    position: relative;
+
+    &:hover {
+      .tooltip_text {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+
+  .tooltip_text {
+    transition: opacity 1s ease-out;
+    visibility: hidden;
+    opacity: 0;
+    width: 64px;
+    height: 30px;
+    box-sizing: border-box;
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+    font-size: $h6;
+    color: $white;
+    border-radius: 3px;
+    background-color: rgba($color: #000000, $alpha: 0.8);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 130%);
+
+    &:before {
+      content: "";
+
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent rgba($color: #000000, $alpha: 0.8)
+        transparent;
+    }
+  }
+
+  //project title
+  .project_title {
+    @extend .item;
+  }
+
+  .project_title__edit {
+    @extend .item;
+    border: 1px solid $gray;
+    padding: 2px 5px;
+    font-size: smaller;
+
+    &:hover {
+      background-color: $white;
+    }
+
+    &:focus {
+      box-shadow: inset 0 0 1px 1px $gray_lighter;
+    }
+  }
+
+  //bar that includes different features on different page
+  .board_bar {
+    box-sizing: border-box;
     flex: auto;
     display: flex;
+    align-items: center;
   }
 
-  .search {
+  //basic setting of select
+  .select {
     @extend .item;
-    font-size: smaller;
+    font-size: $h4;
+    cursor: default;
+    &:hover {
+      background-color: transparent;
+    }
   }
 
-  .searchBoard {
-    @extend .search;
-    width: 150px;
+  //coordinate with customstyles object( react-select's prop)
+  .board_select {
+    @extend .select;
+    width: 125px;
+    height: fit-content;
   }
 
-  .searchCard {
-    @extend .search;
-    max-width: 80%;
-    width: fit-content;
-    min-width: 400px;
-  }
-
-  .space {
+  .card_select {
+    @extend .select;
     flex: auto;
+    max-width: 80%;
+    min-width: 200px;
+    width: fit-content;
+    height: fit-content;
   }
 
+  //coordinate with customstyles(react-datepicker's prop)
   .daySelect_container {
-    @extend .search;
+    @extend .select;
 
     display: flex;
     align-items: center;
@@ -85,47 +189,121 @@
     }
   }
 
-  .modeSelect {
-    @extend .search;
-    width: 150px;
+  //invitation button
+  .invitation {
+    @extend .item;
+    font-size: $h4;
+    background-color: $gray_lighter2;
+    position: relative;
+
+    //popup menu
+    .invitation_container {
+      width: 150px;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid $gray;
+      background-color: $white;
+      border-radius: 5px;
+      position: absolute;
+      top: 50px;
+      left: 0px;
+      font-size: $h5;
+      z-index: 5;
+      cursor: default;
+
+      .caption {
+        color: $gray_darker;
+        padding-bottom: 10px;
+        border-bottom: 1px solid $gray_darker;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .url {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 5px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        border: 2px solid $gray;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+
+        .copy_button {
+          flex: auto;
+          padding: 5px 10px;
+          border-radius: 5px;
+          background-color: $main;
+          color: $white;
+          text-align: center;
+          cursor: pointer;
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
   }
 
-  .userBtn {
+  //empty space to fill the bar
+  .space {
+    flex: auto;
+  }
+
+  //user info shown when signed in
+  .user_icon {
     @extend .item;
+    width: 30px;
+    padding: 0px;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
     border-radius: 50%;
     color: $white;
-    padding: 8px;
     font-size: $h4;
-
     user-select: none;
+
     &:hover {
-      box-shadow: 0 0 3px 4px $gray_lighter;
+      box-shadow: 0 0 3px 1px $gray_lighter, 0 0 5px 1px $gray_lighter;
     }
   }
 
-  .buttons {
+  //buttons shown when not signed in
+  .user_buttons {
     display: flex;
-  }
 
-  .button {
-    @extend .item;
-    padding: 5px 10px;
-    box-sizing: border-box;
+    .sign_in_button {
+      @extend .item;
+      padding: 5px 10px;
+      box-sizing: border-box;
 
-    &:hover {
-      background-color: $gray_lighter;
+      &:hover {
+        background-color: $gray_lighter;
+      }
+    }
+
+    .sign_up_button {
+      @extend .item;
+      padding: 5px 10px;
+      box-sizing: border-box;
+      background-color: $main;
+      color: $white;
+
+      &:hover {
+        opacity: 80%;
+      }
     }
   }
+}
 
-  .colorBtn {
-    @extend .item;
-    background-color: $main;
-    color: $white;
-    padding: 5px 10px;
-    box-sizing: border-box;
-
-    &:hover {
-      opacity: 80%;
-    }
-  }
+.popup_background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }

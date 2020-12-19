@@ -20,6 +20,7 @@ firebase.initializeApp(firebaseConfig)
 //abbreviation
 var db = firebase.firestore()
 var au = firebase.auth()
+export const toDate = firebase.firestore.Timestamp.toDate
 
 ////////////////////////////////////
 //          user-related          //
@@ -64,13 +65,13 @@ export const signUp_Native = (input, handleSuccess) => {
     })
 }
 
-export const signIn_Native = (email, password) => {
+export const signIn_Native = (input, handleSuccess) => {
   return au
-    .signInWithEmailAndPassword(email, password)
+    .signInWithEmailAndPassword(input.email, input.password)
     .then((user) => {
-      console.log(user)
       // Signed in
       // ...
+      handleSuccess()
     })
     .catch((error) => {
       var errorCode = error.code
@@ -91,7 +92,19 @@ export const signOut = (redirect) => {
     })
 }
 
-export const toDate = firebase.firestore.Timestamp.toDate
+export const addProjectInUser_Fs = (userId, change) => {
+  let docRef = db.collection("users").doc(userId)
+  //expect format
+  //change = projectId
+
+  return docRef
+    .update({
+      projects: firebase.firestore.FieldValue.arrayUnion(change),
+    })
+    .catch(function (error) {
+      console.error("Error updating document: ", error)
+    })
+}
 
 //////listening to cloud data///////
 export const listenToUser = (userId, updateState) => {
@@ -120,6 +133,8 @@ export const listenToMembers = (
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      console.log(source, snapshot, docChange)
 
       //local data needs to be changed
       if (docChange.length > 0) {
@@ -162,7 +177,8 @@ export const listenToProjects = (
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
+      console.log(userId)
+      console.log(source, snapshot, docChange)
       //local data needs to be changed
       if (docChange.length > 0) {
         snapshot.docChanges().forEach(function (change) {
@@ -300,8 +316,6 @@ export const listenToComments = (
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
 
-      // console.log(source, snapshot, docChange)
-
       //local data needs to be changed
       if (docChange.length > 0) {
         snapshot.docChanges().forEach(function (change) {
@@ -328,6 +342,7 @@ export const listenToComments = (
       } else {
         //changes have been saved
         console.log("data has been saved to cloud database")
+        console.log("comments")
       }
     })
   return unsubscribe
@@ -375,6 +390,7 @@ export const listenToLinks = (
       } else {
         //changes have been saved
         console.log("data has been saved to cloud database")
+        console.log("links")
       }
     })
   return unsubscribe
@@ -410,6 +426,26 @@ export const addProject_Fs = (input) => {
 
 export const updateProject_Fs = (projectId, change) => {
   let docRef = db.collection("projects").doc(projectId)
+
+  return docRef.update(change).catch(function (error) {
+    console.error("Error updating document: ", error)
+  })
+}
+
+export const updateProjectMember_Fs = (projectId, type, targetUserId) => {
+  let docRef = db.collection("projects").doc(projectId)
+  let change
+
+  if (type === "add") {
+    change = {
+      members: firebase.firestore.FieldValue.arrayUnion(targetUserId),
+    }
+  }
+  if (type === "remove") {
+    change = {
+      members: firebase.firestore.FieldValue.arrayRemove(targetUserId),
+    }
+  }
 
   return docRef.update(change).catch(function (error) {
     console.error("Error updating document: ", error)
@@ -524,6 +560,21 @@ export const removeLink_Fs = (linkId) => {
   })
 }
 
+//get info once
+
+export const getProject_Fs = (projectId) => {
+  let docRef = db.collection("projects").doc(projectId)
+
+  return docRef
+    .get()
+    .then(function (doc) {
+      return doc.data()
+    })
+    .catch(function (error) {
+      console.log("Error getting document:", error)
+    })
+}
+
 export const addDayplan_Fs = (input) => {
   let docRef = db.collection("dayplans")
 
@@ -538,18 +589,6 @@ export const addDayplan_Fs = (input) => {
       console.error("Error adding document: ", error)
     })
 }
-
-// // Atomically add a new region to the "regions" array field.
-// washingtonRef.update({
-//   regions: firebase.firestore.FieldValue.arrayUnion("greater_virginia")
-// });
-
-// // Atomically remove a region from the "regions" array field.
-// washingtonRef.update({
-//   regions: firebase.firestore.FieldValue.arrayRemove("east_coast")
-// });
-
-//////initialize local data//////
 
 export function getFsData_Itinerary(project_id, field, operators, value) {
   return db
