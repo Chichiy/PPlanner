@@ -17,23 +17,26 @@ import {
 import styles from "../../../../scss/itineraryBoard.module.scss"
 
 import DayJS from "react-dayjs"
-import { getDateHeader, colorCode } from "../../../../pages/lib"
+import { getDateHeader, colorCode, resetTime } from "../../../../pages/lib"
 import { addDayplan_Fs } from "../../../../firebase/Config"
 
-const Dayplans = () => {
-  const cards = useSelector((state) => state.cards)
+import { responsiveTime } from "./itineraryBoardLib"
 
+const Dayplans = () => {
+  //set start time
+  const cards = useSelector((state) => state.cards)
   const location = useLocation()
   let startDate
   try {
+    //get startTime from navbar through state in loaction
     startDate = location.state.startDate
   } catch {
+    //if no, show today
     let temp = new Date()
     temp.setHours(0)
     temp.setMinutes(0)
     temp.setSeconds(0)
     temp.setMilliseconds(0)
-
     startDate = temp
   }
 
@@ -49,13 +52,43 @@ export default Dayplans
 
 ////// Appointment //////
 const Appointments = React.memo(({ startDate, cards }) => {
-  // console.log("appointments")
-
   const cardHasPlan = cards.filter((card) => card.status === 1)
 
-  const getCardTitle = (id) => {
-    let target = cards.find((item) => item.id === id)
-    return target ? target.title : null
+  //display responsive time on appointment card
+  const time = (card, snapshot) => {
+    let hoverTime = new Date(Number(snapshot.draggingOver))
+    let timeSpan = new Date(card.end_time) - new Date(card.start_time)
+    let hoverEndTime = new Date(hoverTime.getTime() + timeSpan)
+
+    if (!snapshot.isDragging) {
+      return (
+        <div className={styles.appointment_time}>
+          <DayJS format="HH:mm">{card.start_time}</DayJS>
+          <span>-</span>
+          <DayJS format="HH:mm">{card.end_time}</DayJS>
+        </div>
+      )
+    } else {
+      return (
+        <div className={styles.appointment_time}>
+          {isNaN(hoverTime.getHours()) ? null : (
+            <div>
+              <time>
+                {hoverTime.getHours()}:
+                {hoverTime.getMinutes() < 30 ? "00" : "30"}
+              </time>
+
+              <span>-</span>
+
+              <time>
+                {hoverEndTime.getHours()}:
+                {hoverEndTime.getMinutes() < 30 ? "00" : "30"}
+              </time>
+            </div>
+          )}
+        </div>
+      )
+    }
   }
 
   const style = (card, snapshot, provided) => {
@@ -67,33 +100,46 @@ const Appointments = React.memo(({ startDate, cards }) => {
     let endTime = new Date(card.end_time)
     let timeSpan = Math.ceil((endTime.getTime() - day.getTime()) / 60000 / 30)
     let temp
+    let appointments
+    let resize
+    let resizeWidth
+
+    try {
+      appointments = document
+        .querySelector("#appointments")
+        .getBoundingClientRect()
+      resize = appointments.width * 0.055 < 45
+      resizeWidth = (appointments.width - 45) / 7
+    } catch {
+      resize = false
+    }
 
     temp = {
-      width: "12.5%",
-      padding: "10px",
-      border: "1px solid #ced0ce",
+      padding: "6px",
       boxSizing: "border-box",
       position: "absolute",
       borderRadius: "5px",
+      border: "2px solid white",
 
       backgroundColor: colorCode[card.category],
-      top: `${startTime * 30 - 30}px`,
-      left: `${(dayIndex + 1) * 12.5}%`,
-      height: `${timeSpan * 30}px`,
+      top: `${startTime * 20 - 20}px`,
+      left: resize
+        ? `${resizeWidth * dayIndex + 45}px`
+        : `${dayIndex * 13.5 + 5.5}%`,
+      width: resize ? `${resizeWidth}px` : "13.5%",
+      height: `${timeSpan * 20}px`,
       ...provided.draggableProps.style,
     }
+    if (!snapshot.isDragging) temp.transform = "translateX(1px)"
 
     return dayIndex > -1 && dayIndex < 7 ? temp : { display: "none" }
   }
 
   return (
-    <Droppable
-      key={nanoid()}
-      droppableId={"appointments"}
-      isDropDisabled={true}
-    >
+    <Droppable key={nanoid()} droppableId="appointments" isDropDisabled={true}>
       {(provided) => (
         <div
+          id="appointments"
           {...provided.droppableProps}
           ref={provided.innerRef}
           className={styles.appointments}
@@ -110,7 +156,13 @@ const Appointments = React.memo(({ startDate, cards }) => {
                       style={style(card, snapshot, provided)}
                       ref={provided.innerRef}
                     >
-                      <div>{card.title}</div>
+                      <div className={styles.appointment_title}>
+                        {card.title}
+                      </div>
+                      {/* <div className={styles.appointment_time}>
+                        {card.title}
+                      </div> */}
+                      {responsiveTime(card, snapshot)}
                       <div
                         className={styles.expandHandle_upper}
                         aria-label="upper"
@@ -146,12 +198,17 @@ const TimeTable = React.memo(({ startDate, cards }) => {
 
         temp.push(
           <td key={nanoid()}>
-            <div className={styles.datesHeader_date}>
-              {getDateHeader(date, "MMDD")}
-            </div>
-
             <div className={styles.datesHeader_day}>
               {getDateHeader(date, "Day")}
+            </div>
+            <div
+              className={
+                date.getTime() === resetTime(new Date()).getTime()
+                  ? `${styles.datesHeader_date} ${styles.datesHeader_date__today}`
+                  : styles.datesHeader_date
+              }
+            >
+              <DayJS format="DD">{date}</DayJS>
             </div>
           </td>
         )
@@ -177,9 +234,10 @@ const TimeTable = React.memo(({ startDate, cards }) => {
       left: "0",
 
       width: "100%",
-      height: `60px`,
 
-      backgroundColor: "#e6e8e6",
+      backgroundColor: "rgba(0,0,0,0.1)",
+      // backgroundColor: "#e6e8e6",
+      // opacity: "0.8",
       zIndex: "10",
     }
 
@@ -187,9 +245,17 @@ const TimeTable = React.memo(({ startDate, cards }) => {
       let startTime = new Date(targetCard.start_time)
       let endTime = new Date(targetCard.end_time)
       let timeSpan = Math.ceil((endTime - startTime) / 60000 / 30)
-      style.height = `${timeSpan * 30}px`
+      style.height = `${timeSpan * 20}px`
     }
     return style
+  }
+
+  const hourHeader = (hour, i) => {
+    if (hour === 0) {
+      return null
+    } else {
+      return hour < 10 ? `0${i / 2}:00` : `${i / 2}:00`
+    }
   }
 
   const getRow = () => {
@@ -203,7 +269,7 @@ const TimeTable = React.memo(({ startDate, cards }) => {
             let hour = i / 2
             data.push(
               <td rowSpan="2" className={styles.hourHeader} key={nanoid()}>
-                {hour < 10 ? `0${i / 2}:00` : `${i / 2}:00`}
+                {hourHeader(hour, i)}
               </td>
             )
           }
@@ -218,12 +284,17 @@ const TimeTable = React.memo(({ startDate, cards }) => {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     style={{
-                      height: "30px",
+                      height: "20px",
                       position: "relative",
                       backgroundColor: snapshot.isDraggingOver
-                        ? "#ced0ce"
+                        ? "transparent"
                         : "white",
                     }}
+                    className={
+                      i % 2 === 1
+                        ? styles.td_border__halfHour
+                        : styles.td_border__fullHour
+                    }
                   >
                     {/* shadow */}
                     {snapshot.isDraggingOver && (

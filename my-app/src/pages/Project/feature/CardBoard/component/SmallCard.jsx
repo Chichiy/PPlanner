@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { colorCode } from "../../../../lib"
 
 import styles from "../cardBoard.module.scss"
 
@@ -7,7 +8,10 @@ const fakeImg = "https://fakeimg.pl/65x65/"
 export const SmallCard = ({ card }) => {
   return (
     <div id={card.id} className={styles.card_small}>
-      <div className={styles[`tag_${card.category}`]}></div>
+      <div
+        className={styles[`tag_${card.category}`]}
+        style={{ backgroundColor: colorCode[card.category] }}
+      ></div>
       <div className={styles.info}>
         <div className={styles.card_small_picture}>
           <img src={card.cover_pic} alt="pic" />

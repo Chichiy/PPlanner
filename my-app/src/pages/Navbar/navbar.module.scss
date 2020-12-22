@@ -180,19 +180,34 @@ input:focus {
 
     .daySelect {
       @extend .item;
+      width: 130px;
+      padding-right: 15px;
       border: 1px solid $gray;
+      text-align: center;
+      font-size: 14px;
     }
 
     .hasPlan {
-      background-color: $main_lighter;
-      border-radius: 50%;
+      // background-color: $main_lighter;
+      // border-radius: 50%;
+      position: relative;
+      &:after {
+        content: "・";
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 40px;
+        color: $gray;
+      }
     }
   }
 
   //invitation button
   .invitation {
     @extend .item;
-    font-size: $h4;
+
+    font-size: 14px;
     background-color: $gray_lighter2;
     position: relative;
 

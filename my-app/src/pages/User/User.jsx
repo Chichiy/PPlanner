@@ -50,7 +50,12 @@ const User = ({ isShowing, setShowing }) => {
 
   //close sign in block
   const closePopUp = (e) => {
-    let triggerElementId = ["closeBtn", "popupBackground"]
+    let triggerElementId = [
+      "closeBtn",
+      "popupBackground_default",
+      "popupBackground_signIn",
+      "popupBackground_signUp",
+    ]
 
     if (triggerElementId.includes(e.target.id)) {
       console.log(e)
@@ -101,8 +106,8 @@ const User = ({ isShowing, setShowing }) => {
 
   return (
     <div
-      // id="popupBackground"
-      // className={styles.popup_background}
+      id="popupBackground_default"
+      className={styles.popup_background}
       onClick={closePopUp}
     >
       {content()}
@@ -132,7 +137,7 @@ const SignUp = ({ closePopUp, setShowing }) => {
 
   return (
     <div
-      id="popupBackground"
+      id="popupBackground_signUp"
       className={styles.popUpBackground}
       onClick={closePopUp}
     >
@@ -203,7 +208,7 @@ const SignIn = ({ closePopUp, setShowing }) => {
 
   return (
     <div
-      id="popupBackground"
+      id="popupBackground_signIn"
       className={styles.popUpBackground}
       onClick={closePopUp}
     >
@@ -251,6 +256,7 @@ export const CheckUser = () => {
   const history = useHistory()
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const location = useLocation()
 
   const handleUpdate = (res) => {
     dispatch(initUser(res))
@@ -263,15 +269,20 @@ export const CheckUser = () => {
   }
 
   const handleNoUser = () => {
-    let location = {
-      pathname: `/`,
+    //allow page to show and then ask user to login
+    if (location.pathname.slice(1, 12) === "joinProject") {
     }
 
-    history.push(location)
+    //redirect to home page if not invited
+    if (location.pathname.slice(1, 12) !== "joinProject") {
+      history.push("/")
+    }
   }
 
   //check login
-  checkUserStatus(handleUser, handleNoUser)
+  useEffect(() => {
+    checkUserStatus(handleUser, handleNoUser)
+  }, [])
 
   // useEffect(()=>{
 
@@ -289,31 +300,50 @@ export const Join = () => {
   const [popUp, setPopUp] = useState(false)
   const [projectTitle, setProjectTitle] = useState("")
   const history = useHistory()
+  const location = useLocation()
 
   useEffect(() => {
-    if (user.id) {
-      getProject_Fs(projectId).then((res) => {
-        if (res) {
-          setProjectTitle(res.title)
-        } else {
-          alert("邀請連結有誤")
-          history.push({ pathname: "/" })
-          history.go(0)
-        }
-      })
-    }
-  }, [user.id])
+    // if (user.id) {
+
+    //check if link is valid
+    getProject_Fs(projectId).then((res) => {
+      if (res) {
+        setProjectTitle(res.title)
+      } else {
+        alert("Oops! 這個旅行計劃不存在！")
+        history.push("/")
+        history.go(0)
+      }
+    })
+    // }
+  }, [])
 
   const handleAccept = () => {
-    updateProjectMember_Fs(projectId, "add", user.id).then((res) => {
-      addProjectInUser_Fs(user.id, projectId).then((res) => {
-        history.replace({ pathname: `/projects/${projectId}` })
+    //accept logged in
+    if (user.id) {
+      updateProjectMember_Fs(projectId, "add", user.id).then((res) => {
+        addProjectInUser_Fs(user.id, projectId).then((res) => {
+          history.replace({ pathname: `/projects/${projectId}/cards` })
+        })
       })
-    })
+    } else {
+      alert("請先登入會員帳號")
+      //show login
+      history.push({
+        pathname: `${location.pathname}`,
+        state: { showPopup: "signIn" },
+      })
+    }
   }
 
   const handleCancel = () => {
-    history.replace({ pathname: "/projects" })
+    //if logged-in, redirect to projects page
+    if (user.id) {
+      history.replace({ pathname: "/projects" })
+    } else {
+      //if not, redirect to home page
+      history.replace("/")
+    }
   }
 
   return (

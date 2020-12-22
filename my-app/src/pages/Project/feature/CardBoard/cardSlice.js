@@ -25,6 +25,10 @@ export const cardSlice = createSlice({
   name: "cards",
   initialState: [],
   reducers: {
+    clearCardsState: (state, action) => {
+      state.splice(0, state.length)
+    },
+
     addCard: (state, action) => {
       let target = action.payload
 
@@ -88,6 +92,7 @@ export const {
   modifyCard,
   updateCardsOrder,
   modifyCardProperties,
+  clearCardsState,
 } = cardSlice.actions
 
 export default cardSlice.reducer

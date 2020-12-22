@@ -14,6 +14,7 @@ import styles from "./largeCard.module.scss"
 
 import {
   updateCard_Fs,
+  removeCard_Fs,
   listenToComments,
   listenToLinks,
   addComment_Fs,
@@ -89,6 +90,7 @@ const LargeCard = () => {
   const [isfloating, setFloat] = useState(false)
   const sideBar_addLink = useRef(null)
   const sideBar_addTime = useRef(null)
+  const sideBar_remove = useRef(null)
 
   const handleFloatMenu = (type, ref) => {
     if (!isfloating) {
@@ -204,6 +206,16 @@ const LargeCard = () => {
             >
               安排時間
             </div>
+            <div
+              aria-label="remove"
+              ref={sideBar_remove}
+              className={styles.sidebar_button_remove}
+              onClick={() => {
+                handleFloatMenu("remove", sideBar_remove)
+              }}
+            >
+              刪除
+            </div>
           </div>
 
           {/* float menu */}
@@ -230,18 +242,66 @@ const FloatMenu = ({ card, cardId, isfloating, setFloat }) => {
         <AddLink isfloating={isfloating} setFloat={setFloat} cardId={cardId} />
       )
     }
-
     case "addTime": {
       return <AddTime card={card} isfloating={isfloating} setFloat={setFloat} />
     }
-
     case "addTag": {
       return <AddTag card={card} isfloating={isfloating} setFloat={setFloat} />
+    }
+    case "remove": {
+      return <Remove isfloating={isfloating} setFloat={setFloat} />
     }
     default: {
       return null
     }
   }
+}
+
+const Remove = ({ isfloating, setFloat }) => {
+  const { projectId, cardId } = useParams()
+  const history = useHistory()
+  const match = useRouteMatch()
+
+  const handleRemove = () => {
+    removeCard_Fs(projectId, cardId)
+    setFloat(false)
+    history.replace({ pathname: match.url.slice(0, -(cardId.length + 1)) })
+  }
+
+  return (
+    <div
+      aria-label="remove"
+      className={styles.remove_container}
+      style={{
+        position: "fixed",
+        width: `${isfloating.position.width}px`,
+        left: `${isfloating.position.x}px`,
+        top: `${isfloating.position.y + 40}px`,
+      }}
+    >
+      <div aria-label="remove" className={styles.remove_span}>
+        此動作將無法復原，確定要將這張卡片刪除嗎？
+      </div>
+      <div aria-label="remove" className={styles.remove_buttons}>
+        <div
+          aria-label="remove"
+          className={styles.remove_buttons__cancel}
+          onClick={() => {
+            setFloat(false)
+          }}
+        >
+          取消
+        </div>
+        <div
+          aria-label="remove"
+          className={styles.remove_buttons__confirm}
+          onClick={handleRemove}
+        >
+          確定
+        </div>
+      </div>
+    </div>
+  )
 }
 
 const AddTime = ({ card, isfloating, setFloat }) => {
@@ -432,6 +492,7 @@ const AddLink = ({ isfloating, setFloat, cardId }) => {
       className={styles.addLink_container}
       style={{
         position: "fixed",
+        width: `${isfloating.position.width}px`,
         left: `${isfloating.position.x}px`,
         top: `${isfloating.position.y + 40}px`,
       }}
@@ -480,7 +541,7 @@ const Title = ({ title, handleUpdateTitle }) => {
     return (
       <input
         type="text"
-        className={styles.inputTitle}
+        className={styles.card_title_edit}
         value={pending}
         onChange={(e) => setPending(e.target.value)}
         onBlur={handleTitleEdit}
@@ -509,7 +570,7 @@ const Description = ({ description, handleUpdateDescription }) => {
 
   const handleSave = (e) => {
     handleUpdateDescription(pending ? pending : "")
-    setEditing(!isEditing)
+    setEditing(false)
   }
 
   const textAreaRef = useRef(0)
@@ -548,7 +609,10 @@ const Description = ({ description, handleUpdateDescription }) => {
 
         {/* edit/save btn */}
         {isEditing ? (
-          <div className={styles.save_button} onClick={handleSave}>
+          <div
+            className={styles.save_button}
+            // onClick={handleSave}
+          >
             儲存
           </div>
         ) : (
@@ -829,6 +893,15 @@ const AddComment = ({ cardId, userId }) => {
     return colorCode
   }
 
+  const handleOnFocus = (e) => {
+    // console.dir(e.target)
+    e.target.style.width = "100%"
+  }
+
+  const handleOnBlur = (e) => {
+    e.target.style.width = "250px"
+  }
+
   return (
     <div className={styles.comment}>
       <div
@@ -842,11 +915,13 @@ const AddComment = ({ cardId, userId }) => {
       </div>
       <div className={styles.details}>
         <input
-          className={styles.message}
+          className={styles.add_message}
           value={pending}
           onChange={(e) => setPending(e.target.value)}
           placeholder="撰寫留言"
           onKeyPress={addComment}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
         />
       </div>
     </div>
@@ -903,7 +978,6 @@ const Comment = ({ comment, userId }) => {
         <div className={styles.details}>
           <div className={styles.info}>
             <div className={styles.name}>{sender.name}</div>
-            {/* <time>{comment.time}</time> */}
             <div className={styles.time}>{getTime(comment.date)}</div>
           </div>
 

@@ -115,7 +115,7 @@ export const listenToUser = (userId, updateState) => {
       let data = snapshot.data()
       data.id = snapshot.id
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
+      console.log(source, snapshot, data)
       updateState(data)
     })
   return unsubscribe
@@ -483,6 +483,18 @@ export const updateCard_Fs = (projectId, cardId, change) => {
 
   return docRef.update(change).catch(function (error) {
     console.error("Error updating document: ", error)
+  })
+}
+
+export const removeCard_Fs = (projectId, cardId) => {
+  let docRef = db
+    .collection("projects")
+    .doc(projectId)
+    .collection("cards")
+    .doc(cardId)
+
+  return docRef.delete().catch(function (error) {
+    console.error("Error deleting document: ", error)
   })
 }
 

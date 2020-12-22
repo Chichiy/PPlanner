@@ -40,9 +40,15 @@ import {
   removeCard,
   initCards,
   modifyCardWithCheck,
+  clearCardsState,
 } from "./feature/CardBoard/cardSlice"
 
-import { addMember, modifyMember, removeMember } from "../User/membersSlice"
+import {
+  addMember,
+  modifyMember,
+  removeMember,
+  clearMembersState,
+} from "../User/membersSlice"
 
 const Project = () => {
   // console.log("rerender Project component")
@@ -141,6 +147,10 @@ const Project = () => {
     return () => {
       unsubscribeToCard()
       unsubscribeToMembers()
+
+      //reset cards and memebers' state
+      dispatch(clearCardsState())
+      dispatch(clearMembersState())
     }
   }, [])
 
@@ -155,27 +165,6 @@ const Project = () => {
 
   return (
     <Switch>
-      <Route exact path={match.path}>
-        <Navbar type="project" />
-        <div className={styles.container}>
-          <ul>
-            {/* <Link to={`${match.url}/todoList`}>待辦事項</Link> */}
-
-            <Link to={`${match.url}/cards`}>
-              <CardsIcon className={styles.cardsIcon} />
-              <div className={styles.title}>卡片板 </div>
-            </Link>
-
-            {/* <Link to={`${match.url}/itineraries/${itineraryId}`}> */}
-            <Link to={`${match.url}/itineraries/`}>
-              <CalendarIcon className={styles.itineraryIcon} />
-              <div className={styles.title}> 行程板 </div>
-            </Link>
-
-            {/* <Link to={`${match.url}/expenditure`}>花費板</Link> */}
-          </ul>
-        </div>
-      </Route>
       <Route path={`${match.path}/itineraries`}>
         <Navbar type="itineraries" />
         <ItineraryBoard />
@@ -184,16 +173,38 @@ const Project = () => {
         <Navbar type="cards" />
         <CardBoard />
       </Route>
-      <Route path={`${match.path}/expenditure`}>
-        <Navbar type="expenditure" />
-        <Expenditure />
-      </Route>
-      <Route path={`${match.path}/todoList`}>
-        <Navbar type="todoList" />
-        <TodoList />
-      </Route>
     </Switch>
   )
 }
 
 export default Project
+
+//
+//<Route exact path={match.path}>
+//<Navbar type="project" />
+//<div className={styles.container}>
+//  <ul>
+//    {/* <Link to={`${match.url}/todoList`}>待辦事項</Link> */}
+//      <CardsIcon className={styles.cardsIcon} />
+//      <div className={styles.title}>卡片板 </div>
+//    </Link>
+//
+//    {/* <Link to={`${match.url}/itineraries/${itineraryId}`}> */}
+//    <Link to={`${match.url}/itineraries/`}>
+//      <CalendarIcon className={styles.itineraryIcon} />
+//      <div className={styles.title}> 行程板 </div>
+//    </Link>
+//
+//    {/* <Link to={`${match.url}/expenditure`}>花費板</Link> */}
+//  </ul>
+//</div>
+//</Route>
+
+//<Route path={`${match.path}/expenditure`}>
+//        <Navbar type="expenditure" />
+//        <Expenditure />
+//      </Route>
+//      <Route path={`${match.path}/todoList`}>
+//        <Navbar type="todoList" />
+//        <TodoList />
+//      </Route>

@@ -19,14 +19,15 @@ export default function App() {
       <div>
         <CheckUser />
         <Switch>
-          <Route path="/projects">
-            <Projects />
-          </Route>
-
           <Route path="/joinProject/:projectId">
             <Navbar type="default" />
             <Join />
           </Route>
+
+          <Route path="/projects">
+            <Projects />
+          </Route>
+
           <Route path="/">
             <Navbar type="default" />
             <Home />

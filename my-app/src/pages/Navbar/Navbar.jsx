@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import {
   Link,
   useRouteMatch,
@@ -18,10 +18,11 @@ import makeAnimated from "react-select/animated"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
+import "./react-datepicker-customstyle.scss"
 import styles from "./navbar.module.scss"
 import User from "../User/User"
 import Title from "./component/Title"
-import { getColor } from "../lib"
+import { getColor, resetTime } from "../lib"
 
 const Navbar = (props) => {
   //get login status
@@ -57,13 +58,17 @@ const Navbar = (props) => {
             <div className={styles.board_select}>
               <BoardSelect type={props.type} />
             </div>
-            <div className={styles.daySelect_container}>
+            <div className={`${styles.daySelect_container} ${styles.tooltip}`}>
               <DaySelect />
+              <div style={{ width: "90px" }} className={styles.tooltip_text}>
+                選擇起始日期
+              </div>
             </div>
 
             {/* <div className={styles.modeSelect}>
               <ModeSelect />
             </div> */}
+            <Invitation isShowing={isShowing} setShowing={setShowing} />
           </div>
         )
       }
@@ -95,7 +100,7 @@ const Navbar = (props) => {
   const location = useLocation()
   const [isShowing, setShowing] = useState(false)
 
-  //handle poppu request from other conponent
+  //handle popup request from other conponent
   useEffect(() => {
     try {
       if (location.state.showPopup) {
@@ -188,7 +193,7 @@ const customStyles = {
   }),
   input: (provided) => ({
     ...provided,
-    display: "none",
+    // display: "none",
   }),
   dropdownIndicator: (provided) => ({
     ...provided,
@@ -203,7 +208,11 @@ const customStyles = {
 
   singleValue: (provided) => ({
     ...provided,
-    fontSize: 16,
+    fontSize: 14,
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: 14,
   }),
 }
 
@@ -233,7 +242,7 @@ const BoardSelect = (props) => {
     switch (boardType) {
       case "itineraries": {
         location = {
-          pathname: `/projects/${match.params.projectId}/${boardType}/${itineraryId}`,
+          pathname: `/projects/${match.params.projectId}/${boardType}`,
         }
         break
       }
@@ -350,21 +359,12 @@ const CardSelect = ({ project }) => {
 }
 
 const DaySelect = () => {
-  // console.log("dayselect")
-
-  const resetTime = (date) => {
-    let temp = new Date(date.getTime())
-    temp.setHours(0)
-    temp.setMinutes(0)
-    temp.setSeconds(0)
-    temp.setMilliseconds(0)
-    return temp
-  }
-
   const [startDate, setStartDate] = useState(resetTime(new Date()))
-  const plannedCards = useSelector((state) => state.cards).filter(
-    (card) => card.status === 1
+  const plannedCards = useSelector((state) =>
+    state.cards.filter((card) => card.status === 1)
   )
+
+  // automacticllu set date with first planned card
   // let currentDateRange
   // if (plannedCards.length > 0) {
   //   currentDateRange = plannedCards.reduce((prev, curr) => {
@@ -396,16 +396,20 @@ const DaySelect = () => {
   let history = useHistory()
   let match = useRouteMatch()
   let location = useLocation()
-
+  const previousDate = useRef()
   const handleDateChange = () => {
     location = {
-      pathname: `${match.url}`,
+      pathname: match.url,
       state: { startDate: startDate },
     }
     history.push(location)
   }
   useEffect(() => {
-    handleDateChange()
+    if (previousDate.current !== startDate) {
+      //prevent repeatly redirect
+      previousDate.current = startDate
+      handleDateChange()
+    }
   }, [startDate])
 
   //show dates with plans
@@ -435,12 +439,14 @@ const DaySelect = () => {
     }
   }
 
-  const hasPlan = (date) => {
+  //find current date has plan or not
+  const hasPlan = (compareDate) => {
     if (
       plannedCards.findIndex(
         (card) =>
-          getDate("dateObj", card.start_time) - date < 24 * 60 * 60 * 1000 &&
-          getDate("dateObj", card.start_time) - date > 0
+          0 < getDate("dateObj", card.start_time) - compareDate &&
+          getDate("dateObj", card.start_time) - compareDate <
+            24 * 60 * 60 * 1000
       ) > -1
     ) {
       return true
@@ -454,7 +460,7 @@ const DaySelect = () => {
       selected={startDate}
       onChange={(date) => setStartDate(date)}
       className={styles.daySelect}
-      dateFormat="yyyy/MM/dd"
+      dateFormat="yyyy年MM月"
       popperModifiers={{
         offset: {
           enabled: true,
@@ -467,7 +473,7 @@ const DaySelect = () => {
         },
       }}
       wrapperClassName={styles.wrapper}
-      dayClassName={(date) => (hasPlan(date) ? styles.hasPlan : undefined)}
+      dayClassName={(date) => (hasPlan(date) ? styles.hasPlan : null)}
     />
   )
 }

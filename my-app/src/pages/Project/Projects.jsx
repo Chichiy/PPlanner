@@ -65,7 +65,7 @@ const Projects = () => {
       setConfirm(projectId)
     } else {
       let location = {
-        pathname: `${match.url}/${projectId}`,
+        pathname: `${match.url}/${projectId}/cards`,
       }
       history.push(location)
     }

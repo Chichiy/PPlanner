@@ -28,10 +28,19 @@ export const membersSlice = createSlice({
       let index = state.findIndex((member) => member.id === target.id)
       state.splice(index, 1)
     },
+
+    clearMembersState: (state, action) => {
+      state.splice(0, state.length)
+    },
   },
 })
 
-export const { addMember, modifyMember, removeMember } = membersSlice.actions
+export const {
+  addMember,
+  modifyMember,
+  removeMember,
+  clearMembersState,
+} = membersSlice.actions
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

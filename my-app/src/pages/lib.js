@@ -14,12 +14,12 @@ export const getColor = (id) => {
 //category color code
 export const colorCode = {
   //category
-  food: "#ff70a6",
-  hotel: "#020887",
+  food: "#33B679",
+  hotel: "#F4511E",
   country: "#ff9770",
-  commute: "#71a9f7",
-  site: "#ecdd7b",
-  default: "#e2e1df",
+  commute: "#7986CB",
+  site: "#F6BF26",
+  default: "#616161",
 
   //tag
   green: "#61bd4f",
@@ -93,7 +93,7 @@ export const getTime = (dateString) => {
 //////get Date Header//////
 export const getDateHeader = (dateObj, type) => {
   const dateConverter = (dateObj) => {
-    const dayNamesEn = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."]
+    const dayNamesEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     let temp = {
       MM_DD: `${dateObj.getMonth() + 1}/${dateObj.getDate()}`,
       Day: dayNamesEn[dateObj.getDay()],

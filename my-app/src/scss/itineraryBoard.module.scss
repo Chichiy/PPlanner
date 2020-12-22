@@ -28,68 +28,217 @@
 }
 
 //side bar: card list
-.cardList {
-  // max-width: 20%;
+.sidebar {
   width: 200px;
   height: 100vh;
-  flex: none;
   padding-top: 55px;
   box-sizing: border-box;
-
   background-color: $white;
-  border-right: 2px solid $gray;
-
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: flex-start;
-  overflow-y: scroll;
+  flex-direction: column;
   z-index: 30;
 
-  .card {
-    //text view
-    width: 90%;
-    height: 40px;
-    margin: 5px 0;
+  // .sidebar_space {
+  //   width: 100%;
+  //   height: 60px;
+  // }
 
-    border-radius: 5px;
-    border: 1px solid $gray;
+  .sidebar_filter {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+
+    .sidebar_filter__title {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid $white;
+      box-sizing: border-box;
+      background-color: $white;
+
+      border-radius: 3px;
+      font-size: $h5;
+      color: black;
+      position: relative;
+
+      &:after {
+        @extend %fa-icon;
+        @extend .fa;
+        content: fa-content($fa-var-chevron-up);
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+
+        line-height: 14px;
+        font-size: 14px;
+        color: $gray;
+      }
+
+      &:hover {
+        border: 1px solid $gray;
+        // background-color: $gray_lighter;
+        border-radius: 3px;
+
+        &::after {
+          color: $gray_darker;
+        }
+      }
+    }
+
+    .filter_close {
+      &:after {
+        transform: translateY(-50%) rotate(180deg);
+      }
+    }
+
+    .sidebar_filter__list {
+      width: 100%;
+      padding: 10px;
+      height: 230px;
+      box-sizing: border-box;
+      visibility: visible;
+      transition: height 1s ease-in-out, padding 0.7s 0.3s ease-in;
+
+      label {
+        width: 90%;
+        height: 35px;
+        color: $black;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        input {
+          //hide default
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+          height: 0;
+          width: 0;
+        }
+
+        span {
+          font-size: $h5;
+          margin: 0px;
+          cursor: pointer;
+        }
+
+        //custom checkbox
+        .checkmark {
+          display: block;
+          height: 10px;
+          width: 10px;
+          margin: 0px 5px;
+          position: relative;
+          cursor: pointer;
+
+          &:before {
+            @extend %fa-icon;
+            @extend .fa;
+            content: fa-content($fa-var-square);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: $gray_lighter;
+          }
+        }
+
+        &:hover input ~ .checkmark {
+          &:before {
+            color: $main;
+          }
+        }
+
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $main;
+          }
+        }
+      }
+    }
+  }
+
+  .sidebar_cards {
+    width: 100%;
+    padding: 10px;
+    padding-top: 0px;
+    box-sizing: border-box;
     background-color: $white;
+    flex: auto;
+    z-index: 3;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 
-    line-height: 40px;
-    user-select: none;
-    z-index: 20;
-    position: relative;
-
-    &:hover {
-      box-shadow: 0 0 2px 1px $gray_lighter;
+    .sidebar_cards__title {
+      width: 100%;
+      height: fit-content;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: $white;
+      font-size: $h5;
+      color: black;
+      flex: none;
     }
 
-    .title {
-      margin-left: 20px;
-      font-size: $h4;
-      color: $black;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .cardList {
+      width: 100%;
+      flex: auto;
+      box-sizing: border-box;
 
-    .category {
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      height: 100%;
-      width: 10px;
+      background-color: $white;
 
-      border-top: 1px solid $gray;
-      border-bottom: 1px solid $gray;
-      border-left: 1px solid $gray;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+
+      .card {
+        //text view
+        width: 90%;
+        height: 35px;
+        margin-top: 2px;
+
+        border-radius: 3px;
+        background-color: $white;
+        line-height: 35px;
+
+        display: flex;
+        align-items: center;
+        user-select: none;
+        z-index: 20;
+        position: relative;
+
+        &:hover {
+          box-shadow: 0 0 2px 1px $gray_lighter;
+        }
+
+        .title {
+          font-size: $h5;
+          color: $black;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .category {
+          flex: none;
+          width: 10px;
+          height: 10px;
+          margin: 0 5px;
+          box-sizing: border-box;
+          border-radius: 50%;
+          // position: absolute;
+          // top: 50%;
+          // left: 0px;
+          // transform: translateY(-50%);
+        }
+      }
     }
   }
 }
-
 .itineraryBoard {
   flex: auto;
   height: 100%;
@@ -108,12 +257,12 @@
     margin-top: 59px;
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid $gray;
+    // border: 1px solid $gray;
     text-align: center;
   }
 
   td {
-    width: 12.5%;
+    width: 13.5%;
     vertical-align: middle;
     border: 1px solid $gray;
     box-sizing: border-box;
@@ -126,15 +275,14 @@
     right: 0px;
     width: 100%;
     height: 56px;
-    background-color: $gray_lighter2;
+    background-color: $white;
     z-index: 20;
     display: flex;
     border-bottom: 1px solid $gray;
-    // box-shadow: 0px 1px 1px 1px $gray_lighter;
 
     td {
       padding: 10px;
-      background-color: $gray_lighter2;
+      border: 0px;
       border-bottom: 1px solid $gray;
       box-sizing: border-box;
       height: 60px;
@@ -144,20 +292,78 @@
 
   .datesHeader_space {
     margin-left: 200px;
-  }
-  .datesHeader_date {
-    font-size: 18px;
-    color: $black;
-    margin-bottom: 5px;
+    width: 5.5%;
+    min-width: 45px;
   }
 
   .datesHeader_day {
-    font-size: $h6;
-    color: $gray;
+    font-size: 12px;
+    color: $gray_darker;
+    margin-bottom: 5px;
   }
-  .hourHeader {
+
+  .datesHeader_date {
     font-size: $h4;
     color: $black;
+  }
+
+  .datesHeader_date__today {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: $main;
+    line-height: 30px;
+    color: $white;
+    transform: translateY(-6px);
+    display: inline-block;
+  }
+
+  .hourHeader {
+    width: 5.5%;
+    min-width: 45px;
+    border-left: 0px;
+    border-bottom: 0px;
+    font-size: $h6;
+    color: $gray_darker;
+    vertical-align: top;
+    transform: translateY(-6px);
+
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0px;
+      height: 1px;
+      width: 10%; /* percentage of the element width*/
+      border-bottom: 1px solid $gray;
+      margin-top: 4px; /*move the border below the text*/
+    }
+  }
+
+  .td_border__fullHour {
+    border-bottom: 0px;
+  }
+
+  .td_border__halfHour {
+    border-top: 0px;
+  }
+
+  .appointment_title {
+    margin-bottom: 5px;
+    font-size: $h6;
+    color: $white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    opacity: 0.9;
+  }
+
+  .appointment_time {
+    font-size: $h6;
+    color: $white;
+    opacity: 0.7;
   }
 
   .expandHandle_upper {
@@ -192,255 +398,21 @@
     width: 100%;
     height: 0;
   }
+}
 
-  //////container for each columns senario//////
-  .container {
-    width: 95%;
-    height: 95%;
-    border-radius: 5px;
-    border: 2px solid $gray;
+//for cardlist
+.appointment_title {
+  margin-bottom: 5px;
+  font-size: $h6;
+  color: $white;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  opacity: 0.9;
+}
 
-    text-align: center;
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    grid-template-rows: 10% 25% 25% 25% 15%;
-  }
-
-  .container_1 {
-    @extend .container;
-    grid-template-columns: 200px 1fr;
-    grid-template-areas:
-      "year date_1  "
-      "morning  dayplan_1  "
-      "afternoon dayplan_1  "
-      "evening dayplan_1  "
-      "hotel dayplan_1  ";
-  }
-
-  .container_2 {
-    @extend .container;
-    grid-template-columns: 200px 1fr 1fr;
-    grid-template-areas:
-      "year date_1 date_2 "
-      "morning  dayplan_1 dayplan_2 "
-      "afternoon dayplan_1 dayplan_2 "
-      "evening dayplan_1 dayplan_2 "
-      "hotel dayplan_1 dayplan_2 ";
-  }
-
-  .container_3 {
-    @extend .container;
-    grid-template-columns: 200px repeat(3, 1fr);
-    grid-template-areas:
-      "year date_1 date_2 date_3"
-      "morning  dayplan_1 dayplan_2 dayplan_3"
-      "afternoon dayplan_1 dayplan_2 dayplan_3"
-      "evening dayplan_1 dayplan_2 dayplan_3"
-      "hotel dayplan_1 dayplan_2 dayplan_3";
-  }
-
-  .container_4 {
-    @extend .container;
-    grid-template-columns: 150px repeat(4, 1fr);
-    grid-template-areas:
-      "year date_1 date_2 date_3 date_4"
-      "morning  dayplan_1 dayplan_2 dayplan_3  dayplan_4"
-      "afternoon dayplan_1 dayplan_2 dayplan_3 dayplan_4"
-      "evening dayplan_1 dayplan_2 dayplan_3 dayplan_4"
-      "hotel dayplan_1 dayplan_2 dayplan_3 dayplan_4";
-  }
-
-  .container_5 {
-    @extend .container;
-    grid-template-columns: 150px repeat(5, 1fr);
-    grid-template-areas:
-      "year date_1 date_2 date_3 date_4 date_5"
-      "morning  dayplan_1 dayplan_2 dayplan_3  dayplan_4 dayplan_5 "
-      "afternoon dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 "
-      "evening dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 "
-      "hotel dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 ";
-  }
-
-  .container_6 {
-    @extend .container;
-    grid-template-columns: 10% repeat(6, 1fr);
-    grid-template-areas:
-      "year date_1 date_2 date_3 date_4 date_5 date_6 "
-      "morning  dayplan_1 dayplan_2 dayplan_3  dayplan_4 dayplan_5 dayplan_6 "
-      "afternoon dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 dayplan_6"
-      "evening dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 dayplan_6"
-      "hotel dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 dayplan_6";
-  }
-
-  .container_7 {
-    @extend .container;
-    grid-template-columns: 10% repeat(7, 1fr);
-    grid-template-areas:
-      "year date_1 date_2 date_3 date_4 date_5 date_6 date_7"
-      "morning  dayplan_1 dayplan_2 dayplan_3  dayplan_4 dayplan_5 dayplan_6 dayplan_7"
-      "afternoon dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 dayplan_6 dayplan_7"
-      "evening dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 dayplan_6 dayplan_7"
-      "hotel dayplan_1 dayplan_2 dayplan_3 dayplan_4 dayplan_5 dayplan_6 dayplan_7";
-  }
-
-  .dayplan_container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 27.78% 27.78% 27.78% 16.66%;
-    background-color: $white;
-
-    .card {
-      width: 90%;
-      height: 90%;
-
-      border-radius: 5px;
-      border: 2px solid $gray;
-      background-color: $white;
-
-      justify-self: center;
-      align-self: center;
-      @extend .centralizeItems;
-    }
-  }
-
-  //////each item//////
-
-  .tableTitle {
-    background-color: $white;
-    @extend .centralizeItems;
-    @extend .border_right;
-  }
-
-  .morning {
-    grid-area: morning;
-    @extend .tableTitle;
-  }
-  .afternoon {
-    grid-area: afternoon;
-    @extend .tableTitle;
-  }
-  .evening {
-    grid-area: evening;
-    @extend .tableTitle;
-  }
-  .hotel {
-    grid-area: hotel;
-    @extend .tableTitle;
-  }
-
-  .year {
-    grid-area: year;
-    background-color: $white;
-    @extend .centralizeItems;
-    @extend .border_bottom;
-  }
-
-  .date {
-    background-color: $white;
-    @extend .border_bottom;
-    @extend .centralizeItems;
-
-    .dateString {
-      flex: auto;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .space {
-      flex: auto;
-      min-width: 30px;
-      height: 100%;
-      position: relative;
-    }
-
-    .addDateBtn {
-      @extend .space;
-      &:hover::before {
-        content: "+";
-        width: 30px;
-        height: 30px;
-        padding: 10px;
-        font-size: 30px;
-        line-height: 25px;
-        background-color: $gray;
-        border-radius: 50%;
-        position: absolute;
-        text-align: center;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-  }
-
-  .date_1 {
-    @extend .date;
-    grid-area: date_1;
-  }
-  .date_2 {
-    @extend .date;
-    grid-area: date_2;
-  }
-
-  .date_3 {
-    @extend .date;
-    grid-area: date_3;
-  }
-
-  .date_4 {
-    @extend .date;
-    grid-area: date_4;
-  }
-
-  .date_5 {
-    @extend .date;
-    grid-area: date_5;
-  }
-
-  .date_6 {
-    @extend .date;
-    grid-area: date_6;
-  }
-
-  .date_7 {
-    @extend .date;
-    grid-area: date_7;
-  }
-
-  .dayplan_1 {
-    @extend .dayplan_container;
-    grid-area: dayplan_1;
-  }
-  .dayplan_2 {
-    @extend .dayplan_container;
-    grid-area: dayplan_2;
-  }
-
-  .dayplan_3 {
-    @extend .dayplan_container;
-    grid-area: dayplan_3;
-  }
-
-  .dayplan_4 {
-    @extend .dayplan_container;
-    grid-area: dayplan_4;
-  }
-
-  .dayplan_5 {
-    @extend .dayplan_container;
-    grid-area: dayplan_5;
-  }
-
-  .dayplan_6 {
-    @extend .dayplan_container;
-    grid-area: dayplan_6;
-  }
-
-  .dayplan_7 {
-    @extend .dayplan_container;
-    grid-area: dayplan_7;
-  }
+.appointment_time {
+  font-size: $h6;
+  color: $white;
+  opacity: 0.7;
 }

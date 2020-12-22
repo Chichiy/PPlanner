@@ -13,13 +13,40 @@ export const userSlice = createSlice({
     initUser: (state, action) => {
       let target = action.payload
 
+      // console.log(target)
       //prevent repeatly adding when itinitallizing
-      if (state.id !== target.id) {
-        let keys = Object.keys(target)
-        keys.forEach((key) => {
-          state[key] = target[key]
-        })
-      }
+      // if (state.id !== target.id) {
+      let keys = Object.keys(target)
+      keys.forEach((key) => {
+        state[key] = target[key]
+      })
+      // }
+
+      //check should update
+      // if (state.id === target.id) {
+      //   //copy the keys from target
+      //   let keys = Object.keys(target)
+
+      //   //loop and check if anything needs to update
+      //   keys.forEach((key) => {
+      //     //for string
+      //     if (target[key] instanceof String && state[key] !== target[key]) {
+      //       state[key] = target[key]
+      //     }
+      //     //for array
+      //     if (target[key] instanceof Array) {
+      //       console.log(state[key])
+      //       console.log(key)
+      //       if (
+      //         target[key].forEach((item, index) => item !== state[key][index]) >
+      //         -1
+      //       ) {
+      //         console.log("whites")
+      //         state[key] = target[key]
+      //       }
+      //     }
+      //   })
+      // }
     },
   },
 })
