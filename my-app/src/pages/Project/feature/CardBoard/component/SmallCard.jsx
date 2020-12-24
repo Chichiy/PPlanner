@@ -1,53 +1,137 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { colorCode } from "../../../../lib"
 
 import styles from "../cardBoard.module.scss"
+import { categoryTitle } from "../../../../lib"
+import DayJS from "react-dayjs"
+import { useParams } from "react-router-dom"
+import {
+  listenToLinks,
+  listenToComments,
+  getLinksNumber_Fs,
+  getCommentsNumber_Fs,
+} from "../../../../../firebase/Config"
+import { nanoid } from "@reduxjs/toolkit"
 
-const fakeImg = "https://fakeimg.pl/65x65/"
+// const fakeImg = "https://fakeimg.pl/65x65/"
 
-export const SmallCard = ({ card }) => {
+export const SmallCard = ({ card, project }) => {
   return (
     <div id={card.id} className={styles.card_small}>
       <div
-        className={styles[`tag_${card.category}`]}
+        className={styles.tag}
         style={{ backgroundColor: colorCode[card.category] }}
       ></div>
       <div className={styles.info}>
-        <div className={styles.card_small_picture}>
+        {/* <div className={styles.card_small_picture}>
           <img src={card.cover_pic} alt="pic" />
-        </div>
+        </div> */}
         <div className={styles.details}>
           <div className={styles.title}>{card.title}</div>
           <div className={styles.description}>{card.description}</div>
+        </div>
+        <div className={styles.small_card_icons}>
+          {/* show card's status  */}
+          {card.start_time && (
+            <div className={styles.small_card_icon__status}>
+              <DayJS format="MM/DD">{card.start_time}</DayJS>
+            </div>
+          )}
+
+          {/* show card's link number  */}
+
+          <LinkIcon cardId={card.id} />
+
+          {/* show card's comment number  */}
+          <CommentIcon cardId={card.id} />
+
+          {/* fill empty  */}
+          <div className={styles.space}></div>
+
+          {/* show card's tags  */}
+          {card.tags.length > 0 &&
+            card.tags.map((tag) => {
+              try {
+                let target = project.tags.find((item) => item.id === tag)
+                return (
+                  <div
+                    key={nanoid()}
+                    style={{ backgroundColor: colorCode[target.color] }}
+                    className={styles.small_card_icon__tag}
+                  ></div>
+                )
+              } catch {
+                return null
+              }
+            })}
         </div>
       </div>
     </div>
   )
 }
 
+const CommentIcon = ({ cardId }) => {
+  const commentsNumber = useRef(0)
+
+  useEffect(() => {
+    const handleAdd = () => {
+      commentsNumber.current += 1
+    }
+
+    const handleModify = () => {
+      //do nothing
+    }
+    const handleRemove = () => {
+      commentsNumber.current -= 1
+    }
+
+    //listen to links number and handle counts
+    const unsubscribe = listenToComments(
+      cardId,
+      handleAdd,
+      handleModify,
+      handleRemove
+    )
+    return unsubscribe
+  }, [])
+
+  return commentsNumber.current > 0 ? (
+    <div className={styles.small_card_icon__comment}>
+      {commentsNumber.current}
+    </div>
+  ) : null
+}
+
+const LinkIcon = ({ cardId }) => {
+  const linksNumber = useRef(0)
+
+  useEffect(() => {
+    const handleAdd = () => {
+      linksNumber.current += 1
+    }
+    const handleModify = () => {
+      //do nothing
+    }
+    const handleRemove = () => {
+      linksNumber.current -= 1
+    }
+
+    //listen to links number and handle counts
+    const unsubscribe = listenToLinks(
+      cardId,
+      handleAdd,
+      handleModify,
+      handleRemove
+    )
+    return unsubscribe
+  }, [])
+
+  return linksNumber.current > 0 ? (
+    <div className={styles.small_card_icon__link}>{linksNumber.current}</div>
+  ) : null
+}
+
 export const AddCard = ({ pendingInfo, setPendingInfo, shouldAddCard }) => {
-  //new card data
-  // const emptyCard = {
-  //   title: "",
-  //   description: "",
-  //   category: "default",
-  // }
-
-  // const [pendingInfo, setPendingInfo] = useState(emptyCard)
-
-  // useEffect(() => {
-  //   return () => {
-  //     console.log("unmount")
-  //   }
-  // })
-
-  // console.log(pendingInfo !== emptyCard)
-  // pendingInfo, setPendingInfo, shouldAddCard
-  //detemine should add card or not
-  // if (pendingInfo !== emptyCard) {
-  //   shouldAddCard(true)
-  // }
-
   //category related
   const [selectCategory, setCategory] = useState(false)
   const toggleCategorySelect = (e) => {
@@ -75,18 +159,22 @@ export const AddCard = ({ pendingInfo, setPendingInfo, shouldAddCard }) => {
     <div className={styles.card_small}>
       <div
         id="pendingCategory"
-        className={styles[`tag_${pendingInfo.category}`]}
+        className={styles.tag}
+        style={{ backgroundColor: colorCode[pendingInfo.category] }}
         onClick={toggleCategorySelect}
       >
         {selectCategory ? (
-          <SelectCategory handleSelectCategory={updateCategory} />
+          <SelectCategory
+            handleSelectCategory={updateCategory}
+            selected={pendingInfo.category}
+          />
         ) : null}
       </div>
 
       <div className={styles.info}>
-        <div className={styles.card_small_picture}>
+        {/* <div className={styles.card_small_picture}>
           <img src={fakeImg} alt="pic" />
-        </div>
+        </div> */}
         <div className={styles.details}>
           <PendingTitle
             pendingTitle={pendingInfo.title}
@@ -133,7 +221,7 @@ const PendingTitle = (props) => {
       <input
         type="text"
         className={styles.inputTitle}
-        placeholder="編輯標題"
+        placeholder="請輸入標題"
         value={pending}
         onChange={(e) => setPending(e.target.value)}
         onBlur={handleTitleEdit}
@@ -184,7 +272,7 @@ const PendingDescription = (props) => {
       <textarea
         type="text"
         className={styles.inputDescription}
-        placeholder="編輯描述"
+        placeholder="對卡片增加描述"
         value={pending}
         onChange={(e) => setPending(e.target.value)}
         onBlur={handleTitleEdit}
@@ -206,20 +294,27 @@ const PendingDescription = (props) => {
 
 ////////////Category////////////
 
-const SelectCategory = (props) => {
-  const categories = ["food", "hotel", "country", "site", "commute", "default"]
-  let handleSelectCategory = props.handleSelectCategory
+const SelectCategory = ({ selected, handleSelectCategory }) => {
+  const categories = ["hotel", "activity", "site", "food", "commute", "default"]
 
   return (
     <div className={styles.selectCategory}>
       {categories.map((category) => {
         return (
           <option
+            key={nanoid()}
             value={category}
-            className={styles[`category_${category}`]}
+            style={{
+              backgroundColor: colorCode[category],
+            }}
+            className={
+              selected === category
+                ? `${styles.option} ${styles.current}`
+                : styles.option
+            }
             onClick={handleSelectCategory}
           >
-            {category}
+            {categoryTitle(category)}
           </option>
         )
       })}

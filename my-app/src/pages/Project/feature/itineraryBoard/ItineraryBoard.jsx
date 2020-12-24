@@ -24,7 +24,7 @@ import { modifyCardProperties, updateCardsOrder } from "../CardBoard/cardSlice"
 import LargeCard from "../CardBoard/component/LargeCard"
 
 const ItineraryBoard = () => {
-  let { itineraryId, projectId } = useParams()
+  const { itineraryId, projectId } = useParams()
 
   console.log("rerender!!!!!")
   //needed state

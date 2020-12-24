@@ -16,19 +16,19 @@ export const responsiveTime = (card, snapshot, isExpanding) => {
     let newEndTime = new Date(startTime.getTime() + timeSpan * 30 * 60 * 1000)
 
     return (
-      <div className={styles.appointment_time} data-cardId={card.id}>
+      <div className={styles.appointment_time} data-cardid={card.id}>
         {isNaN(timeSpan) ? null : (
-          <div data-cardId={card.id}>
-            <time data-cardId={card.id}>
+          <div data-cardid={card.id}>
+            <time data-cardid={card.id}>
               {startTime.getHours() < 10
                 ? "0" + startTime.getHours()
                 : startTime.getHours()}
               :{startTime.getMinutes() < 30 ? "00" : "30"}
             </time>
 
-            <span data-cardId={card.id}>-</span>
+            <span data-cardid={card.id}>-</span>
 
-            <time aria-label="expandEndTime" data-cardId={card.id}>
+            <time aria-label="expandEndTime" data-cardid={card.id}>
               {newEndTime.getHours() < 10
                 ? "0" + newEndTime.getHours()
                 : newEndTime.getHours()}
@@ -68,19 +68,19 @@ export const responsiveTime = (card, snapshot, isExpanding) => {
   } else {
     //case: display hover time while re-arranging card
     return (
-      <div className={styles.appointment_time} data-cardId={card.id}>
+      <div className={styles.appointment_time} data-cardid={card.id}>
         {isNaN(hoverTime.getHours()) ? null : (
-          <div data-cardId={card.id}>
-            <time data-cardId={card.id}>
+          <div data-cardid={card.id}>
+            <time data-cardid={card.id}>
               {hoverTime.getHours() < 10
                 ? "0" + hoverTime.getHours()
                 : hoverTime.getHours()}
               :{hoverTime.getMinutes() < 30 ? "00" : "30"}
             </time>
 
-            <span data-cardId={card.id}>-</span>
+            <span data-cardid={card.id}>-</span>
 
-            <time data-cardId={card.id}>
+            <time data-cardid={card.id}>
               {hoverEndTime.getHours() < 10
                 ? "0" + hoverEndTime.getHours()
                 : hoverEndTime.getHours()}

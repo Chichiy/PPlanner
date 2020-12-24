@@ -293,11 +293,11 @@ const Appointments = React.memo(
                         ref={provided.innerRef}
                         // onDoubleClick={handleShowCard}
                         onClick={handleShowCard}
-                        data-cardId={card.id}
+                        data-cardid={card.id}
                       >
                         <div
                           className={styles.appointment_title}
-                          data-cardId={card.id}
+                          data-cardid={card.id}
                         >
                           {card.title}
                         </div>
@@ -314,7 +314,7 @@ const Appointments = React.memo(
                         <div
                           className={styles.expandHandle_lower}
                           aria-label="lower"
-                          data-cardId={card.id}
+                          data-cardid={card.id}
                           // style={expandingStyle(card)}
                         ></div>
                       </div>

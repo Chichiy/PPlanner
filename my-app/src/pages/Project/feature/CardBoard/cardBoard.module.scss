@@ -6,14 +6,13 @@
   box-sizing: border-box;
   background-color: $gray_lighter;
 
-  // display: grid;
-  // grid-template-columns: auto;
-  // grid-template-rows: auto;
-
   display: flex;
   flex-wrap: wrap;
-  // justify-content: center;
   align-content: flex-start;
+}
+
+.space {
+  flex: auto;
 }
 
 .card {
@@ -32,6 +31,10 @@
   position: relative;
   flex-wrap: wrap;
 
+  &:hover {
+    box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray;
+  }
+
   .tag {
     position: absolute;
     top: 0;
@@ -39,44 +42,19 @@
     width: 100%;
     height: 15px;
     border-radius: 10px 10px 0 0;
-  }
+    cursor: pointer;
 
-  .tag_food {
-    @extend .tag;
-    background-color: $food;
-  }
-
-  .tag_hotel {
-    @extend .tag;
-    background-color: $hotel;
-  }
-
-  .tag_activity {
-    @extend .tag;
-    background-color: $activity;
-  }
-
-  .tag_site {
-    @extend .tag;
-    background-color: $site;
-  }
-
-  .tag_commute {
-    @extend .tag;
-    background-color: $commute;
-  }
-
-  .tag_default {
-    @extend .tag;
-    background-color: $default;
+    &:hover {
+      box-shadow: 0 0 10px 1px $gray, 0 0 5px 1px $gray_darker;
+    }
   }
 
   .info {
     width: 100%;
     padding-top: 10px;
-    display: flex;
     box-sizing: border-box;
-    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
 
     .card_small_picture {
       width: 65px;
@@ -94,24 +72,24 @@
       }
     }
     .details {
-      max-width: 105px;
+      // max-width: 105px;
+      width: 100%;
+      flex: auto;
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
-      // line-height: 24px;
-      // overflow-wrap: break-word;
 
       .title {
         width: 100%;
-        margin-bottom: 2px;
         box-sizing: border-box;
+
+        font-size: $h4;
+        line-height: 140%;
+        color: $black;
         overflow-wrap: break-word;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        font-size: 18px;
-        line-height: 18px;
-        color: $black;
       }
 
       .inputTitle {
@@ -119,111 +97,161 @@
         border: 0;
 
         &:focus {
-          outline: 1px solid $gray;
+          outline: none;
+          border: none;
         }
       }
 
       .description {
         flex: auto;
-        max-height: 43px;
         margin: auto 0;
         box-sizing: border-box;
+
+        font-size: $h6;
+        line-height: 200%;
+        color: $black;
+
         overflow-wrap: break-word;
         text-overflow: ellipsis;
         overflow: hidden;
-        font-size: 14px;
-        line-height: 20px;
-        color: $black;
+        white-space: nowrap;
       }
 
       .inputDescription {
         @extend .description;
         resize: none;
         border: 0;
+        font-size: $h6;
         &:focus {
-          outline: 1px solid $gray;
+          // border: 1px solid $gray;
+          outline: none;
         }
+      }
+    }
+
+    .small_card_icons {
+      // max-width: 105px;
+      width: 100%;
+      height: 16px;
+      font-size: $h6;
+
+      display: flex;
+      align-items: center;
+
+      .small_card_icon__link {
+        padding-left: 16px;
+        margin-right: 3px;
+        color: $gray_darker;
+
+        position: relative;
+
+        &:before {
+          @extend %fa-icon;
+          @extend .fas;
+          content: fa-content($fa-var-paperclip);
+          position: absolute;
+          top: 52%;
+          left: 2px;
+          transform: translateY(-50%);
+
+          font-size: 10px;
+        }
+      }
+
+      .small_card_icon__comment {
+        padding-left: 16px;
+        margin-right: 3px;
+        color: $gray_darker;
+
+        position: relative;
+
+        &:before {
+          @extend %fa-icon;
+          @extend .far;
+          content: fa-content($fa-var-comment-alt);
+          position: absolute;
+          top: 52%;
+          left: 2px;
+          transform: translateY(-50%);
+
+          font-size: 10px;
+        }
+      }
+
+      .small_card_icon__status {
+        padding: 3px;
+        padding-left: 16px;
+        margin-right: 3px;
+        background-color: $gray_lighter;
+        border-radius: 3px;
+        box-sizing: border-box;
+        font-size: $h6;
+        color: $gray_darker;
+
+        position: relative;
+        @extend %fa-icon;
+        @extend .fa;
+
+        &:before {
+          content: fa-content($fa-var-clock);
+          position: absolute;
+          top: 52%;
+          left: 2px;
+          transform: translateY(-50%);
+          font-size: 10px;
+        }
+      }
+
+      .small_card_icon__tag {
+        width: 10px;
+        height: 10px;
+        margin-left: 3px;
+        border-radius: 50%;
       }
     }
   }
 }
 
-.card_small:hover {
-  box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray;
-}
-
 .selectCategory {
-  width: 100%;
+  width: 200px;
+  height: 100px;
   padding: 5px;
   box-sizing: border-box;
+  background-color: $white;
+  border-radius: 5px;
+  box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray;
+
   position: absolute;
   right: -205px;
   top: 0px;
-  background-color: $white;
-  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
 
   .option {
-    width: 100%;
-    height: 15px;
-    padding: 3px;
-    margin-bottom: 3px;
+    width: 30%;
+    height: 45%;
     box-sizing: border-box;
-    line-height: 9px;
+    border-radius: 5px;
+    opacity: 0.5;
     font-size: 10px;
     color: $white;
-    border-radius: 5px;
+    user-select: none;
 
-    &:last-child {
-      margin-bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      opacity: 1;
     }
   }
-}
 
-.category_food {
-  @extend .option;
-  background-color: $food;
+  .current {
+    opacity: 1;
+  }
 }
-
-.category_hotel {
-  @extend .option;
-  background-color: $hotel;
-}
-
-.category_activity {
-  @extend .option;
-  background-color: $activity;
-}
-
-.category_site {
-  @extend .option;
-  background-color: $site;
-}
-.category_commute {
-  @extend .option;
-  background-color: $commute;
-}
-.category_default {
-  @extend .option;
-  background-color: $default;
-}
-
-// .button {
-//   padding: 2px 20px;
-//   border-radius: 5px;
-//   text-decoration: none;
-//   color: $black;
-// }
-
-// .button_border {
-//   @extend .button;
-//   background-color: $main;
-//   color: $white;
-//   font-size: smaller;
-// }
-
-// .button_border:hover {
-//   background-color: $main_lighter;
-// }
 
 //tool tip
 .tooltip {

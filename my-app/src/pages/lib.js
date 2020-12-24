@@ -38,6 +38,19 @@ export const colorCode_tags = {
   orange: "#FF9F1A",
 }
 
+export const categoryTitle = (string) => {
+  const title = {
+    hotel: "住宿",
+    activity: "活動",
+    site: "景點",
+    food: "食物",
+    commute: "交通",
+    default: "預設",
+  }
+
+  return title[string]
+}
+
 //
 //
 //     TIME

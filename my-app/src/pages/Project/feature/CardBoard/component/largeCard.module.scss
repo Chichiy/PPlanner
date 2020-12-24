@@ -54,10 +54,10 @@
   display: flex;
 
   position: relative;
-  @extend %fa-icon;
-  @extend .fas;
 
   &:before {
+    @extend %fa-icon;
+    @extend .far;
     content: fa-content($fa-var-sticky-note);
     position: absolute;
     top: 0px;
@@ -69,7 +69,7 @@
 
   .card_title {
     font-weight: bold;
-    font-size: larger;
+    font-size: $h3;
     flex: auto;
   }
 
@@ -233,10 +233,10 @@
         cursor: default;
 
         position: relative;
-        @extend %fa-icon;
-        @extend .fas;
 
         &:before {
+          @extend %fa-icon;
+          @extend .far;
           content: fa-content($fa-var-comment-alt);
           position: absolute;
           top: 0px;
@@ -476,10 +476,10 @@
   .sidebar_button_addlink {
     @extend .sidebar_button;
     position: relative;
-    @extend %fa-icon;
-    @extend .fas;
 
     &:before {
+      @extend %fa-icon;
+      @extend .fas;
       content: fa-content($fa-var-paperclip);
       position: absolute;
       top: 50%;
@@ -494,10 +494,10 @@
   .sidebar_button_expenditure {
     @extend .sidebar_button;
     position: relative;
-    @extend %fa-icon;
-    @extend .fas;
 
     &:before {
+      @extend %fa-icon;
+      @extend .fas;
       content: fa-content($fa-var-dollar-sign);
       position: absolute;
       top: 50%;

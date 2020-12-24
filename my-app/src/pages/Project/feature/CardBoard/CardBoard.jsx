@@ -106,7 +106,7 @@ const CardBoard = () => {
       {filteredCard().map((card) => {
         return (
           <Link to={`${match.url}/${card.id}`} key={card.id}>
-            <SmallCard card={card} />
+            <SmallCard card={card} project={project} />
           </Link>
         )
       })}

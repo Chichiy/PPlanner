@@ -54,13 +54,12 @@ export const signUp_Native = (input, handleSuccess) => {
       })
     })
     .then((res) => {
-      console.log(res)
       handleSuccess()
     })
     .catch((error) => {
       var errorCode = error.code
       var errorMessage = error.message
-      console.log(errorMessage)
+      alert(errorMessage)
       // ..
     })
 }
@@ -76,7 +75,7 @@ export const signIn_Native = (input, handleSuccess) => {
     .catch((error) => {
       var errorCode = error.code
       var errorMessage = error.message
-      console.log(errorMessage)
+      alert(errorMessage)
     })
 }
 
@@ -115,7 +114,7 @@ export const listenToUser = (userId, updateState) => {
       let data = snapshot.data()
       data.id = snapshot.id
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-      console.log(source, snapshot, data)
+      // console.log(source, snapshot, data)
       updateState(data)
     })
   return unsubscribe
@@ -134,7 +133,7 @@ export const listenToMembers = (
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
 
-      console.log(source, snapshot, docChange)
+      // console.log(source, snapshot, docChange)
 
       //local data needs to be changed
       if (docChange.length > 0) {
@@ -177,8 +176,7 @@ export const listenToProjects = (
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-      console.log(userId)
-      console.log(source, snapshot, docChange)
+
       //local data needs to be changed
       if (docChange.length > 0) {
         snapshot.docChanges().forEach(function (change) {
@@ -342,7 +340,7 @@ export const listenToComments = (
       } else {
         //changes have been saved
         console.log("data has been saved to cloud database")
-        console.log("comments")
+        // console.log("comments")
       }
     })
   return unsubscribe
@@ -390,7 +388,6 @@ export const listenToLinks = (
       } else {
         //changes have been saved
         console.log("data has been saved to cloud database")
-        console.log("links")
       }
     })
   return unsubscribe
@@ -498,6 +495,24 @@ export const removeCard_Fs = (projectId, cardId) => {
   })
 }
 
+export const getCommentsNumber_Fs = (cardId) => {
+  return db
+    .collection("comments")
+    .where("card_id", "==", cardId)
+    .get()
+    .then(function (querySnapshot) {
+      let temp = []
+      querySnapshot.forEach(function (doc) {
+        temp.push(doc.data())
+      })
+      return temp.length
+    })
+
+    .catch(function (error) {
+      console.log("Error getting documents: ", error)
+    })
+}
+
 export const addComment_Fs = (input) => {
   // expected format:
   // let input = {
@@ -533,6 +548,24 @@ export const removeComment_Fs = (commentId) => {
   return docRef.delete().catch(function (error) {
     console.error("Error deleting document: ", error)
   })
+}
+
+export const getLinksNumber_Fs = (cardId) => {
+  return db
+    .collection("links")
+    .where("card_id", "==", cardId)
+    .get()
+    .then(function (querySnapshot) {
+      let temp = []
+      querySnapshot.forEach(function (doc) {
+        temp.push(doc.data())
+      })
+      return temp.length
+    })
+
+    .catch(function (error) {
+      console.log("Error getting documents: ", error)
+    })
 }
 
 export const addLink_Fs = (input) => {
