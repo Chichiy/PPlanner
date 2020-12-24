@@ -51,9 +51,9 @@
     background-color: $hotel;
   }
 
-  .tag_country {
+  .tag_activity {
     @extend .tag;
-    background-color: $country;
+    background-color: $activity;
   }
 
   .tag_site {
@@ -189,9 +189,9 @@
   background-color: $hotel;
 }
 
-.category_country {
+.category_activity {
   @extend .option;
-  background-color: $country;
+  background-color: $activity;
 }
 
 .category_site {
@@ -224,3 +224,91 @@
 // .button_border:hover {
 //   background-color: $main_lighter;
 // }
+
+//tool tip
+.tooltip {
+  position: relative;
+
+  &:hover {
+    .tooltip_text {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.tooltip_text {
+  transition: opacity 1s ease-out;
+  visibility: hidden;
+  opacity: 0;
+  width: 64px;
+  height: 30px;
+  box-sizing: border-box;
+  display: inline-block;
+  line-height: 30px;
+  text-align: center;
+  font-size: $h6;
+  color: $white;
+  border-radius: 3px;
+  background-color: rgba($color: #000000, $alpha: 0.8);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -130%);
+
+  &:before {
+    content: "";
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba($color: #000000, $alpha: 0.8) transparent transparent
+      transparent;
+  }
+}
+
+//add card button
+.addCardButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: $main;
+  box-shadow: 0 0 10px 3px $gray;
+  cursor: pointer;
+
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+
+  &:hover {
+    width: 50px;
+    height: 50px;
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+    background-color: $main_darker;
+    box-shadow: 0 0 10px 3px $gray, 0 0 3px 1px $gray_lighter;
+
+    .tooltip_text {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 1s 1s ease-out;
+    }
+  }
+
+  &:after {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-plus);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 20px;
+    color: $white;
+  }
+}

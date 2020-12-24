@@ -28,6 +28,29 @@ const CardList = (props) => {
   }
   // filiter's state
   const [isShowing, setShowing] = useState(false)
+  const [filter, setFilter] = useState([
+    "activity",
+    "commute",
+    "default",
+    "food",
+    "hotel",
+    "site",
+  ])
+
+  const handleChangeFilter = (e) => {
+    if (e.target.checked) {
+      //add option in filiter
+      setFilter((prev) => [...prev, e.target.name])
+    } else {
+      //remove option from filiter
+      let newFiliter = filter.filter((option) => option !== e.target.name)
+      setFilter(newFiliter)
+    }
+  }
+
+  const filteredCards = () => {
+    return props.cards.filter((card) => filter.includes(card.category))
+  }
 
   //isDragging's styles
   const isDraggingStyle = (card, snapshot, provided) => {
@@ -82,36 +105,69 @@ const CardList = (props) => {
                 }
           }
         >
-          <label>
+          <label className={styles.label__hotel}>
+            <input
+              type="checkbox"
+              name="hotel"
+              id="hotel"
+              defaultChecked
+              onChange={handleChangeFilter}
+            />
+            <div className={styles.checkmark}> </div>
+            <span>住宿</span>
+          </label>
+          <label className={styles.label__activity}>
             <input
               type="checkbox"
               name="activity"
               id="activity"
               defaultChecked
+              onChange={handleChangeFilter}
             />
             <div className={styles.checkmark}></div> <span>活動</span>
           </label>
-          <label>
-            <input type="checkbox" name="commute" id="commute" defaultChecked />
-            <div className={styles.checkmark}></div> <span>交通</span>
-          </label>
-          <label>
-            <input type="checkbox" name="food" id="food" defaultChecked />
-            <div className={styles.checkmark}> </div>
-            <span>食物</span>
-          </label>
-          <label>
-            <input type="checkbox" name="hotel" id="hotel" defaultChecked />
-            <div className={styles.checkmark}> </div>
-            <span>住宿</span>
-          </label>
-          <label>
-            <input type="checkbox" name="site" id="site" defaultChecked />
+          <label className={styles.label__site}>
+            <input
+              type="checkbox"
+              name="site"
+              id="site"
+              defaultChecked
+              onChange={handleChangeFilter}
+            />
             <div className={styles.checkmark}> </div>
             <span>景點</span>
           </label>
-          <label>
-            <input type="checkbox" name="default" id="default" defaultChecked />
+
+          <label className={styles.label__food}>
+            <input
+              type="checkbox"
+              name="food"
+              id="food"
+              defaultChecked
+              onChange={handleChangeFilter}
+            />
+            <div className={styles.checkmark}> </div>
+            <span>食物</span>
+          </label>
+          <label className={styles.label__commute}>
+            <input
+              type="checkbox"
+              name="commute"
+              id="commute"
+              defaultChecked
+              onChange={handleChangeFilter}
+            />
+            <div className={styles.checkmark}></div> <span>交通</span>
+          </label>
+
+          <label className={styles.label__default}>
+            <input
+              type="checkbox"
+              name="default"
+              id="default"
+              defaultChecked
+              onChange={handleChangeFilter}
+            />
             <div className={styles.checkmark}></div>
             <span>預設</span>
           </label>
@@ -130,12 +186,10 @@ const CardList = (props) => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {props.cards.map((card, index) => {
+              {filteredCards().map((card, index) => {
                 return (
                   <Draggable key={card.id} draggableId={card.id} index={index}>
                     {(provided, snapshot) => {
-                      console.log(snapshot.draggingOver)
-
                       return (
                         <div
                           {...provided.draggableProps}

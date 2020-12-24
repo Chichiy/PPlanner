@@ -21,6 +21,7 @@ import styles from "../../../../scss/itineraryBoard.module.scss"
 import { OnDragEnd } from "./itineraryBoardLib"
 import { updateCard_Fs } from "../../../../firebase/Config"
 import { modifyCardProperties, updateCardsOrder } from "../CardBoard/cardSlice"
+import LargeCard from "../CardBoard/component/LargeCard"
 
 const ItineraryBoard = () => {
   let { itineraryId, projectId } = useParams()
@@ -198,19 +199,26 @@ const ItineraryBoard = () => {
     }
   }
 
-  // const handleOnDragStart = (result) => {
-  //   console.log(result)
-  // }
+  const handleOnDragStart = (result) => {
+    console.log(result)
+  }
 
+  const match = useRouteMatch()
   return (
     <div className={styles.view}>
       <DragDropContext
-        // onDragStart={handleOnDragStart}
+        onDragStart={handleOnDragStart}
         onDragEnd={handleOnDragEnd}
       >
         <CardList cards={filterCards("noPlan")} />
         <Dayplans />
       </DragDropContext>
+
+      <Switch>
+        <Route path={`${match.path}/:cardId`}>
+          <LargeCard />
+        </Route>
+      </Switch>
     </div>
   )
 }

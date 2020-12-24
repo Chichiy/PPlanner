@@ -101,7 +101,7 @@ const CardBoard = () => {
     <div
       id="cardBoardContainer"
       className={styles.container}
-      onDoubleClick={handleAddCard}
+      onClick={handleAddCard}
     >
       {filteredCard().map((card) => {
         return (
@@ -118,6 +118,9 @@ const CardBoard = () => {
           <LargeCard />
         </Route>
       </Switch>
+      <div className={styles.addCardButton} onClick={() => toggleAddCard(true)}>
+        <div className={styles.tooltip_text}>新增卡片</div>
+      </div>
     </div>
   )
 }

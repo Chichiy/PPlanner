@@ -2,37 +2,88 @@ import DayJS from "react-dayjs"
 import styles from "../../../../scss/itineraryBoard.module.scss"
 
 //display responsive time on appointment card
-export const responsiveTime = (card, snapshot) => {
+export const responsiveTime = (card, snapshot, isExpanding) => {
+  //case: edit time through expansion
+  if (card.status === 1 && card.id === isExpanding) {
+    console.log(card.id === isExpanding)
+
+    let targetElement = document
+      .querySelector(`[id="${card.id}"]`)
+      .getBoundingClientRect()
+    let targetHeight = targetElement.height
+    let timeSpan = targetHeight / 20
+    let startTime = new Date(card.start_time)
+    let newEndTime = new Date(startTime.getTime() + timeSpan * 30 * 60 * 1000)
+
+    return (
+      <div className={styles.appointment_time} data-cardId={card.id}>
+        {isNaN(timeSpan) ? null : (
+          <div data-cardId={card.id}>
+            <time data-cardId={card.id}>
+              {startTime.getHours() < 10
+                ? "0" + startTime.getHours()
+                : startTime.getHours()}
+              :{startTime.getMinutes() < 30 ? "00" : "30"}
+            </time>
+
+            <span data-cardId={card.id}>-</span>
+
+            <time aria-label="expandEndTime" data-cardId={card.id}>
+              {newEndTime.getHours() < 10
+                ? "0" + newEndTime.getHours()
+                : newEndTime.getHours()}
+              :{newEndTime.getMinutes() < 30 ? "00" : "30"}
+            </time>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   let hoverTime = new Date(Number(snapshot.draggingOver))
-  let timeSpan = new Date(card.end_time) - new Date(card.start_time)
+  let timeSpan
+
+  //time span for re-arranging card
+  if (card.status === 1) {
+    timeSpan = new Date(card.end_time) - new Date(card.start_time)
+  }
+
+  //time span for new card with 1 hr span in default
+  if (card.status === 0) {
+    timeSpan = 60 * 60 * 1000
+  }
   let hoverEndTime = new Date(hoverTime.getTime() + timeSpan)
 
+  //case: display recorded time
   if (!snapshot.isDragging) {
     return (
       <div className={styles.appointment_time}>
         <DayJS format="HH:mm">{card.start_time}</DayJS>
         <span>-</span>
-        <DayJS format="HH:mm">{card.end_time}</DayJS>
+        <DayJS aria-label="expandEndTime" format="HH:mm">
+          {card.end_time}
+        </DayJS>
       </div>
     )
   } else {
+    //case: display hover time while re-arranging card
     return (
-      <div className={styles.appointment_time}>
+      <div className={styles.appointment_time} data-cardId={card.id}>
         {isNaN(hoverTime.getHours()) ? null : (
-          <div>
-            <time>
+          <div data-cardId={card.id}>
+            <time data-cardId={card.id}>
               {hoverTime.getHours() < 10
                 ? "0" + hoverTime.getHours()
                 : hoverTime.getHours()}
               :{hoverTime.getMinutes() < 30 ? "00" : "30"}
             </time>
 
-            <span>-</span>
+            <span data-cardId={card.id}>-</span>
 
-            <time>
-              {hoverTime.getHours() < 10
-                ? "0" + hoverTime.getHours()
-                : hoverTime.getHours()}
+            <time data-cardId={card.id}>
+              {hoverEndTime.getHours() < 10
+                ? "0" + hoverEndTime.getHours()
+                : hoverEndTime.getHours()}
               :{hoverEndTime.getMinutes() < 30 ? "00" : "30"}
             </time>
           </div>

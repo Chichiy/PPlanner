@@ -16,7 +16,7 @@ export const colorCode = {
   //category
   food: "#33B679",
   hotel: "#F4511E",
-  country: "#ff9770",
+  activity: "#ff9770",
   commute: "#7986CB",
   site: "#F6BF26",
   default: "#616161",
