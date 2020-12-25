@@ -3,6 +3,8 @@
 .view {
   width: 100vw;
   height: 100vh;
+  overflow: scroll;
+
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -74,7 +76,7 @@
     @extend .project;
     color: $gray_lighter;
     padding-top: 10px;
-    background-color: $gray_lighter2;
+    background-color: $white;
     opacity: 0.8;
 
     //without editing
@@ -86,7 +88,6 @@
     }
     &:hover {
       color: $gray;
-      background-color: $white;
       opacity: 1;
     }
 

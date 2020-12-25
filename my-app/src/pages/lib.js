@@ -15,11 +15,17 @@ export const getColor = (id) => {
 export const colorCode = {
   //category
   food: "#33B679",
+  food_shade: "rgba(51, 182, 121, 0.5)",
   hotel: "#F4511E",
+  hotel_shade: "rgba(244, 81, 30, 0.5)",
   activity: "#ff9770",
+  activity_shade: "rgba(255, 151, 112, 0.5)",
   commute: "#7986CB",
+  commute_shade: "#rgba(121, 134, 203, 0.5)",
   site: "#F6BF26",
+  site_shade: "#rgba(246, 191, 38, 0.5)",
   default: "#616161",
+  default_shade: "#rgba(97, 97, 97, 0.5)",
 
   //tag
   green: "#61bd4f",

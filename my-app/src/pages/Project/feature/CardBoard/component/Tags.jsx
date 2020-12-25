@@ -204,10 +204,10 @@ export const AddTag = ({ card, isfloating, setFloat }) => {
 
         {tags.map((tag, index) => {
           return (
-            <div className={styles.tag_container}>
+            <div key={nanoid()} className={styles.tag_container}>
               <div
                 aria-label="addTag"
-                data-tagId={tag.id}
+                data-tagid={tag.id}
                 className={
                   ` ${styles.tag}` +
                   `  ${card.tags.includes(tag.id) && styles.active}` +
@@ -220,7 +220,7 @@ export const AddTag = ({ card, isfloating, setFloat }) => {
               </div>
               <div
                 aria-label="addTag"
-                data-tagId={tag.id}
+                data-tagid={tag.id}
                 className={
                   onChangeTagId === tag.id ? styles.onEdit : styles.edit
                 }

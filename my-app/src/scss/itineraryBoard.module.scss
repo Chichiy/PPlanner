@@ -432,9 +432,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 10px;
-    height: 25%;
-    max-height: 40px;
+    height: 100%;
   }
 
   .expandHandle_lower {
@@ -443,10 +441,31 @@
     left: 0;
     width: 100%;
     height: 10px;
+    z-index: 100;
 
     &:hover {
       cursor: ns-resize;
     }
+  }
+
+  .isDragging_user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid $white;
+    font-size: $h6;
+    color: $white;
+    line-height: 24px;
+    opacity: 1 !important;
+    z-index: 10;
+
+    position: absolute;
+    top: 0px;
+    left: -26px;
   }
 
   .appointments {

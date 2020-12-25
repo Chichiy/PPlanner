@@ -17,7 +17,12 @@ import {
 import styles from "../../../../scss/itineraryBoard.module.scss"
 
 import DayJS from "react-dayjs"
-import { getDateHeader, colorCode, resetTime } from "../../../../pages/lib"
+import {
+  getDateHeader,
+  colorCode,
+  resetTime,
+  getColor,
+} from "../../../../pages/lib"
 import { responsiveTime } from "./itineraryBoardLib"
 import { modifyCardProperties } from "../CardBoard/cardSlice"
 import { updateCard_Fs } from "../../../../firebase/Config"
@@ -56,7 +61,7 @@ const Dayplans = () => {
     if (isExpanding) {
       //get target size and position
       let targetCardId = isExpanding
-      let target = document.querySelector(`[id="${targetCardId}"]`)
+      let target = document.querySelector(`[data-displayid="${targetCardId}"]`)
       let targetHeight = target.getBoundingClientRect().height
 
       //per 30 mins
@@ -98,7 +103,7 @@ const Dayplans = () => {
 
       //get target size and position
       let targetId = isExpanding
-      let target = document.querySelector(`[id="${targetId}"]`)
+      let target = document.querySelector(`[data-displayid="${targetId}"]`)
       let targetPosition = target.getBoundingClientRect()
 
       //new height (10px for buffer)
@@ -203,7 +208,7 @@ const Appointments = React.memo(
       }
     }
 
-    const style = (card, snapshot, provided) => {
+    const style = (card, snapshot, provided, type) => {
       let day = new Date(card.start_time)
       let dayIndex = Math.floor((day - startDate) / 24 / 60 / 60 / 1000)
 
@@ -216,6 +221,7 @@ const Appointments = React.memo(
       let resize
       let resizeWidth
 
+      //resize when view change
       try {
         appointments = document
           .querySelector("#appointments")
@@ -226,23 +232,82 @@ const Appointments = React.memo(
         resize = false
       }
 
-      temp = {
-        padding: "6px",
-        boxSizing: "border-box",
-        position: "absolute",
-        borderRadius: "5px",
-        border: "2px solid white",
-        cursor: "pointer",
+      switch (type) {
+        case "sensor": {
+          // temp = {
+          //   padding: "6px",
+          //   boxSizing: "border-box",
+          //   position: "absolute",
+          //   borderRadius: "5px",
+          //   border: "2px solid white",
+          //   cursor: "pointer",
 
-        backgroundColor: colorCode[card.category],
-        top: `${startTime * 20 - 20}px`,
-        left: resize
-          ? `${resizeWidth * dayIndex + 45}px`
-          : `${dayIndex * 13.5 + 5.5}%`,
-        width: resize ? `${resizeWidth}px` : "13.5%",
-        height: `${timeSpan * 20}px`,
-        ...provided.draggableProps.style,
+          //   backgroundColor: colorCode[card.category],
+          //   top: `${startTime * 20 - 20}px`,
+          //   left: resize
+          //     ? `${resizeWidth * dayIndex + 45}px`
+          //     : `${dayIndex * 13.5 + 5.5}%`,
+          //   width: resize ? `${resizeWidth}px` : "13.5%",
+          //   height: `${timeSpan * 20}px`,
+          //   ...provided.draggableProps.style,
+          // }
+
+          temp = {
+            // padding: "6px",
+            // boxSizing: "border-box",
+            position: "absolute",
+            // borderRadius: "5px",
+            // border: "2px solid white",
+            // cursor: "pointer",
+
+            // backgroundColor: colorCode[card.category],
+            top: `${startTime * 20 - 20}px`,
+            left: resize
+              ? `${resizeWidth * dayIndex + 45}px`
+              : `${dayIndex * 13.5 + 5.5}%`,
+            width: resize ? `${resizeWidth}px` : "13.5%",
+            height: `20px`,
+            ...provided.draggableProps.style,
+          }
+
+          break
+        }
+        case "display": {
+          temp = {
+            padding: "6px",
+            boxSizing: "border-box",
+            position: "absolute",
+            borderRadius: "5px",
+            border: "2px solid white",
+            cursor: "pointer",
+            backgroundColor: colorCode[card.category],
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: `${timeSpan * 20}px`,
+
+            // top: `${startTime * 20 - 20}px`,
+            // left: resize
+            //   ? `${resizeWidth * dayIndex + 45}px`
+            //   : `${dayIndex * 13.5 + 5.5}%`,
+            // width: resize ? `${resizeWidth}px` : "13.5%",
+            // height: `${timeSpan * 20}px`,
+            // ...provided.draggableProps.style,
+          }
+
+          //display blocking card when other is dragging
+          if (card.isDragging) {
+            temp.backgroundColor = colorCode[`${card.category}_shade`]
+          }
+
+          break
+        }
+        default: {
+          break
+        }
       }
+
+      //fix position
       if (!snapshot.isDragging) temp.transform = "translateX(1px)"
 
       return dayIndex > -1 && dayIndex < 7 ? temp : { display: "none" }
@@ -251,13 +316,7 @@ const Appointments = React.memo(
     const history = useHistory()
     const match = useRouteMatch()
     const handleShowCard = (e) => {
-      // console.log(e.target)
-      // console.log(e.target.dataset)
       history.push(`${match.url}/${e.target.dataset.cardid}`)
-    }
-
-    const handleClick = () => {
-      console.log("fire")
     }
 
     useEffect(() => {}, [])
@@ -282,41 +341,44 @@ const Appointments = React.memo(
               return (
                 <Draggable key={nanoid()} draggableId={card.id} index={index}>
                   {(provided, snapshot) => {
-                    // console.log(
-                    //   snapshot.isDragging ? provided.dragHandleProps : null
-                    // )
                     return (
                       <div
                         {...provided.draggableProps}
                         id={card.id}
-                        style={style(card, snapshot, provided)}
+                        style={style(card, snapshot, provided, "sensor")}
                         ref={provided.innerRef}
-                        // onDoubleClick={handleShowCard}
-                        onClick={handleShowCard}
                         data-cardid={card.id}
+                        {...(card.isDragging && "isDragDisabled")}
                       >
                         <div
-                          className={styles.appointment_title}
-                          data-cardid={card.id}
+                          data-displayid={card.id}
+                          style={style(card, snapshot, provided, "display")}
                         >
-                          {card.title}
+                          <div
+                            className={styles.appointment_title}
+                            data-cardid={card.id}
+                          >
+                            {card.title}
+                          </div>
+                          {responsiveTime(card, snapshot, isExpanding)}
+
+                          <div
+                            aria-label="upper"
+                            data-cardid={card.id}
+                            className={styles.expandHandle_upper}
+                            {...provided.dragHandleProps}
+                            onClick={handleShowCard}
+                          ></div>
+
+                          {/* expand handle */}
+
+                          <div
+                            aria-label="lower"
+                            data-cardid={card.id}
+                            className={styles.expandHandle_lower}
+                          ></div>
+                          <IsDraggingUser isDragging={card.isDragging} />
                         </div>
-
-                        {responsiveTime(card, snapshot, isExpanding)}
-                        <div
-                          className={styles.expandHandle_upper}
-                          aria-label="upper"
-                          {...provided.dragHandleProps}
-                        ></div>
-
-                        {/* expand handle */}
-
-                        <div
-                          className={styles.expandHandle_lower}
-                          aria-label="lower"
-                          data-cardid={card.id}
-                          // style={expandingStyle(card)}
-                        ></div>
                       </div>
                     )
                   }}
@@ -330,6 +392,26 @@ const Appointments = React.memo(
     )
   }
 )
+
+const IsDraggingUser = ({ isDragging }) => {
+  const members = useSelector((state) => state.members)
+  const isDraggingUser = members.find((member) => member.id === isDragging)
+  if (isDragging) {
+    return (
+      <div
+        className={styles.isDragging_user}
+        style={{
+          opacity: "1 !important",
+          backgroundColor: getColor(isDragging),
+        }}
+      >
+        {isDraggingUser.name[0]}
+      </div>
+    )
+  } else {
+    return null
+  }
+}
 
 ////// Time Table //////
 const TimeTable = React.memo(
@@ -387,9 +469,6 @@ const TimeTable = React.memo(
         width: "100%",
 
         backgroundColor: "rgba(0,0,0,0.1)",
-        // backgroundColor: "#e6e8e6",
-        // opacity: "0.8",
-        zIndex: "10",
       }
 
       if (targetCard.hasOwnProperty("start_time") && targetCard.start_time) {
@@ -397,6 +476,8 @@ const TimeTable = React.memo(
         let endTime = new Date(targetCard.end_time)
         let timeSpan = Math.ceil((endTime - startTime) / 60000 / 30)
         style.height = `${timeSpan * 20}px`
+      } else {
+        style.height = `40px`
       }
       return style
     }
@@ -439,7 +520,7 @@ const TimeTable = React.memo(
                         position: "relative",
                         backgroundColor: snapshot.isDraggingOver
                           ? "transparent"
-                          : "white",
+                          : "transparent",
                       }}
                       className={
                         i % 2 === 1

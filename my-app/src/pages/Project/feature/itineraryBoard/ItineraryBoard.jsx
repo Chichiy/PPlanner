@@ -58,7 +58,6 @@ const ItineraryBoard = () => {
   const dispatch = useDispatch()
 
   const handleOnDragEnd = (result) => {
-    console.log(result)
     // OnDragEnd(dispatch, result, itinerary, filterCards)
 
     //define type
@@ -81,6 +80,11 @@ const ItineraryBoard = () => {
 
     switch (type) {
       case "reorderCards": {
+        //check if change
+        if (result.source.index === result.destination.index) {
+          break
+        }
+
         let destinationId = filterCards("noPlan")[result.destination.index].id
         let updateAction = updateCardsOrder({
           type: "cardsList",
@@ -88,6 +92,12 @@ const ItineraryBoard = () => {
           destinationId: destinationId,
         })
         dispatch(updateAction)
+
+        let change = {
+          isDragging: false,
+        }
+        //update to cloud database
+        updateCard_Fs(projectId, result.draggableId, change)
         break
       }
 
@@ -112,6 +122,13 @@ const ItineraryBoard = () => {
           startTime.getTime() === newStartTime.getTime() &&
           endTime.getTime() === newEndTime.getTime()
         ) {
+          //prepare changes
+          let change = {
+            isDragging: false,
+          }
+
+          //update to cloud database to cancel isDragging
+          updateCard_Fs(projectId, targetCardId, change)
           break
         }
 
@@ -119,10 +136,12 @@ const ItineraryBoard = () => {
         let change = {
           start_time: newStartTime,
           end_time: newEndTime,
+          isDragging: false,
         }
         let convertedChange = {
           start_time: newStartTime.toString(),
           end_time: newEndTime.toString(),
+          isDragging: false,
         }
 
         //update locally first
@@ -149,11 +168,13 @@ const ItineraryBoard = () => {
           status: 1,
           start_time: newStartTime,
           end_time: newEndTime,
+          isDragging: false,
         }
         let convertedChange = {
           status: 1,
           start_time: newStartTime.toString(),
           end_time: newEndTime.toString(),
+          isDragging: false,
         }
 
         //update locally first
@@ -175,11 +196,13 @@ const ItineraryBoard = () => {
           status: 0,
           start_time: null,
           end_time: null,
+          isDragging: false,
         }
         let convertedChange = {
           status: 0,
           start_time: null,
           end_time: null,
+          isDragging: false,
         }
 
         //update locally first
@@ -199,8 +222,23 @@ const ItineraryBoard = () => {
     }
   }
 
+  const user = useSelector((state) => state.user)
+
   const handleOnDragStart = (result) => {
-    console.log(result)
+    //register dragger's info on cloud data to prevent re-writes
+    let targetCardId = result.draggableId
+    let userId = user.id
+
+    //prepare changes
+    let change = {
+      isDragging: userId,
+    }
+    let convertedChange = {
+      isDragging: userId,
+    }
+
+    //update to cloud database with blocking listening again
+    updateCard_Fs(projectId, targetCardId, change)
   }
 
   const match = useRouteMatch()

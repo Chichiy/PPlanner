@@ -7,15 +7,28 @@ export const modifyCardWithCheck = createAsyncThunk(
   },
   {
     condition: (res, { getState }) => {
-      const { cards } = getState()
+      const { cards, user } = getState()
       const target = cards.find((card) => card.id === res.id)
 
+      // Check if update needed.
+
+      // First, check if the card is being dragged or not.
+      // If it's dragged by myself, then stop updating
+      // in order to prevent interrupting drag and drop process.
+      if (res.isDragging && res.isDragging === user.id) {
+        return false
+      }
+
+      // Second, check if response data is different from local state,
+      // meaning that changes haven't been updated locally,
+      // then allow update
       let keys = Object.keys(target)
       for (let i = 0; i < keys.length; i++) {
         if (res[keys[i]] !== target[keys[i]]) {
           return true
         }
       }
+      //Otherwise, prevent repeatly update
       return false
     },
   }
@@ -70,13 +83,16 @@ export const cardSlice = createSlice({
       //extract target from original position
       let [reorderItem] = state.splice(souIndex, 1)
 
+      //update isDragging info
+      reorderItem.isDragging = false
+
       //put in new position
       state.splice(desIndex, 0, reorderItem)
     },
   },
   extraReducers: {
     [modifyCardWithCheck.pending]: (state, action) => {
-      console.log("checking cards state")
+      // start checking cards state in thunk
     },
     [modifyCardWithCheck.fulfilled]: (state, action) => {
       let target = action.payload

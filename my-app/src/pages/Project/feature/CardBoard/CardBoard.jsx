@@ -64,7 +64,8 @@ const CardBoard = () => {
     category: "default",
     tags: [],
     status: 0,
-    cover_pic: "https://fakeimg.pl/65x65/",
+    // cover_pic: "https://fakeimg.pl/65x65/",
+    isDragging: false,
   }
 
   const [addCard, toggleAddCard] = useState(false)
