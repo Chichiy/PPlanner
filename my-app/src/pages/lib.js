@@ -21,11 +21,11 @@ export const colorCode = {
   activity: "#ff9770",
   activity_shade: "rgba(255, 151, 112, 0.5)",
   commute: "#7986CB",
-  commute_shade: "#rgba(121, 134, 203, 0.5)",
+  commute_shade: "rgba(121, 134, 203, 0.5)",
   site: "#F6BF26",
-  site_shade: "#rgba(246, 191, 38, 0.5)",
+  site_shade: "rgba(246, 191, 38, 0.5)",
   default: "#616161",
-  default_shade: "#rgba(97, 97, 97, 0.5)",
+  default_shade: "rgba(97, 97, 97, 0.5)",
 
   //tag
   green: "#61bd4f",
@@ -56,6 +56,15 @@ export const categoryTitle = (string) => {
 
   return title[string]
 }
+
+export const categories = [
+  "hotel",
+  "activity",
+  "site",
+  "food",
+  "commute",
+  "default",
+]
 
 //
 //

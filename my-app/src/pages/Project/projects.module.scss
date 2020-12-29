@@ -68,23 +68,25 @@
   }
 
   .projectTitle {
+    width: 100%;
     font-weight: bold;
-    font-size: $h2;
+    font-size: $h3;
+    word-break: break-all;
   }
 
   .addProject_container {
     @extend .project;
     color: $gray_lighter;
-    padding-top: 10px;
+    padding-top: 20px;
     background-color: $white;
     opacity: 0.8;
 
     //without editing
     .projectTitle {
       display: block;
-      padding-top: 10px;
+      width: 100%;
       font-weight: bold;
-      font-size: 28px;
+      font-size: $h3;
     }
     &:hover {
       color: $gray;
@@ -117,13 +119,13 @@
           width: 100%;
 
           .caption {
-            font-size: $h4;
+            font-size: $h5;
             color: $gray_darker;
             width: 100%;
             padding-top: 2px;
             padding-bottom: 10px;
             margin-bottom: 10px;
-            border-bottom: 1px solid $gray_darker;
+            border-bottom: 1px solid $gray;
           }
 
           input {
@@ -132,7 +134,15 @@
             width: 100%;
             box-sizing: border-box;
             border: none;
-            font-size: $h3;
+            border: 1px solid $gray;
+            border-radius: 3px;
+
+            font-size: $h4;
+
+            &:focus,
+            &:hover {
+              box-shadow: 0 0 3px 1px $gray;
+            }
           }
         }
       }
@@ -146,8 +156,12 @@
           padding: 10px 20px;
           border-radius: 5px;
           text-decoration: none;
-          font-size: $h4;
+          font-size: $h5;
           cursor: pointer;
+
+          &:hover {
+            opacity: 0.8;
+          }
         }
 
         .cancel {

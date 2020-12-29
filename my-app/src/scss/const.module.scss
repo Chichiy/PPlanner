@@ -5,13 +5,17 @@
 @import "./fontawesomScss/regular.scss";
 @import "./fontawesomScss/brands.scss";
 
+:root {
+  font-family: "Noto Sans TC", sans-serif;
+}
+
 //font size
 $h1: 42px;
 $h2: 30px;
 $h3: 24px;
 $h4: 16px;
 $h5: 14px;
-$h6: 10px;
+$h6: 12px;
 
 //color code
 $white: #fff;

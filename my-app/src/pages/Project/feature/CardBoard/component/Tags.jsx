@@ -30,13 +30,7 @@ import { nanoid } from "@reduxjs/toolkit"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
-import {
-  getTime,
-  getColor,
-  resetTime,
-  colorCode,
-  colorCode_tags,
-} from "../../../../lib"
+import { colorCode, categoryTitle, categories } from "../../../../lib"
 
 const Tags = ({ projectId, card, isfloating, setFloat }) => {
   const project = useSelector((state) =>
@@ -46,6 +40,15 @@ const Tags = ({ projectId, card, isfloating, setFloat }) => {
   const toggleAddTag = (e) => {
     let float = {
       type: "addTag",
+      position: e.target.getBoundingClientRect(),
+    }
+
+    setFloat(float)
+  }
+
+  const toggleChangeMainTag = (e) => {
+    let float = {
+      type: "changeMainTag",
       position: e.target.getBoundingClientRect(),
     }
 
@@ -61,9 +64,9 @@ const Tags = ({ projectId, card, isfloating, setFloat }) => {
             aria-label="addTag" //need to be able to change category
             className={styles.tag}
             style={{ backgroundColor: colorCode[card.category] }}
-            onClick={toggleAddTag}
+            onClick={toggleChangeMainTag}
           >
-            {card.category}
+            {categoryTitle(card.category)}
           </div>
 
           {/* regular tags */}
@@ -245,4 +248,50 @@ export const AddTag = ({ card, isfloating, setFloat }) => {
   } catch {
     return null
   }
+}
+
+export const ChangeMainTag = ({ card, isfloating, setFloat }) => {
+  const { projectId, cardId } = useParams()
+
+  const handleChangeMainTag = (e) => {
+    let change = {
+      category: e.target.dataset.category,
+    }
+
+    updateCard_Fs(projectId, cardId, change)
+  }
+
+  return (
+    <div
+      style={{
+        top: `${isfloating.position.y + 32}px`,
+        left: `${isfloating.position.x}px`,
+      }}
+      className={styles.addTag_container}
+      aria-label="changeMainTag"
+    >
+      <span aria-label="changeMainTag" className={styles.addTag_span}>
+        主標籤
+      </span>
+
+      {categories.map((category) => {
+        return (
+          <div key={nanoid()} className={styles.tag_container}>
+            <div
+              aria-label="changeMainTag"
+              data-category={category}
+              className={
+                ` ${styles.tag}` +
+                `  ${card.category === category && styles.active}`
+              }
+              style={{ backgroundColor: colorCode[category] }}
+              onClick={handleChangeMainTag}
+            >
+              {categoryTitle(category)}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
 }

@@ -26,7 +26,7 @@ import {
 } from "../../../../../firebase/Config"
 import { nanoid } from "@reduxjs/toolkit"
 
-import Tags, { AddTag } from "./Tags"
+import Tags, { AddTag, ChangeMainTag } from "./Tags"
 
 //DatesPicker
 import DatePicker from "react-datepicker"
@@ -147,9 +147,7 @@ const LargeCard = () => {
           <div className={styles.card_header}>
             <div className={styles.tag_icon}></div>
             <Title title={card.title} handleUpdateTitle={updateTitle} />
-            <div id="closeBtn" className={styles.card_close}>
-              X
-            </div>
+            <div id="closeBtn" className={styles.card_close}></div>
           </div>
 
           {/* main */}
@@ -206,6 +204,8 @@ const LargeCard = () => {
             >
               安排時間
             </div>
+            <RedirectButton card={card} />
+
             <div
               aria-label="remove"
               ref={sideBar_remove}
@@ -234,6 +234,57 @@ const LargeCard = () => {
 }
 export default LargeCard
 
+const RedirectButton = ({ card }) => {
+  const { projectId } = useParams()
+  const history = useHistory()
+
+  const handleRedirect = (type, card) => {
+    if (type === "itinerary") {
+      // let startDate = resetTime(new Date(card.start_time))
+      // let location = {
+      //   pathname: `/projects/${projectId}/itineraries`,
+      //   state: { startDate: startDate },
+      // }
+      // history.push(location)
+      history.push(`/projects/${projectId}/itineraries`)
+    }
+
+    if (type === "cards") {
+      let location = {
+        pathname: `/projects/${projectId}/cards`,
+      }
+      history.push(location)
+    }
+  }
+
+  return (
+    <Switch>
+      <Route path="/projects/:projectId/cards/:cardId">
+        <div
+          aria-label="redirect"
+          className={styles.sidebar_button_redirect__itinerary}
+          onClick={() => {
+            handleRedirect("itinerary", card)
+          }}
+        >
+          前往行程板
+        </div>
+      </Route>
+      <Route path="/projects/:projectId/itineraries/:cardId">
+        <div
+          aria-label="redirect"
+          className={styles.sidebar_button_redirect__itinerary}
+          onClick={() => {
+            handleRedirect("cards", card)
+          }}
+        >
+          前往卡片板
+        </div>
+      </Route>
+    </Switch>
+  )
+}
+
 ////////////floating menu////////////
 const FloatMenu = ({ card, cardId, isfloating, setFloat }) => {
   switch (isfloating.type) {
@@ -247,6 +298,16 @@ const FloatMenu = ({ card, cardId, isfloating, setFloat }) => {
     }
     case "addTag": {
       return <AddTag card={card} isfloating={isfloating} setFloat={setFloat} />
+    }
+
+    case "changeMainTag": {
+      return (
+        <ChangeMainTag
+          card={card}
+          isfloating={isfloating}
+          setFloat={setFloat}
+        />
+      )
     }
     case "remove": {
       return <Remove isfloating={isfloating} setFloat={setFloat} />
@@ -337,6 +398,7 @@ const AddTime = ({ card, isfloating, setFloat }) => {
         end_time: endDate,
       }
       updateCard_Fs(projectId, cardId, change)
+      setFloat(false)
     }
   }
 
@@ -492,7 +554,6 @@ const AddLink = ({ isfloating, setFloat, cardId }) => {
       className={styles.addLink_container}
       style={{
         position: "fixed",
-        width: `${isfloating.position.width}px`,
         left: `${isfloating.position.x}px`,
         top: `${isfloating.position.y + 40}px`,
       }}
@@ -537,29 +598,28 @@ const Title = ({ title, handleUpdateTitle }) => {
     }
   }
 
-  if (isEditing) {
-    return (
-      <input
-        type="text"
-        className={styles.card_title_edit}
-        value={pending}
-        onChange={(e) => setPending(e.target.value)}
-        onBlur={handleTitleEdit}
-        onKeyPress={handleTitleEdit}
-        autoFocus
-      />
-    )
-  } else {
-    return (
-      <div
-        id="largeCardTitle"
-        className={styles.card_title}
-        onClick={() => setEditing(!isEditing)}
-      >
-        {title}
-      </div>
-    )
-  }
+  // if (isEditing) {
+  return (
+    <input
+      type="text"
+      className={styles.card_title_edit}
+      value={pending}
+      onChange={(e) => setPending(e.target.value)}
+      onBlur={handleTitleEdit}
+      onKeyPress={handleTitleEdit}
+    />
+  )
+  // } else {
+  //   return (
+  //     <div
+  //       id="largeCardTitle"
+  //       className={styles.card_title}
+  //       onClick={() => setEditing(!isEditing)}
+  //     >
+  //       {title}
+  //     </div>
+  //   )
+  // }
 }
 
 ////////////Description////////////
@@ -570,6 +630,7 @@ const Description = ({ description, handleUpdateDescription }) => {
 
   const handleSave = (e) => {
     handleUpdateDescription(pending ? pending : "")
+
     setEditing(false)
   }
 
@@ -608,17 +669,13 @@ const Description = ({ description, handleUpdateDescription }) => {
         <div className={styles.title}>描述</div>
 
         {/* edit/save btn */}
-        {isEditing ? (
-          <div
-            className={styles.save_button}
-            // onClick={handleSave}
-          >
-            儲存
-          </div>
-        ) : (
+        {!isEditing && (
           <div
             className={styles.edit_button}
-            onClick={() => setEditing(!isEditing)}
+            onClick={(e) => {
+              console.log(e)
+              setEditing(!isEditing)
+            }}
           >
             編輯
           </div>
@@ -630,18 +687,28 @@ const Description = ({ description, handleUpdateDescription }) => {
         {isEditing ? (
           <textarea
             ref={textAreaRef}
-            type="text"
             className={styles.inputDescription}
+            type="text"
+            placeholder="在這裡新增描述..."
             value={pending}
             onChange={handleEdit}
-            // onFocus={handleEdit}
-            onBlur={handleSave}
+            onBlurCapture={handleSave}
             autoFocus
-            // onBlur={handleEdit}
-            // onKeyPress={handleEdit}
           />
         ) : (
-          <pre className={styles.description}>{description}</pre>
+          <pre
+            className={styles.description}
+            style={!description ? { color: "gray" } : null}
+            onClick={() => setEditing(!isEditing)}
+          >
+            {description ? description : "在這裡新增描述..."}
+          </pre>
+        )}
+
+        {isEditing && (
+          <div className={styles.save_button} aria-label="saveButton">
+            儲存
+          </div>
         )}
       </div>
     </div>
@@ -682,33 +749,7 @@ const Links = ({ links, isfloating, setFloat }) => {
         >
           增加附件
         </div>
-        {/* {isfloating.type === "addLink" && (
-          <AddLink
-            url={url}
-            setUrl={setUrl}
-            handleSubmit={handleSubmit}
-            isfloating={isfloating}
-          />
-        )} */}
       </div>
-      {/* textarea/display section */}
-      {/* {isEditing ? (
-          <textarea
-            ref={textAreaRef}
-            type="text"
-            className={styles.inputDescription}
-            value={pending}
-            onChange={handleEdit}
-            // onFocus={handleEdit}
-            onBlur={handleSave}
-            autoFocus
-            // onBlur={handleEdit}
-            // onKeyPress={handleEdit}
-          />
-        ) : (
-          <pre className={styles.description}>{description}</pre>
-        )}
-      </div> */}
     </div>
   )
 }
@@ -773,9 +814,10 @@ const LinkItem = ({ data }) => {
         target="_blank"
         rel="noreferrer"
       >
-        <img src={data.img} alt="link's thumbnail" />
+        Link
+        {data.img && <img src={data.img} alt="link" />}
       </a>
-      <div className={styles.info}>
+      <div className={styles.link_info}>
         {isEditing ? (
           <textarea
             className={styles.message}
@@ -785,7 +827,7 @@ const LinkItem = ({ data }) => {
           />
         ) : (
           <a
-            className={styles.title}
+            className={styles.link_info__title}
             ref={title}
             href={data.url}
             target="_blank"
@@ -887,28 +929,13 @@ const AddComment = ({ cardId, userId }) => {
     }
   }
 
-  const getColor = () => {
-    let code = Math.floor(userId.charCodeAt(0) * 4.86 - 233.28)
-    let colorCode = `hsl(${code},95%, 75%)`
-    return colorCode
-  }
-
-  const handleOnFocus = (e) => {
-    // console.dir(e.target)
-    e.target.style.width = "100%"
-  }
-
-  const handleOnBlur = (e) => {
-    e.target.style.width = "250px"
-  }
-
   return (
     <div className={styles.comment}>
       <div
         className={styles.user}
         style={{
-          marginTop: "12px",
-          backgroundColor: getColor(),
+          marginTop: "7px",
+          backgroundColor: getColor(userId),
         }}
       >
         {userName[0]}
@@ -920,8 +947,6 @@ const AddComment = ({ cardId, userId }) => {
           onChange={(e) => setPending(e.target.value)}
           placeholder="撰寫留言"
           onKeyPress={addComment}
-          onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
         />
       </div>
     </div>

@@ -71,12 +71,16 @@
     .project {
       width: fit-content;
       font-size: $h4;
-      padding: 10px;
+      padding: 10px 15px;
       border-radius: 26px;
       border: 1px solid $gray;
       color: $black;
       margin: 0 auto 20px auto;
       cursor: pointer;
+
+      &:hover {
+        box-shadow: 0 0 3px 1px $gray_lighter;
+      }
     }
 
     .sign_out_btn {
@@ -88,6 +92,9 @@
       color: $black;
       margin: 0 auto 0px auto;
       cursor: pointer;
+      &:hover {
+        box-shadow: 0 0 3px 1px $gray_lighter;
+      }
     }
   }
 }
@@ -179,6 +186,10 @@
         background-color: $main;
         color: $white;
         cursor: pointer;
+
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
   }

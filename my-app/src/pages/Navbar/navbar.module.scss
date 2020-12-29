@@ -46,12 +46,15 @@ input:focus {
 
   .logo {
     @extend .item;
-    width: 120px;
+    width: 125px;
 
     background-image: url("../../img/icon/logo.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+    &:hover {
+      background-color: transparent;
+    }
   }
 
   .home {
@@ -294,6 +297,7 @@ input:focus {
       @extend .item;
       padding: 5px 10px;
       box-sizing: border-box;
+      line-height: 18px;
 
       &:hover {
         background-color: $gray_lighter;
@@ -306,8 +310,10 @@ input:focus {
       box-sizing: border-box;
       background-color: $main;
       color: $white;
+      line-height: 18px;
 
       &:hover {
+        background-color: $main;
         opacity: 80%;
       }
     }

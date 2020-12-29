@@ -253,14 +253,8 @@ const Appointments = React.memo(
           // }
 
           temp = {
-            // padding: "6px",
-            // boxSizing: "border-box",
             position: "absolute",
-            // borderRadius: "5px",
-            // border: "2px solid white",
-            // cursor: "pointer",
 
-            // backgroundColor: colorCode[card.category],
             top: `${startTime * 20 - 20}px`,
             left: resize
               ? `${resizeWidth * dayIndex + 45}px`
@@ -274,25 +268,18 @@ const Appointments = React.memo(
         }
         case "display": {
           temp = {
-            padding: "6px",
+            padding: "2px 6px",
             boxSizing: "border-box",
             position: "absolute",
             borderRadius: "5px",
             border: "2px solid white",
+            overflow: "hidden",
             cursor: "pointer",
             backgroundColor: colorCode[card.category],
             top: "0",
             left: "0",
             width: "100%",
             height: `${timeSpan * 20}px`,
-
-            // top: `${startTime * 20 - 20}px`,
-            // left: resize
-            //   ? `${resizeWidth * dayIndex + 45}px`
-            //   : `${dayIndex * 13.5 + 5.5}%`,
-            // width: resize ? `${resizeWidth}px` : "13.5%",
-            // height: `${timeSpan * 20}px`,
-            // ...provided.draggableProps.style,
           }
 
           //display blocking card when other is dragging
@@ -348,7 +335,7 @@ const Appointments = React.memo(
                         style={style(card, snapshot, provided, "sensor")}
                         ref={provided.innerRef}
                         data-cardid={card.id}
-                        {...(card.isDragging && "isDragDisabled")}
+                        isDragDisabled={card.isDragging ? true : false}
                       >
                         <div
                           data-displayid={card.id}
@@ -401,7 +388,6 @@ const IsDraggingUser = ({ isDragging }) => {
       <div
         className={styles.isDragging_user}
         style={{
-          opacity: "1 !important",
           backgroundColor: getColor(isDragging),
         }}
       >
@@ -416,7 +402,7 @@ const IsDraggingUser = ({ isDragging }) => {
 ////// Time Table //////
 const TimeTable = React.memo(
   ({ startDate, cards, handleExpandEnd, handlePosition }) => {
-    // console.log("timetable")
+    console.log(startDate)
     const datesHeader = () => {
       let temp = []
       for (let i = 0; i < 8; i++) {

@@ -23,7 +23,7 @@
   @extend .card;
   width: 200px;
   height: 100px;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   box-sizing: border-box;
   background-color: $white;
   border-radius: 10px;
@@ -123,17 +123,17 @@
         border: 0;
         font-size: $h6;
         &:focus {
-          // border: 1px solid $gray;
           outline: none;
         }
       }
     }
 
     .small_card_icons {
-      // max-width: 105px;
       width: 100%;
       height: 16px;
       font-size: $h6;
+      font-family: inherit;
+      line-height: 16px;
 
       display: flex;
       align-items: center;
@@ -189,13 +189,13 @@
         color: $gray_darker;
 
         position: relative;
-        @extend %fa-icon;
-        @extend .fa;
 
         &:before {
+          @extend %fa-icon;
+          @extend .fa;
           content: fa-content($fa-var-clock);
           position: absolute;
-          top: 52%;
+          top: 50%;
           left: 2px;
           transform: translateY(-50%);
           font-size: 10px;

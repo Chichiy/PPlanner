@@ -53,8 +53,8 @@ const User = ({ isShowing, setShowing }) => {
     let triggerElementId = [
       "closeBtn",
       "popupBackground_default",
-      "popupBackground_signIn",
-      "popupBackground_signUp",
+      // "popupBackground_signIn",
+      // "popupBackground_signUp",
     ]
 
     if (triggerElementId.includes(e.target.id)) {
