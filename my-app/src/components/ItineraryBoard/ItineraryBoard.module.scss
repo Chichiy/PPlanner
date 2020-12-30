@@ -1,0 +1,497 @@
+@import "../../scss/const.module.scss";
+
+//shared css
+.centralizeItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.border_bottom {
+  border-bottom: 2px solid $gray;
+}
+
+.border_bottom_thin {
+  border-bottom: 1px solid $gray;
+}
+
+.border_right {
+  border-right: 2px solid $gray;
+}
+
+//general view
+.view {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex: none;
+}
+
+//side bar: card list
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  padding-top: 55px;
+  box-sizing: border-box;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+
+  // .sidebar_space {
+  //   width: 100%;
+  //   height: 60px;
+  // }
+
+  .sidebar_filter {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+
+    .sidebar_filter__title {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid $white;
+      box-sizing: border-box;
+      background-color: $white;
+
+      border-radius: 3px;
+      font-size: $h5;
+      color: black;
+      position: relative;
+
+      &:after {
+        @extend %fa-icon;
+        @extend .fa;
+        content: fa-content($fa-var-chevron-up);
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+
+        line-height: 14px;
+        font-size: 14px;
+        color: $gray;
+      }
+
+      &:hover {
+        border: 1px solid $gray;
+        // background-color: $gray_lighter;
+        border-radius: 3px;
+
+        &::after {
+          color: $gray_darker;
+        }
+      }
+    }
+
+    .filter_close {
+      &:after {
+        transform: translateY(-50%) rotate(180deg);
+      }
+    }
+
+    .sidebar_filter__list {
+      width: 100%;
+      padding: 10px;
+      height: 230px;
+      box-sizing: border-box;
+      visibility: visible;
+      transition: height 1s ease-in-out, padding 0.7s 0.3s ease-in;
+
+      .label {
+        width: 90%;
+        height: 35px;
+        color: $black;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        input {
+          //hide default
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+          height: 0;
+          width: 0;
+        }
+
+        span {
+          font-size: $h5;
+          margin: 0px;
+          cursor: pointer;
+        }
+
+        //custom checkbox
+        .checkmark {
+          display: block;
+          height: 10px;
+          width: 10px;
+          margin: 0px 5px;
+          position: relative;
+          cursor: pointer;
+
+          &:before {
+            @extend %fa-icon;
+            @extend .fa;
+            content: fa-content($fa-var-square);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: $gray_lighter;
+          }
+        }
+
+        &:hover input ~ .checkmark {
+          &:before {
+            color: $gray;
+          }
+        }
+
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $main;
+          }
+        }
+      }
+
+      .label__food {
+        @extend .label;
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $food;
+          }
+        }
+      }
+
+      .label__hotel {
+        @extend .label;
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $hotel;
+          }
+        }
+      }
+
+      .label__activity {
+        @extend .label;
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $activity;
+          }
+        }
+      }
+
+      .label__site {
+        @extend .label;
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $site;
+          }
+        }
+      }
+
+      .label__commute {
+        @extend .label;
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $commute;
+          }
+        }
+      }
+
+      .label__default {
+        @extend .label;
+        input:checked ~ .checkmark {
+          &:before {
+            content: fa-content($fa-var-check-square);
+            color: $default;
+          }
+        }
+      }
+    }
+  }
+
+  .sidebar_cards {
+    width: 100%;
+    padding: 10px;
+    padding-top: 0px;
+    box-sizing: border-box;
+    background-color: $white;
+    flex: auto;
+    z-index: 3;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+
+    .sidebar_cards__title {
+      width: 100%;
+      height: fit-content;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: $white;
+      font-size: $h5;
+      color: black;
+      flex: none;
+    }
+
+    .cardList {
+      width: 100%;
+      flex: auto;
+      box-sizing: border-box;
+
+      background-color: $white;
+
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+
+      .card {
+        //text view
+        width: 90%;
+        height: 35px;
+        margin-top: 2px;
+
+        border-radius: 3px;
+        background-color: $white;
+        line-height: 35px;
+
+        display: flex;
+        align-items: center;
+        user-select: none;
+        z-index: 20;
+        position: relative;
+
+        &:hover {
+          box-shadow: 0 0 2px 1px $gray_lighter;
+        }
+
+        .title {
+          font-size: $h5;
+          color: $black;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .category {
+          flex: none;
+          width: 10px;
+          height: 10px;
+          margin: 0 5px;
+          box-sizing: border-box;
+          border-radius: 50%;
+          // position: absolute;
+          // top: 50%;
+          // left: 0px;
+          // transform: translateY(-50%);
+        }
+      }
+    }
+  }
+}
+.itineraryBoard {
+  flex: auto;
+  height: 100%;
+  padding-top: 50px;
+  box-sizing: border-box;
+  background-color: $white;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: scroll;
+  font-size: $h4;
+  position: relative;
+  user-select: none;
+
+  table {
+    margin-top: 59px;
+    width: 100%;
+    border-collapse: collapse;
+    // border: 1px solid $gray;
+    text-align: center;
+  }
+
+  td {
+    width: 13.5%;
+    vertical-align: middle;
+    border: 1px solid $gray;
+    box-sizing: border-box;
+    background-color: $white;
+  }
+
+  .datesHeader_row {
+    position: fixed;
+    top: 50px;
+    right: 0px;
+    width: 100%;
+    height: 56px;
+    background-color: $white;
+    z-index: 20;
+    display: flex;
+    border-bottom: 1px solid $gray;
+
+    td {
+      padding: 10px;
+      border: 0px;
+      border-bottom: 1px solid $gray;
+      box-sizing: border-box;
+      height: 60px;
+      vertical-align: middle;
+    }
+  }
+
+  .datesHeader_space {
+    margin-left: 200px;
+    width: 5.5%;
+    min-width: 45px;
+  }
+
+  .datesHeader_day {
+    font-size: 12px;
+    color: $gray_darker;
+    margin-bottom: 5px;
+  }
+
+  .datesHeader_date {
+    font-size: $h4;
+    color: $black;
+  }
+
+  .datesHeader_date__today {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: $main;
+    line-height: 30px;
+    color: $white;
+    transform: translateY(-6px);
+    display: inline-block;
+  }
+
+  .hourHeader {
+    width: 5.5%;
+    min-width: 45px;
+    border-left: 0px;
+    border-bottom: 0px;
+    font-size: $h6;
+    color: $gray_darker;
+    vertical-align: top;
+    transform: translateY(-6px);
+
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0px;
+      height: 1px;
+      width: 10%; /* percentage of the element width*/
+      border-bottom: 1px solid $gray;
+      margin-top: 4px; /*move the border below the text*/
+    }
+  }
+
+  .td_border__fullHour {
+    border-bottom: 0px;
+  }
+
+  .td_border__halfHour {
+    border-top: 0px;
+  }
+
+  .appointment_title {
+    margin-bottom: 5px;
+    font-size: $h6;
+    color: $white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    opacity: 0.9;
+  }
+
+  .appointment_time {
+    font-size: $h6;
+    color: $white;
+    opacity: 0.7;
+  }
+
+  .expandHandle_upper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .expandHandle_lower {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    z-index: 100;
+
+    &:hover {
+      cursor: ns-resize;
+    }
+  }
+
+  .isDragging_user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid $white;
+    font-size: $h6;
+    color: $white;
+    line-height: 24px;
+    z-index: 100;
+
+    position: absolute;
+    top: 0px;
+    left: -26px;
+  }
+
+  .appointments {
+    position: absolute;
+    margin-top: 110px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+  }
+}
+
+//for cardlist
+.appointment_title {
+  line-height: 140%;
+  margin-bottom: 5px;
+  font-size: $h6;
+  color: $white;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  opacity: 0.9;
+}
+
+.appointment_time {
+  font-size: $h6;
+  color: $white;
+  opacity: 0.7;
+}

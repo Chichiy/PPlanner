@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
 
-import userReducer from "../pages/User/userSlice"
-import membersReducer from "../pages/User/membersSlice"
-import projectsReducer from "../pages/Project/projectsSlice"
-import cardReducer from "../pages/Project/feature/CardBoard/cardSlice"
-import itineraryReducer from "../pages/Project/feature/itineraryBoard/itinerarySlice"
-import dayplanReducer from "../pages/Project/feature/itineraryBoard/dayplanSlice"
+import userReducer from "./slices/userSlice"
+import membersReducer from "./slices/membersSlice"
+import projectsReducer from "./slices/projectsSlice"
+import cardReducer from "./slices/cardSlice"
+import itineraryReducer from "./slices/itinerarySlice"
+import dayplanReducer from "./slices/dayplanSlice"
 
 export default configureStore({
   reducer: {

@@ -1,13 +1,7 @@
-@import "reset.module";
-
-@import "./fontawesomScss/fontawesome.scss"; //color code
+@import "./fontawesomScss/fontawesome.scss";
 @import "./fontawesomScss/solid.scss";
 @import "./fontawesomScss/regular.scss";
 @import "./fontawesomScss/brands.scss";
-
-:root {
-  font-family: "Noto Sans TC", sans-serif;
-}
 
 //font size
 $h1: 42px;
@@ -31,11 +25,6 @@ $main_darker: #e23707;
 
 $red: #d30d0d;
 $red_darker: #c50707;
-
-//reset polyfill
-a {
-  color: $black;
-}
 
 //card tag
 $food: #33b679;

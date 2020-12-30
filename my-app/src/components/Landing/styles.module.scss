@@ -1,0 +1,124 @@
+@import "../../scss/const.module.scss";
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.view {
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.block {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+}
+
+.landing_svg {
+  width: 50%;
+  max-height: 90vh;
+  transform: translateY(5%);
+}
+
+.banner {
+  width: 40%;
+  flex: auto;
+  font-family: inherit;
+  padding-left: 5%;
+  box-sizing: border-box;
+
+  .banner_slogan {
+    font-size: $h1;
+    font-weight: 700;
+    color: $black;
+    line-height: 140%;
+  }
+  .banner_text {
+    margin-top: 20px;
+    font-size: $h4;
+    color: $gray_darker;
+    line-height: 140%;
+  }
+}
+
+.button {
+  width: fit-content;
+  height: 25px;
+  padding: 15px 30px;
+  margin-top: 20px;
+  border-radius: 25px;
+  background-color: $main;
+  font-size: $h4;
+  text-decoration: none;
+  line-height: 25px;
+  color: $white;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.card_block {
+  @extend .block;
+  padding: 0 10%;
+  background-color: $main;
+}
+
+.feature_section {
+  width: 60%;
+  flex: auto;
+  font-family: inherit;
+  box-sizing: border-box;
+
+  .feature_slogan {
+    font-size: $h1;
+    font-weight: 700;
+    color: $white;
+    line-height: 140%;
+  }
+
+  .feature_text {
+    margin-top: 20px;
+    font-size: $h4;
+    color: rgba(0, 0, 0, 0.9);
+    line-height: 140%;
+  }
+}
+
+.card_svg {
+  width: 40%;
+  height: auto;
+  fill: $white;
+  box-sizing: border-box;
+  transform: translateY(5%);
+}
+
+.itinerary_block {
+  @extend .block;
+  padding: 0 10%;
+  background-color: $main;
+}
+
+.itinerary_svg {
+  width: 40%;
+  height: auto;
+  box-sizing: border-box;
+  transform: translateY(5%);
+}
