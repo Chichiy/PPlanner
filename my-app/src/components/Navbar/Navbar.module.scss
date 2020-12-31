@@ -58,6 +58,8 @@ input:focus {
   }
 
   .home {
+    @extend .item;
+    @extend .tooltip;
     width: 30px;
     height: 30px;
     padding: 5px;
@@ -122,6 +124,7 @@ input:focus {
   //project title
   .project_title {
     @extend .item;
+    @extend .tooltip;
   }
 
   .project_title__edit {
@@ -176,7 +179,7 @@ input:focus {
   //coordinate with customstyles(react-datepicker's prop)
   .daySelect_container {
     @extend .select;
-
+    @extend .tooltip;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -203,6 +206,11 @@ input:focus {
         font-size: 40px;
         color: $gray;
       }
+    }
+
+    .daySelect_tooltip_text {
+      @extend .tooltip_text;
+      width: 90px;
     }
   }
 

@@ -9,40 +9,26 @@ import styles from "./Navbar.module.scss"
 const FeatureBar = () => {
   const { boardType } = useParams()
 
-  switch (boardType) {
-    case "cards": {
-      return (
-        <div className={styles.board_bar}>
-          <div className={styles.board_select}>
-            <BoardSelect type={boardType} />
-          </div>
+  return (
+    <div className={styles.board_bar}>
+      <div className={styles.board_select}>
+        <BoardSelect />
+      </div>
 
-          <div className={styles.card_select}>
-            <CardSelect />
-          </div>
+      {boardType === "cards" && (
+        <div className={styles.card_select}>
+          <CardSelect />
         </div>
-      )
-    }
-    case "itineraries": {
-      return (
-        <div className={styles.board_bar}>
-          <div className={styles.board_select}>
-            <BoardSelect type={boardType} />
-          </div>
-          <div className={`${styles.daySelect_container} ${styles.tooltip}`}>
-            <DaySelect />
-            <div style={{ width: "90px" }} className={styles.tooltip_text}>
-              選擇起始日期
-            </div>
-          </div>
-        </div>
-      )
-    }
+      )}
 
-    default: {
-      return null
-    }
-  }
+      {boardType === "itineraries" && (
+        <div className={styles.daySelect_container}>
+          <DaySelect />
+          <div className={styles.daySelect_tooltip_text}>選擇起始日期</div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default FeatureBar

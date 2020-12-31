@@ -8,25 +8,19 @@ import {
   Switch,
 } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-
 import styles from "./CardBoard.module.scss"
-
-import { SmallCard, AddCard } from "./SmallCard"
-import LargeCard from "./LargeCard"
-
+import SmallCard from "./SmallCard"
+import LargeCard from "../LargeCard/LargeCard"
 import { AddCard_Fs } from "../../firebase/Config"
+import AddCard from "./AddCard"
 
 const CardBoard = () => {
-  // console.log("re-cardBoard")
-
   const cards = useSelector((state) => state.cards)
   const { projectId } = useParams()
   const project = useSelector((state) =>
     state.projects.find((project) => project.id === projectId)
   )
   const match = useRouteMatch()
-
-  //////filter cards//////
 
   //get searched tags from URL
   const useQuery = () => {
@@ -68,7 +62,6 @@ const CardBoard = () => {
 
   const [addCard, toggleAddCard] = useState(false)
   const [pendingInfo, setPendingInfo] = useState(emptyCard)
-  const dispatch = useDispatch()
 
   const handleAddCard = (e) => {
     let triggerElementId = ["cardBoardContainer"]
@@ -88,7 +81,6 @@ const CardBoard = () => {
         }
 
         default: {
-          // toggleAddCard(!addCard)
           toggleAddCard(!addCard)
           break
         }

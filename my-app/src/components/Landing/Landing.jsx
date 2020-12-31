@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom"
 import { ReactComponent as Discovery } from "../../img/Discovery.svg"
 import cards from "../../img/cards.svg"
 import itinerary from "../../img/itinerary.svg"
-import styles from "./styles.module.scss"
+import styles from "./Landing.module.scss"
 
 const Landing = () => {
   const user = useSelector((state) => state.user)

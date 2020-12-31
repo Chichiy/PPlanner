@@ -20,14 +20,14 @@ import {
   removeCard,
   modifyCardWithCheck,
   clearCardsState,
-} from "../../app/slices/cardSlice"
+} from "../../redux/slices/cardSlice"
 
 import {
   addMember,
   modifyMember,
   removeMember,
   clearMembersState,
-} from "../../app/slices/membersSlice"
+} from "../../redux/slices/membersSlice"
 
 const Project = () => {
   // console.log("rerender Project component")
@@ -133,33 +133,3 @@ const Project = () => {
 }
 
 export default Project
-
-//
-//<Route exact path={match.path}>
-//<Navbar type="project" />
-//<div className={styles.container}>
-//  <ul>
-//    {/* <Link to={`${match.url}/todoList`}>待辦事項</Link> */}
-//      <CardsIcon className={styles.cardsIcon} />
-//      <div className={styles.title}>卡片板 </div>
-//    </Link>
-//
-//    {/* <Link to={`${match.url}/itineraries/${itineraryId}`}> */}
-//    <Link to={`${match.url}/itineraries/`}>
-//      <CalendarIcon className={styles.itineraryIcon} />
-//      <div className={styles.title}> 行程板 </div>
-//    </Link>
-//
-//    {/* <Link to={`${match.url}/expenditure`}>花費板</Link> */}
-//  </ul>
-//</div>
-//</Route>
-
-//<Route path={`${match.path}/expenditure`}>
-//        <Navbar type="expenditure" />
-//        <Expenditure />
-//      </Route>
-//      <Route path={`${match.path}/todoList`}>
-//        <Navbar type="todoList" />
-//        <TodoList />
-//      </Route>

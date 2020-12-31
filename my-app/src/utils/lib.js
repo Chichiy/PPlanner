@@ -44,6 +44,18 @@ export const colorCode_tags = {
   orange: "#FF9F1A",
 }
 
+export const tagsTitle = (string) => {
+  const title = {
+    green: "綠色標籤",
+    yellow: "黃色標籤",
+    pink: "粉色標籤",
+    blue: "青色標籤",
+    orange: "橘色標籤",
+  }
+
+  return title[string]
+}
+
 export const categoryTitle = (string) => {
   const title = {
     hotel: "住宿",
@@ -71,18 +83,14 @@ export const reactSelectsCustomStyles = {
     ...provided,
     minHeight: 30,
   }),
-  input: (provided) => ({
-    ...provided,
-  }),
+
   dropdownIndicator: (provided) => ({
     ...provided,
     padding: 5,
   }),
   valueContainer: (provided) => ({
     ...provided,
-    padding: 5,
     height: 30,
-    boxSizing: "border-box",
   }),
 
   singleValue: (provided) => ({
@@ -90,6 +98,10 @@ export const reactSelectsCustomStyles = {
     fontSize: 14,
   }),
   option: (provided) => ({
+    ...provided,
+    fontSize: 14,
+  }),
+  placeholder: (provided) => ({
     ...provided,
     fontSize: 14,
   }),

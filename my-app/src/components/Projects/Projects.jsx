@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-  useLocation,
-  useHistory,
-} from "react-router-dom"
+import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { nanoid } from "@reduxjs/toolkit"
 
@@ -27,7 +18,7 @@ import {
   addProjects,
   modifyProjects,
   removeProjects,
-} from "../../app/slices/projectsSlice"
+} from "../../redux/slices/projectsSlice"
 const Projects = () => {
   const dispatch = useDispatch()
   const match = useRouteMatch()

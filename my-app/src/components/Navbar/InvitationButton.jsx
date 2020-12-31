@@ -1,32 +1,33 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useParams } from "react-router-dom"
 import styles from "./Navbar.module.scss"
 
 const InvitationButton = ({ isShowing, setShowing }) => {
-  const { projectId } = useParams()
-
-  const getUrl = () => {
-    let url = window.location.origin
-    return url + `/joinProject/${projectId}`
-  }
-  const handleFocus = (e) => {
-    e.target.select()
-  }
-
-  const handleCopy = () => {
-    let copyText = document.querySelector("#url")
-    copyText.select()
-    copyText.setSelectionRange(0, 99999) /* For mobile devices */
-    document.execCommand("copy")
-    setShowing(false)
-  }
-
   const clickOnInvitation = (e) => {
     if (isShowing !== "invitation") {
       setShowing("invitation")
     } else if (e.target.id === "invitation") {
       setShowing(false)
     }
+  }
+
+  const { projectId } = useParams()
+  const getInvitationUrl = () => {
+    const origin = window.location.origin
+    return origin + `/joinProject/${projectId}`
+  }
+
+  const handleFocus = (e) => {
+    e.target.select()
+  }
+
+  const url = useRef(null)
+  const handleCopyUrl = () => {
+    const copyText = url.current
+    copyText.select()
+    copyText.setSelectionRange(0, 99999) /* For mobile devices */
+    document.execCommand("copy")
+    setShowing(false)
   }
 
   return (
@@ -40,16 +41,16 @@ const InvitationButton = ({ isShowing, setShowing }) => {
         <div className={styles.invitation_container}>
           <div className={styles.caption}>邀請好友加入</div>
           <input
-            id="url"
-            className={styles.url}
-            type="text"
-            value={getUrl()}
+            ref={url}
             autoFocus
             readOnly
+            type="text"
+            className={styles.url}
+            value={getInvitationUrl()}
             onFocus={handleFocus}
           />
           <div className={styles.buttons}>
-            <div className={styles.copy_button} onClick={handleCopy}>
+            <div className={styles.copy_button} onClick={handleCopyUrl}>
               點擊複製連結
             </div>
           </div>

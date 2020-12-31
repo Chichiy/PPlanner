@@ -2,13 +2,13 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useHistory } from "react-router-dom"
 import { checkUserStatus, listenToUser } from "../../firebase/Config"
-import { initUser } from "../../app/slices/userSlice"
+import { initUser } from "../../redux/slices/userSlice"
 
 const CheckUser = () => {
-  const history = useHistory()
-  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const history = useHistory()
   const location = useLocation()
+  const user = useSelector((state) => state.user)
 
   const handleUpdate = (res) => {
     dispatch(initUser(res))
@@ -21,27 +21,13 @@ const CheckUser = () => {
   }
 
   const handleNoUser = () => {
-    //allow page to show and then ask user to login
-    if (location.pathname.slice(1, 12) === "joinProject") {
-    }
-
-    //redirect to home page if not invited
-    if (location.pathname.slice(1, 12) !== "joinProject") {
-      history.push("/")
-    }
+    const shouldRedirect = location.pathname.slice(1, 12) !== "joinProject"
+    shouldRedirect && history.push("/")
   }
 
-  //check login
   useEffect(() => {
     checkUserStatus(handleUser, handleNoUser)
   }, [])
-
-  // useEffect(()=>{
-
-  //   const unsubscribe=listenToUser()
-
-  //   return unsubscribe
-  // },[])
 
   return <div></div>
 }

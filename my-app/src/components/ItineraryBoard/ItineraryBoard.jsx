@@ -1,14 +1,7 @@
 //tools
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom"
+import { Switch, Route, useRouteMatch, useParams } from "react-router-dom"
 import { DragDropContext } from "react-beautiful-dnd"
 
 //components and scss
@@ -23,8 +16,8 @@ import { updateCard_Fs } from "../../firebase/Config"
 import {
   modifyCardProperties,
   updateCardsOrder,
-} from "../../app/slices/cardSlice"
-import LargeCard from "../CardBoard/LargeCard"
+} from "../../redux/slices/cardSlice"
+import LargeCard from "../LargeCard/LargeCard"
 
 const ItineraryBoard = () => {
   const { itineraryId, projectId } = useParams()

@@ -1,31 +1,10 @@
-//tools
 import React, { useState } from "react"
-import { useDispatch } from "react-redux"
-import { nanoid } from "nanoid"
 import { Draggable, Droppable } from "react-beautiful-dnd"
-
-//components and scss
 import styles from "./ItineraryBoard.module.scss"
-
-//functions
-import { addCard } from "../../app/slices/cardSlice"
 import { colorCode } from "../../utils/lib"
 import { responsiveTime } from "../../utils/itineraryBoardLib"
 
 const CardList = (props) => {
-  //dispatch
-  const dispatch = useDispatch()
-
-  const handleAddCard = (e) => {
-    if (e.target.id === "cardList") {
-      let card = {
-        title: "test" + nanoid(3),
-        id: nanoid(),
-        status: 0,
-      }
-      dispatch(addCard(card))
-    }
-  }
   // filiter's state
   const [isShowing, setShowing] = useState(false)
   const [filter, setFilter] = useState([

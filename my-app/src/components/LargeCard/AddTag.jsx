@@ -7,86 +7,9 @@ import styles from "./LargeCard.module.scss"
 import { updateCard_Fs, updateProject_Fs } from "../../firebase/Config"
 import { nanoid } from "@reduxjs/toolkit"
 
-//DatesPicker
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
+import { colorCode } from "../../utils/lib"
 
-import { colorCode, categoryTitle, categories } from "../../utils/lib"
-
-const Tags = ({ projectId, card, isfloating, setFloat }) => {
-  const project = useSelector((state) =>
-    state.projects.find((project) => project.id === projectId)
-  )
-
-  const toggleAddTag = (e) => {
-    let float = {
-      type: "addTag",
-      position: e.target.getBoundingClientRect(),
-    }
-
-    setFloat(float)
-  }
-
-  const toggleChangeMainTag = (e) => {
-    let float = {
-      type: "changeMainTag",
-      position: e.target.getBoundingClientRect(),
-    }
-
-    setFloat(float)
-  }
-  try {
-    return (
-      <div className={styles.tags_section}>
-        <div className={styles.title}>標籤</div>
-        <div className={styles.container}>
-          {/* category tag */}
-          <div
-            aria-label="addTag" //need to be able to change category
-            className={styles.tag}
-            style={{ backgroundColor: colorCode[card.category] }}
-            onClick={toggleChangeMainTag}
-          >
-            {categoryTitle(card.category)}
-          </div>
-
-          {/* regular tags */}
-          {card.tags.map((tag) => {
-            let target = project.tags.find((item) => item.id === tag)
-
-            return (
-              <div
-                aria-label="addTag"
-                key={nanoid()}
-                className={styles.tag}
-                style={{
-                  backgroundColor: colorCode[target.color],
-                }}
-                onClick={toggleAddTag}
-              >
-                {target.name}
-              </div>
-            )
-          })}
-          <div
-            aria-label="addTag"
-            className={styles.tag}
-            onClick={toggleAddTag}
-          >
-            +
-          </div>
-        </div>
-      </div>
-    )
-  } catch (err) {
-    console.log(err.message)
-    return null
-  }
-}
-
-export default Tags
-
-export const AddTag = ({ card, isfloating, setFloat }) => {
+const AddTag = ({ card, isfloating, setFloat }) => {
   const { projectId, cardId } = useParams()
 
   const tags = useSelector(
@@ -231,48 +154,4 @@ export const AddTag = ({ card, isfloating, setFloat }) => {
   }
 }
 
-export const ChangeMainTag = ({ card, isfloating, setFloat }) => {
-  const { projectId, cardId } = useParams()
-
-  const handleChangeMainTag = (e) => {
-    let change = {
-      category: e.target.dataset.category,
-    }
-
-    updateCard_Fs(projectId, cardId, change)
-  }
-
-  return (
-    <div
-      style={{
-        top: `${isfloating.position.y + 32}px`,
-        left: `${isfloating.position.x}px`,
-      }}
-      className={styles.addTag_container}
-      aria-label="changeMainTag"
-    >
-      <span aria-label="changeMainTag" className={styles.addTag_span}>
-        主標籤
-      </span>
-
-      {categories.map((category) => {
-        return (
-          <div key={nanoid()} className={styles.tag_container}>
-            <div
-              aria-label="changeMainTag"
-              data-category={category}
-              className={
-                ` ${styles.tag}` +
-                `  ${card.category === category && styles.active}`
-              }
-              style={{ backgroundColor: colorCode[category] }}
-              onClick={handleChangeMainTag}
-            >
-              {categoryTitle(category)}
-            </div>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
+export default AddTag

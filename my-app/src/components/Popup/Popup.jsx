@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-
+import React from "react"
+import { useSelector } from "react-redux"
 import styles from "./Popup.module.scss"
-
-import { useParams, useLocation, useHistory } from "react-router-dom"
-
-import {
-  checkUserStatus,
-  listenToUser,
-  signOut,
-  getProject_Fs,
-  updateProjectMember_Fs,
-  addProjectInUser_Fs,
-} from "../../firebase/Config"
+import { useHistory } from "react-router-dom"
+import { signOut } from "../../firebase/Config"
 import { getColor } from "../../utils/lib"
-import { initUser } from "../../app/slices/userSlice"
 import SignUp from "./SignUp"
 import SignIn from "./SignIn"
 
