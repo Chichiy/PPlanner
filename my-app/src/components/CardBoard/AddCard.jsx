@@ -32,7 +32,7 @@ export const AddCard = ({ pendingInfo, setPendingInfo, shouldAddCard }) => {
     <div className={styles.card_small}>
       <div
         id="pendingCategory"
-        className={styles.tag}
+        className={styles.add_main_tag}
         style={{ backgroundColor: colorCode[pendingInfo.category] }}
         onClick={toggleCategorySelect}
       >

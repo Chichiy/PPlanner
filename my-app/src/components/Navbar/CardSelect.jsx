@@ -22,11 +22,6 @@ const CardSelect = () => {
   let match = useRouteMatch()
   const animatedComponents = makeAnimated()
 
-  // const { projectId } = useParams()
-  // const thisProject = (state) =>
-  //   state.projects.find((project) => project.id === projectId)
-  // const project = useSelector(thisProject)
-
   const { projectId } = useParams()
   const selectProjectTags = createSelector(
     (state) => state.projects,

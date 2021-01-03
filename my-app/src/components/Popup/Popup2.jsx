@@ -38,18 +38,22 @@ const Popup = ({ isShowing, setShowing }) => {
     }
   }
 
-  const content = () => {
-    switch (isShowing) {
-      case "signIn": {
-        return <SignIn closePopUp={closePopUp} setShowing={setShowing} />
-      }
+  switch (isShowing) {
+    case "signIn": {
+      return <SignIn closePopUp={closePopUp} setShowing={setShowing} />
+    }
 
-      case "signUp": {
-        return <SignUp closePopUp={closePopUp} setShowing={setShowing} />
-      }
+    case "signUp": {
+      return <SignUp closePopUp={closePopUp} setShowing={setShowing} />
+    }
 
-      case "user": {
-        return (
+    case "user": {
+      return (
+        <div
+          id="popupBackground_default"
+          className={styles.popup_background}
+          onClick={closePopUp}
+        >
           <div className={styles.user_container}>
             <div className={styles.userInfo}>
               <div
@@ -70,23 +74,13 @@ const Popup = ({ isShowing, setShowing }) => {
               </div>
             </div>
           </div>
-        )
-      }
-      default: {
-        return null
-      }
+        </div>
+      )
+    }
+    default: {
+      return null
     }
   }
-
-  return (
-    <div
-      id="popupBackground_default"
-      className={styles.popup_background}
-      onClick={closePopUp}
-    >
-      {content()}
-    </div>
-  )
 }
 
 export default Popup

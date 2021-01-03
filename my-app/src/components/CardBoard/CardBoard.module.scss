@@ -33,9 +33,10 @@
 
   &:hover {
     box-shadow: 0 0 3px 2px $gray_lighter, 0 0 10px 1px $gray;
+    cursor: pointer;
   }
 
-  .tag {
+  .main_tag {
     position: absolute;
     top: 0;
     left: 0;
@@ -43,7 +44,10 @@
     height: 15px;
     border-radius: 10px 10px 0 0;
     cursor: pointer;
+  }
 
+  .add_main_tag {
+    @extend .main_tag;
     &:hover {
       box-shadow: 0 0 10px 1px $gray, 0 0 5px 1px $gray_darker;
     }
@@ -72,7 +76,6 @@
       }
     }
     .details {
-      // max-width: 105px;
       width: 100%;
       flex: auto;
       display: flex;
@@ -138,7 +141,7 @@
       display: flex;
       align-items: center;
 
-      .small_card_icon__link {
+      .small_card_icon__links {
         padding-left: 16px;
         margin-right: 3px;
         color: $gray_darker;
@@ -158,7 +161,7 @@
         }
       }
 
-      .small_card_icon__comment {
+      .small_card_icon__comments {
         padding-left: 16px;
         margin-right: 3px;
         color: $gray_darker;

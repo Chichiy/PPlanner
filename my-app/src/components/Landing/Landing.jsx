@@ -28,7 +28,7 @@ const Landing = () => {
             可以更簡單！
           </div>
           <div className={styles.banner_text}>
-            使用 PPlanner 讓您更有效率地整理旅遊資訊
+            PPlanner 讓整理旅遊資訊更有效率
             <br />
             和旅伴一起安排行程不再困難重重！
           </div>
@@ -46,9 +46,9 @@ const Landing = () => {
             旅程的每一步
           </div>
           <div className={styles.feature_text}>
-            透過卡片板系統性記錄所蒐集到的旅遊資訊
+            透過卡片記錄所蒐集到的旅遊資訊
             <br />
-            不論是檢索歸納、和旅伴討論都超方便！
+            檢索歸納、和旅伴討論都超方便！
           </div>
         </div>
         <img

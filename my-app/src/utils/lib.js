@@ -1,3 +1,5 @@
+import { nanoid } from "@reduxjs/toolkit"
+
 //
 //
 //     COLOR
@@ -6,9 +8,23 @@
 
 //////get user color//////
 export const getColor = (id) => {
-  let code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
-  let colorCode = `hsl(${code},95%, 70%)`
-  return colorCode
+  const code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
+  return `hsl(${code},95%, 70%)`
+}
+
+export const getGradiet = (id) => {
+  const code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
+  const nextCode = (code, i) =>
+    code - 40 * i < 0 ? code - 40 * i + 360 : code - 40 * i
+  const colorCode = `hsl(${code},90%, 55%)`
+  const colorCode2 = `hsl(${nextCode(code, 1)},90%, 45%)`
+
+  const style = {
+    backgroundColor: colorCode,
+    background: `linear-gradient(145deg, ${colorCode} 0%, ${colorCode2} 100% `,
+  }
+
+  return style
 }
 
 //category color code
@@ -77,6 +93,40 @@ export const categories = [
   "commute",
   "default",
 ]
+
+export const emptyProject = {
+  creator: "",
+  title: "",
+  members: [],
+  tags: [
+    {
+      color: "orange",
+      name: "",
+      id: nanoid(),
+    },
+    {
+      color: "blue",
+      name: "",
+      id: nanoid(),
+    },
+    {
+      color: "yellow",
+      name: "",
+      id: nanoid(),
+    },
+    {
+      color: "pink",
+      name: "",
+      id: nanoid(),
+    },
+    {
+      color: "green",
+      name: "",
+      id: nanoid(),
+    },
+  ],
+  created_time: null,
+}
 
 export const reactSelectsCustomStyles = {
   control: (provided) => ({

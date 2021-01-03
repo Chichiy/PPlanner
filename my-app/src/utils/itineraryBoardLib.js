@@ -93,6 +93,34 @@ export const responsiveTime = (card, snapshot, isExpanding) => {
   }
 }
 
+export const deepEqual = (a, b) => {
+  const jsonEqual = (a, b) => {
+    return JSON.stringify(a) === JSON.stringify(b)
+  }
+
+  const compareObject = (a, b) => {
+    const keys = Object.keys(a)
+    for (let i = 0; i < keys.length; i++) {
+      if (a[keys[i]] !== b[keys[i]]) {
+        if (a[keys[i]] instanceof Array) {
+          if (!jsonEqual(a[keys[i]], b[keys[i]])) {
+            return false
+          }
+        } else if (a[keys[i]] instanceof Object) {
+          if (!compareObject(a[keys[i]], b[keys[i]])) {
+            return false
+          }
+        } else {
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  return compareObject(a, b)
+}
+
 // export const OnDragEnd = (dispatch, result, itinerary, filterCards) => {
 //   //only fire when resonable placement
 //   if (!result.destination) return

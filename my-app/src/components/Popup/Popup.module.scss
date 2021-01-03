@@ -111,15 +111,24 @@
   background-color: rgba(255, 255, 255, 0.7);
 
   .popUpContainer {
-    position: relative;
-    width: 400px;
+    max-width: 400px;
     padding: 40px;
-    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid $gray;
     background-color: $white;
     border-radius: 10px;
-    border: 1px solid $gray;
+    text-align: center;
+    position: relative;
     &:hover {
       box-shadow: 0 0 3px 1px $gray_lighter;
+    }
+
+    @include mid-width {
+      width: 95vw;
+    }
+
+    @include small-width {
+      padding: 40px 5vw;
     }
 
     .close {
@@ -195,38 +204,48 @@
   }
 }
 
-//JoinProject
-.join_background {
+@mixin full_screen_background {
+  width: 100vw;
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@mixin modal_container_2 {
+  width: 90%;
+  max-width: 400px;
+  padding: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+
+  @include small-width {
+    padding: 20px;
+  }
+}
+
+//JoinProject
+.join_background {
+  @include full_screen_background;
   background-color: rgba(0, 0, 0, 0.8);
 
   .popUp_container {
-    width: 50%;
-    max-width: 700px;
-    height: 50%;
-    max-height: 400px;
-    padding: 3% 5%;
-    box-sizing: border-box;
-    border-radius: 3%;
-    background-color: $white;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
+    @include modal_container_2;
 
     .text {
       width: 100%;
-      padding-left: 130px;
+      padding: 30px 0 30px 110px;
       box-sizing: border-box;
 
       line-height: 140%;
-      font-size: $h3;
+      font-size: $h4;
       text-align: center;
 
       display: flex;
@@ -234,6 +253,9 @@
       justify-content: center;
       position: relative;
       flex: auto;
+      @include mid-width {
+        padding: 60px 0 0px 0px;
+      }
 
       &::before {
         @extend %fa-icon;
@@ -244,28 +266,32 @@
         left: 20px;
         transform: translateY(-50%);
         color: $black;
-        font-size: 110px;
+        font-size: 80px;
+
+        @include mid-width {
+          top: 0px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 50px;
+        }
       }
     }
 
     .tools {
       width: 100%;
       height: fit-content;
+      margin-top: 20px;
 
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
 
       .button {
-        padding: 15px 20px;
+        padding: 10px 15px;
         border-radius: 5px;
         text-decoration: none;
         font-size: $h4;
         cursor: pointer;
-
-        &:hover {
-          opacity: 0.8;
-        }
       }
 
       .cancel {
@@ -277,6 +303,86 @@
       .join {
         @extend .button;
         background-color: $main;
+        color: $white;
+      }
+    }
+  }
+}
+
+//Remove Project
+.background {
+  @include full_screen_background;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  .confirm_container {
+    @include modal_container_2;
+
+    .text {
+      width: 100%;
+      padding: 30px 0 30px 110px;
+      box-sizing: border-box;
+
+      font-size: $h4;
+      line-height: 140%;
+      text-align: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex: auto;
+
+      @include mid-width {
+        padding: 60px 0 0px 0px;
+      }
+
+      &::before {
+        @extend %fa-icon;
+        @extend .far;
+        content: fa-content($fa-var-trash-alt);
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+        color: $black;
+        font-size: 80px;
+
+        @include mid-width {
+          top: 0px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 50px;
+        }
+      }
+    }
+
+    .tools {
+      width: 100%;
+      height: fit-content;
+      margin-top: 20px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      .button {
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: $h4;
+        cursor: pointer;
+      }
+
+      .cancelBtn {
+        @extend .button;
+        background-color: $gray;
+        color: $black;
+      }
+
+      .removeBtn {
+        @extend .button;
+        background-color: $red;
         color: $white;
       }
     }

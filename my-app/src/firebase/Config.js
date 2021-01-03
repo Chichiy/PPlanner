@@ -91,18 +91,20 @@ export const signOut = (redirect) => {
     })
 }
 
-export const addProjectInUser_Fs = (userId, change) => {
-  let docRef = db.collection("users").doc(userId)
-  //expect format
-  //change = projectId
+export const updateProjectInUser_Fs = (userId, type, projectId) => {
+  const docRef = db.collection("users").doc(userId)
+  const change = {}
 
-  return docRef
-    .update({
-      projects: firebase.firestore.FieldValue.arrayUnion(change),
-    })
-    .catch(function (error) {
-      console.error("Error updating document: ", error)
-    })
+  if (type === "add") {
+    change.projects = firebase.firestore.FieldValue.arrayUnion(projectId)
+  }
+  if (type === "remove") {
+    change.projects = firebase.firestore.FieldValue.arrayRemove(projectId)
+  }
+
+  return docRef.update(change).catch(function (error) {
+    console.error("Error updating document: ", error)
+  })
 }
 
 //////listening to cloud data///////
@@ -207,6 +209,28 @@ export const listenToProjects = (
   return unsubscribe
 }
 
+export const listenToProjects2 = (userId, handleUpdate) => {
+  return db
+    .collection("projects")
+    .where("members", "array-contains", userId)
+    .orderBy("created_time", "desc")
+    .onSnapshot((snapshot) => {
+      const docChange = snapshot.docChanges()
+
+      if (docChange.length > 0) {
+        const temp = []
+        snapshot.forEach((doc) => {
+          const id = doc.id
+          const data = doc.data()
+          data.id = id
+          data.created_time = data.created_time.toDate().toString()
+          temp.push(data)
+        })
+        handleUpdate(temp)
+      }
+    })
+}
+
 export const listenToDayplans = (
   itineraryId,
   handleAdd,
@@ -295,6 +319,69 @@ export const listenToCard = (
       } else {
         //changes have been saved
         console.log("data has been saved to cloud database")
+      }
+    })
+  return unsubscribe
+}
+
+export const listenToCard2 = (projectId, handleUpdate) => {
+  return db
+    .collection("projects")
+    .doc(projectId)
+    .collection("cards")
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      var docChange = snapshot.docChanges()
+      if (docChange.length > 0) {
+        const temp = []
+        snapshot.docChanges().forEach(function (change) {
+          const data = change.doc.data()
+          data.id = change.doc.id
+          data.type = change.type
+          if (data.start_time) {
+            data.start_time = data.start_time.toDate().toString()
+            data.end_time = data.end_time.toDate().toString()
+          }
+          temp.push(data)
+        })
+        handleUpdate(temp)
+      }
+    })
+}
+
+export const ListenToCardsRelatedData = (
+  field,
+  cardId,
+  // handleAdd,
+  // handleModify,
+  // handleRemove,
+  handleChange
+) => {
+  const unsubscribe = db
+    .collection(field)
+    .where("card_id", "==", cardId)
+    .orderBy("date", "asc")
+    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
+      const docChange = snapshot.docChanges()
+      const source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+
+      if (docChange.length > 0) {
+        docChange.forEach(function (change) {
+          const data = change.doc.data()
+          data.id = change.doc.id
+          data.date = data.date.toDate().toString()
+
+          // if (change.type === "added") {
+          //   handleAdd(data, source)
+          // }
+          // if (change.type === "modified") {
+          //   handleModify(data, source)
+          // }
+          // if (change.type === "removed") {
+          //   handleRemove(data, source)
+          // }
+
+          handleChange(change.type, data, source)
+        })
       }
     })
   return unsubscribe

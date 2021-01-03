@@ -19,12 +19,6 @@ const LargeCard = () => {
   const history = useHistory()
 
   //////updates//////
-  const updateTitle = (input) => {
-    let change = {
-      title: input,
-    }
-    updateCard_Fs(projectId, cardId, change)
-  }
 
   const updateDescription = (input) => {
     let change = {
@@ -122,7 +116,7 @@ const LargeCard = () => {
           {/* header */}
           <div className={styles.card_header}>
             <div className={styles.tag_icon}></div>
-            <CardTitle title={card.title} handleUpdateTitle={updateTitle} />
+            <CardTitle title={card.title} />
             <div id="closeBtn" className={styles.card_close}></div>
           </div>
 

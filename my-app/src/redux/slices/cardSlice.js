@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { deepEqual } from "../../utils/itineraryBoardLib"
 
 export const modifyCardWithCheck = createAsyncThunk(
   "cards/modifyCardWithCheck",
@@ -21,15 +22,9 @@ export const modifyCardWithCheck = createAsyncThunk(
 
       // Second, check if response data is different from local state,
       // meaning that changes haven't been updated locally,
-      // then allow update
-      let keys = Object.keys(target)
-      for (let i = 0; i < keys.length; i++) {
-        if (res[keys[i]] !== target[keys[i]]) {
-          return true
-        }
-      }
-      //Otherwise, prevent repeatly update
-      return false
+      // then allow update. Otherwise, prevent repeatly update
+
+      return !deepEqual(res, target)
     },
   }
 )
@@ -89,12 +84,20 @@ export const cardSlice = createSlice({
       //put in new position
       state.splice(desIndex, 0, reorderItem)
     },
+    initCards: (state, action) => {
+      const cards = action.payload.map((card) => {
+        delete card.type
+        return card
+      })
+      return cards
+    },
   },
   extraReducers: {
     [modifyCardWithCheck.pending]: (state, action) => {
       // start checking cards state in thunk
     },
     [modifyCardWithCheck.fulfilled]: (state, action) => {
+      console.log(action)
       let target = action.payload
       let index = state.findIndex((card) => card.id === target.id)
       state.splice(index, 1, target)
@@ -109,6 +112,7 @@ export const {
   updateCardsOrder,
   modifyCardProperties,
   clearCardsState,
+  initCards,
 } = cardSlice.actions
 
 export default cardSlice.reducer

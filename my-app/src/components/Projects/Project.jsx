@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import {
   Switch,
   Route,
@@ -12,7 +12,11 @@ import Navbar from "../Navbar/Navbar"
 import ItineraryBoard from "../ItineraryBoard/ItineraryBoard"
 import CardBoard from "../CardBoard/CardBoard"
 
-import { listenToCard, listenToMembers } from "../../firebase/Config"
+import {
+  listenToCard,
+  listenToCard2,
+  listenToMembers,
+} from "../../firebase/Config"
 
 import {
   addCard,
@@ -20,6 +24,7 @@ import {
   removeCard,
   modifyCardWithCheck,
   clearCardsState,
+  initCards,
 } from "../../redux/slices/cardSlice"
 
 import {
@@ -31,6 +36,8 @@ import {
 
 const Project = () => {
   // console.log("rerender Project component")
+
+  const [access, setAccess] = useState(false)
 
   let { projectId } = useParams()
   let match = useRouteMatch()
@@ -82,39 +89,70 @@ const Project = () => {
     dispatch(removeMember(input))
   }
 
+  const isInit = useRef(true)
+  const handleUpdateCard = (res) => {
+    if (isInit.current) {
+      dispatch(initCards(res))
+      isInit.current = false
+    } else {
+      res.forEach((card) => {
+        if (card.type === "added") {
+          delete card.type
+          dispatch(addCard(card))
+        }
+        if (card.type === "modified") {
+          delete card.type
+          dispatch(modifyCardWithCheck(card))
+        }
+        if (card.type === "removed") {
+          delete card.type
+          dispatch(removeCard(card))
+        }
+      })
+    }
+  }
+
   //init and listen to changes
   useEffect(() => {
-    let unsubscribeToCard = listenToCard(
-      projectId,
-      handleAddCard,
-      checkModifyCard,
-      // handleModifyCard,
-      handleRemoveCard
-    )
+    // const unsubscribeToCard =
+    //   access &&
+    //   listenToCard(projectId, handleAddCard, checkModifyCard, handleRemoveCard)
 
-    let unsubscribeToMembers = listenToMembers(
-      projectId,
-      handleAddMember,
-      handleModifyMember,
-      handleRemoveMember
-    )
+    const unsubscribeToCard =
+      access && listenToCard2(projectId, handleUpdateCard)
+
+    const unsubscribeToMembers =
+      access &&
+      listenToMembers(
+        projectId,
+        handleAddMember,
+        handleModifyMember,
+        handleRemoveMember
+      )
 
     return () => {
-      unsubscribeToCard()
-      unsubscribeToMembers()
+      if (access) {
+        unsubscribeToCard()
+        unsubscribeToMembers()
 
-      //reset cards and memebers' state
-      dispatch(clearCardsState())
-      dispatch(clearMembersState())
+        //reset cards and memebers' state
+        dispatch(clearCardsState())
+        dispatch(clearMembersState())
+      }
     }
-  }, [])
+  }, [access])
 
   //check if user is in the project or not
   const history = useHistory()
+
   useEffect(() => {
+    if (user.id && user.projects.includes(projectId)) {
+      setAccess(true)
+    }
+
     if (user.id && !user.projects.includes(projectId)) {
       alert("您沒有訪問這個旅行計劃的權限")
-      history.replace({ pathname: "/projects" })
+      history.replace("/projects")
     }
   }, [user])
 

@@ -1,18 +1,18 @@
 import React, { useState } from "react"
 import {
-  Link,
   useRouteMatch,
   useParams,
   useLocation,
   Route,
   Switch,
 } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import styles from "./CardBoard.module.scss"
 import SmallCard from "./SmallCard"
 import LargeCard from "../LargeCard/LargeCard"
 import { AddCard_Fs } from "../../firebase/Config"
 import AddCard from "./AddCard"
+import { nanoid } from "@reduxjs/toolkit"
 
 const CardBoard = () => {
   const cards = useSelector((state) => state.cards)
@@ -45,6 +45,7 @@ const CardBoard = () => {
               return true
             }
           }
+          return false
         })
       : cards
   }
@@ -56,7 +57,6 @@ const CardBoard = () => {
     category: "default",
     tags: [],
     status: 0,
-    // cover_pic: "https://fakeimg.pl/65x65/",
     isDragging: false,
   }
 
@@ -95,11 +95,7 @@ const CardBoard = () => {
       onClick={handleAddCard}
     >
       {filteredCard().map((card) => {
-        return (
-          <Link to={`${match.url}/${card.id}`} key={card.id}>
-            <SmallCard card={card} project={project} />
-          </Link>
-        )
+        return <SmallCard key={nanoid()} card={card} />
       })}
       {addCard ? (
         <AddCard pendingInfo={pendingInfo} setPendingInfo={setPendingInfo} />

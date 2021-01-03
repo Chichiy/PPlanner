@@ -7,7 +7,7 @@ import { getColor } from "../../utils/lib"
 import SignUp from "./SignUp"
 import SignIn from "./SignIn"
 
-const Popup = ({ isShowing, setShowing }) => {
+const Modal = ({ isShowing, setShowing, children }) => {
   const user = useSelector((state) => state.user)
   const history = useHistory()
 
@@ -34,6 +34,7 @@ const Popup = ({ isShowing, setShowing }) => {
     let triggerElementId = ["closeBtn", "popupBackground_default"]
 
     if (triggerElementId.includes(e.target.id)) {
+      console.log(e)
       setShowing(false)
     }
   }
@@ -80,13 +81,18 @@ const Popup = ({ isShowing, setShowing }) => {
 
   return (
     <div
-      id="popupBackground_default"
-      className={styles.popup_background}
+      id="popupBackground_signIn"
+      className={styles.popUpBackground}
       onClick={closePopUp}
     >
-      {content()}
+      <div className={styles.popUpContainer}>
+        <div id="closeBtn" className={styles.close}>
+          X
+        </div>
+        {children}
+      </div>
     </div>
   )
 }
 
-export default Popup
+export default Modal

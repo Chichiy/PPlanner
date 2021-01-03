@@ -24,6 +24,10 @@ input:focus {
   display: flex;
   align-items: center;
 
+  @include mid-width {
+    padding: 0 5px;
+  }
+
   //basic setting of items in navbar
   .item {
     height: 30px;
@@ -41,6 +45,10 @@ input:focus {
 
     &:hover {
       background-color: $gray_lighter;
+    }
+
+    @include mid-width {
+      margin: 0 5px;
     }
   }
 

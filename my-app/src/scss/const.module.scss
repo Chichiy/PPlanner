@@ -3,6 +3,22 @@
 @import "./fontawesomScss/regular.scss";
 @import "./fontawesomScss/brands.scss";
 
+//media size
+$mid-width: 700px;
+$small-width: 360px;
+
+@mixin mid-width() {
+  @media screen and (max-width: $mid-width) {
+    @content;
+  }
+}
+
+@mixin small-width() {
+  @media screen and (max-width: $small-width) {
+    @content;
+  }
+}
+
 //font size
 $h1: 42px;
 $h2: 30px;

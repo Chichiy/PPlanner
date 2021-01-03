@@ -1,67 +1,46 @@
-import React, { useState, useEffect, useRef } from "react"
-
+import React from "react"
+import { useHistory, useRouteMatch } from "react-router-dom"
 import styles from "./CardBoard.module.scss"
-import { colorCode, categoryTitle } from "../../utils/lib"
-import DayJS from "react-dayjs"
+import SavedDate from "./SavedDate"
+import SavedTags from "./SavedTags"
+import DataNumber from "./DataNumber"
+import { colorCode } from "../../utils/lib"
 
-import { listenToLinks, listenToComments } from "../../firebase/Config"
-import { nanoid } from "@reduxjs/toolkit"
-import CommentIcon from "./CommentIcon"
-import LinkIcon from "./LinkIcon"
+const SmallCard = ({ card }) => {
+  console.log(card.title)
 
-const SmallCard = ({ card, project }) => {
+  const match = useRouteMatch()
+  const history = useHistory()
+  const toggleLargeCard = () => {
+    history.push(`${match.url}/${card.id}`)
+  }
+
   return (
-    <div id={card.id} className={styles.card_small}>
+    <div id={card.id} className={styles.card_small} onClick={toggleLargeCard}>
       <div
-        className={styles.tag}
+        className={styles.main_tag}
         style={{ backgroundColor: colorCode[card.category] }}
       ></div>
       <div className={styles.info}>
-        {/* <div className={styles.card_small_picture}>
-          <img src={card.cover_pic} alt="pic" />
-        </div> */}
         <div className={styles.details}>
           <div className={styles.title}>{card.title}</div>
           <div className={styles.description}>{card.description}</div>
         </div>
         <div className={styles.small_card_icons}>
-          {/* show card's status  */}
-          {card.start_time && (
-            <div className={styles.small_card_icon__status}>
-              <DayJS format="MM/DD">{card.start_time}</DayJS>
-            </div>
-          )}
-
-          {/* show card's link number  */}
-
-          <LinkIcon cardId={card.id} />
-
-          {/* show card's comment number  */}
-          <CommentIcon cardId={card.id} />
-
-          {/* fill empty  */}
-          <div className={styles.space}></div>
-
-          {/* show card's tags  */}
-          {card.tags.length > 0 &&
-            card.tags.map((tag) => {
-              try {
-                let target = project.tags.find((item) => item.id === tag)
-                return (
-                  <div
-                    key={nanoid()}
-                    style={{ backgroundColor: colorCode[target.color] }}
-                    className={styles.small_card_icon__tag}
-                  ></div>
-                )
-              } catch {
-                return null
-              }
-            })}
+          <SavedDate date={card.start_time} />
+          <DataNumber cardId={card.id} dataType="links" />
+          <DataNumber cardId={card.id} dataType="comments" />
+          <div className={styles.space} />
+          <SavedTags tags={card.tags} />
         </div>
       </div>
     </div>
   )
 }
 
-export default SmallCard
+const areEqual = (prevProps, nextProps) => {
+  return true
+}
+
+const MemorizeSamllCard = React.memo(SmallCard, areEqual)
+export default MemorizeSamllCard

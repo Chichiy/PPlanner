@@ -1,19 +1,22 @@
 import React, { useState } from "react"
-
+import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
+import { updateCard_Fs } from "../../firebase/Config"
 
-const CardTitle = ({ title, handleUpdateTitle }) => {
+const CardTitle = ({ title }) => {
+  const { projectId, cardId } = useParams()
   const [isEditing, setEditing] = useState(false)
   const [pending, setPending] = useState(title)
 
-  const handleTitleEdit = (e) => {
-    if (e.type === "blur" || e.key === "Enter") {
-      if (e.target.value) {
-        setEditing(!isEditing)
-        handleUpdateTitle(e.target.value)
-      } else {
-        alert("請輸入卡片標題")
-      }
+  const handleEdit = (e) => {
+    if (e.key === "Enter") {
+      e.target.blur()
+    }
+    if (e.type === "blur") {
+      updateCard_Fs(projectId, cardId, {
+        title: e.target.value,
+      })
+      setEditing(!isEditing)
     }
   }
 
@@ -23,10 +26,10 @@ const CardTitle = ({ title, handleUpdateTitle }) => {
       className={styles.card_title_edit}
       value={pending}
       onChange={(e) => setPending(e.target.value)}
-      onBlur={handleTitleEdit}
-      onKeyPress={handleTitleEdit}
+      onBlur={handleEdit}
+      onKeyPress={handleEdit}
     />
   )
 }
 
-export default CardTitle
+export default React.memo(CardTitle)
