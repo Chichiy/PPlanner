@@ -1,11 +1,19 @@
+//fontawesome
 @import "./fontawesomScss/fontawesome.scss";
 @import "./fontawesomScss/solid.scss";
 @import "./fontawesomScss/regular.scss";
 @import "./fontawesomScss/brands.scss";
+$fa-font-path: "../../public/webfonts";
 
 //media size
 $mid-width: 700px;
 $small-width: 360px;
+
+@mixin custom-width($max-width) {
+  @media screen and (max-width: $max-width) {
+    @content;
+  }
+}
 
 @mixin mid-width() {
   @media screen and (max-width: $mid-width) {
@@ -49,6 +57,3 @@ $activity: #ff9770;
 $commute: #7986cb;
 $site: #f6bf26;
 $default: #616161;
-
-//fontawesome
-$fa-font-path: "../../public/webfonts";

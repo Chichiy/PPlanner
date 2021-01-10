@@ -7,8 +7,6 @@ import DataNumber from "./DataNumber"
 import { colorCode } from "../../utils/lib"
 
 const SmallCard = ({ card }) => {
-  console.log(card.title)
-
   const match = useRouteMatch()
   const history = useHistory()
   const toggleLargeCard = () => {

@@ -21,17 +21,17 @@
   z-index: 60;
   top: 0;
   left: 0;
-
   background-color: rgba(0, 0, 0, 0.7);
-
+  display: flex;
+  justify-content: center;
   overflow: scroll;
 }
 
 .card_large {
   width: 700px;
   min-height: 500px;
-
-  margin: 100px auto;
+  height: fit-content;
+  margin: 100px 0;
   padding: 15px 10px 10px 10px;
   box-sizing: border-box;
 
@@ -45,6 +45,14 @@
   grid-template-areas:
     "header header"
     "main sideBar";
+
+  @include mid-width {
+    display: block;
+    width: 100%;
+    margin: 5% 0 0 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 
 .card_header {

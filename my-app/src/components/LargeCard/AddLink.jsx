@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-
 import styles from "./LargeCard.module.scss"
-
 import { addLink_Fs } from "../../firebase/Config"
+import { getFloatStyle } from "../../utils/lib"
+import { useWindowSize } from "../../utils/customHooks"
 
 const AddLink = ({ isfloating, setFloat, cardId }) => {
   //input link holder
@@ -49,15 +49,13 @@ const AddLink = ({ isfloating, setFloat, cardId }) => {
     setUrl("")
   }
 
+  const windowSize = useWindowSize()
+
   return (
     <div
       aria-label="addLink"
       className={styles.addLink_container}
-      style={{
-        position: "fixed",
-        left: `${isfloating.position.x}px`,
-        top: `${isfloating.position.y + 40}px`,
-      }}
+      style={getFloatStyle(isfloating, windowSize)}
     >
       <div aria-label="addLink" className={styles.addLink_span}>
         附加連結

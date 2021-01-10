@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { Link, useLocation, Route, Switch } from "react-router-dom"
+import { Link, useLocation, Route, Switch, useParams } from "react-router-dom"
 import styles from "./Navbar.module.scss"
 import ProjectTitle from "./ProjectTitle"
 import FeatureBar from "./FeatureBar"
 import InvitationButton from "./InvitationButton"
 import UserButton from "./UserButton"
 import Popup from "../Popup/Popup"
+import MobileMenu from "./MobileMenu"
 
 const Navbar = () => {
   const location = useLocation()
@@ -17,25 +18,38 @@ const Navbar = () => {
 
   useEffect(checkShouldShowPopup, [location])
 
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
+
   return (
     <div className={styles.navbar}>
       <Switch>
         <Route path={`/projects/:projectId/:boardType`}>
-          <Link to="/projects" className={styles.home}>
+          <Link to="/projects" className={styles.projects}>
             <div className={styles.tooltip_text}>返回總覽</div>
           </Link>
+          <div
+            className={styles.mobile_menu_icon}
+            onClick={() => {
+              setShowMobileMenu(true)
+            }}
+          ></div>
           <ProjectTitle />
           <FeatureBar />
           <InvitationButton isShowing={isShowing} setShowing={setShowing} />
+          <MobileMenu
+            isShowing={showMobileMenu}
+            setShowing={setShowMobileMenu}
+          />
+          <div className={styles.space_board}></div>
+          <UserButton isShowing={isShowing} setShowing={setShowing} />
         </Route>
 
         <Route path="/">
           <Link to="/projects" className={styles.logo}></Link>
+          <div className={styles.space}></div>
+          <UserButton isShowing={isShowing} setShowing={setShowing} />
         </Route>
       </Switch>
-
-      <div className={styles.space}></div>
-      <UserButton isShowing={isShowing} setShowing={setShowing} />
 
       {isShowing && <Popup isShowing={isShowing} setShowing={setShowing} />}
     </div>

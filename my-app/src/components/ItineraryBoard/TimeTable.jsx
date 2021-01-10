@@ -6,7 +6,6 @@ import DayJS from "react-dayjs"
 import { getDateHeader, resetTime } from "../../utils/lib"
 
 const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
-  console.log(startDate)
   const datesHeader = () => {
     let temp = []
     for (let i = 0; i < 8; i++) {

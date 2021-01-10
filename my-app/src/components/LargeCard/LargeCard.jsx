@@ -64,7 +64,7 @@ const LargeCard = () => {
 
   const handleFloatMenu = (type, ref) => {
     if (!isfloating) {
-      let float = {
+      const float = {
         type: type,
         position: ref.current.getBoundingClientRect(),
       }
@@ -77,7 +77,7 @@ const LargeCard = () => {
   //links
   const [links, setLinks] = useState([])
   useEffect(() => {
-    let unsubscribe = listenToLinks(
+    const unsubscribe = listenToLinks(
       cardId,
       handleAddLink,
       handleModifyLink,
@@ -150,7 +150,6 @@ const LargeCard = () => {
           {/* side bar */}
           <div className={styles.card_sideBar}>
             <div className={styles.title}>新增至卡片</div>
-            <div className={styles.sidebar_button_todo}>待辦事項</div>
             {card.links ? null : (
               <div
                 aria-label="addLink"
@@ -163,7 +162,6 @@ const LargeCard = () => {
                 附件
               </div>
             )}
-            <div className={styles.sidebar_button_expenditure}>預估花費</div>
             <div
               aria-label="addTime"
               ref={sideBar_addTime}
@@ -174,7 +172,7 @@ const LargeCard = () => {
             >
               安排時間
             </div>
-            <RedirectButton card={card} />
+            <RedirectButton />
 
             <div
               aria-label="remove"

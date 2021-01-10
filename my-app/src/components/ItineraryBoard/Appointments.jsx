@@ -7,6 +7,7 @@ import DayJS from "react-dayjs"
 import { colorCode } from "../../utils/lib"
 import { responsiveTime } from "../../utils/itineraryBoardLib"
 import IsDraggingUser from "./IsDraggingUser"
+import { useWindowSize } from "../../utils/customHooks"
 
 const Appointments = React.memo(
   ({
@@ -56,6 +57,8 @@ const Appointments = React.memo(
       }
     }
 
+    const windowSize = useWindowSize()
+
     const style = (card, snapshot, provided, type) => {
       let day = new Date(card.start_time)
       let dayIndex = Math.floor((day - startDate) / 24 / 60 / 60 / 1000)
@@ -66,49 +69,31 @@ const Appointments = React.memo(
       let timeSpan = Math.ceil((endTime.getTime() - day.getTime()) / 60000 / 30)
       let temp
       let appointments
-      let resize
+      let timeTableResize
+      let mobileMode
       let resizeWidth
 
       //resize when view change
       try {
-        appointments = document
-          .querySelector("#appointments")
-          .getBoundingClientRect()
-        resize = appointments.width * 0.055 < 45
-        resizeWidth = (appointments.width - 45) / 7
+        mobileMode = windowSize.width < 700
+        appointments = mobileMode ? windowSize.width : windowSize.width - 200
+        timeTableResize = appointments * 0.055 < 46
+        resizeWidth = (appointments - 45.6) / 7
       } catch {
-        resize = false
+        timeTableResize = false
       }
 
       switch (type) {
         case "sensor": {
-          // temp = {
-          //   padding: "6px",
-          //   boxSizing: "border-box",
-          //   position: "absolute",
-          //   borderRadius: "5px",
-          //   border: "2px solid white",
-          //   cursor: "pointer",
-
-          //   backgroundColor: colorCode[card.category],
-          //   top: `${startTime * 20 - 20}px`,
-          //   left: resize
-          //     ? `${resizeWidth * dayIndex + 45}px`
-          //     : `${dayIndex * 13.5 + 5.5}%`,
-          //   width: resize ? `${resizeWidth}px` : "13.5%",
-          //   height: `${timeSpan * 20}px`,
-          //   ...provided.draggableProps.style,
-          // }
-
           temp = {
-            position: "absolute",
-
-            top: `${startTime * 20 - 20}px`,
-            left: resize
-              ? `${resizeWidth * dayIndex + 45}px`
-              : `${dayIndex * 13.5 + 5.5}%`,
-            width: resize ? `${resizeWidth}px` : "13.5%",
+            width: timeTableResize ? `${resizeWidth}px` : "13.5%",
             height: `20px`,
+
+            position: "absolute",
+            top: `${startTime * 20 - 20}px`,
+            left: timeTableResize
+              ? `${resizeWidth * dayIndex + 45.6 - 2}px`
+              : `${dayIndex * 13.5 + 5.5}%`,
             ...provided.draggableProps.style,
           }
 
@@ -116,23 +101,12 @@ const Appointments = React.memo(
         }
         case "display": {
           temp = {
-            padding: "2px 6px",
-            boxSizing: "border-box",
-            position: "absolute",
-            borderRadius: "5px",
-            border: "2px solid white",
-            overflow: "hidden",
-            cursor: "pointer",
-            backgroundColor: colorCode[card.category],
-            top: "0",
-            left: "0",
-            width: "100%",
             height: `${timeSpan * 20}px`,
-          }
 
-          //display blocking card when other is dragging
-          if (card.isDragging) {
-            temp.backgroundColor = colorCode[`${card.category}_shade`]
+            //display blocking card when other is dragging
+            backgroundColor: card.isDragging
+              ? colorCode[`${card.category}_shade`]
+              : colorCode[card.category],
           }
 
           break
@@ -174,7 +148,7 @@ const Appointments = React.memo(
           >
             {cardHasPlan.map((card, index) => {
               return (
-                <Draggable key={nanoid()} draggableId={card.id} index={index}>
+                <Draggable key={card.id} draggableId={card.id} index={index}>
                   {(provided, snapshot) => {
                     return (
                       <div
@@ -188,6 +162,7 @@ const Appointments = React.memo(
                         <div
                           data-displayid={card.id}
                           style={style(card, snapshot, provided, "display")}
+                          className={styles.appointment_display}
                         >
                           <div
                             className={styles.appointment_title}

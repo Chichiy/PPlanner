@@ -1,13 +1,13 @@
 //tools
 import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Switch, Route, useRouteMatch, useParams } from "react-router-dom"
+import { Switch, Route, useParams } from "react-router-dom"
 import { DragDropContext } from "react-beautiful-dnd"
 
 //components and scss
 
-import CardList from "./CardList"
-import Dayplans from "./Dayplans"
+import Sidebar from "./Sidebar"
+import Schedule from "./Schedule"
 import styles from "./ItineraryBoard.module.scss"
 
 //functions
@@ -20,15 +20,8 @@ import {
 import LargeCard from "../LargeCard/LargeCard"
 
 const ItineraryBoard = () => {
-  const { itineraryId, projectId } = useParams()
-
-  console.log("rerender!!!!!")
-  //needed state
-  const itinerary = useSelector((state) => state.itinerary)
-  // const dayplans = useSelector((state) => state.dayplans)
+  const { projectId } = useParams()
   const cards = useSelector((state) => state.cards)
-
-  const [filterMethod] = useState("status")
 
   const filterCards = (filterMethod) => {
     switch (filterMethod) {
@@ -237,19 +230,18 @@ const ItineraryBoard = () => {
     updateCard_Fs(projectId, targetCardId, change)
   }
 
-  const match = useRouteMatch()
   return (
     <div className={styles.view}>
       <DragDropContext
         onDragStart={handleOnDragStart}
         onDragEnd={handleOnDragEnd}
       >
-        <CardList cards={filterCards("noPlan")} />
-        <Dayplans />
+        <Sidebar />
+        <Schedule />
       </DragDropContext>
 
       <Switch>
-        <Route path={`${match.path}/:cardId`}>
+        <Route path={`/projects/:projectId/:boardType/:cardId`}>
           <LargeCard />
         </Route>
       </Switch>

@@ -1,4 +1,6 @@
-@import "../../scss/const.module.scss";
+@import "../../scss/button.module.scss";
+
+$cardBoard: 600px;
 
 //reset default css on tag
 input {
@@ -65,7 +67,7 @@ input:focus {
     }
   }
 
-  .home {
+  .projects {
     @extend .item;
     @extend .tooltip;
     width: 30px;
@@ -81,6 +83,9 @@ input:focus {
 
     &:hover {
       background-color: transparent;
+    }
+    @include custom-width($cardBoard) {
+      display: none;
     }
   }
 
@@ -156,6 +161,9 @@ input:focus {
     flex: auto;
     display: flex;
     align-items: center;
+    @include custom-width($cardBoard) {
+      justify-content: flex-end;
+    }
   }
 
   //basic setting of select
@@ -173,6 +181,10 @@ input:focus {
     @extend .select;
     width: 125px;
     height: fit-content;
+
+    @include custom-width($cardBoard) {
+      display: none;
+    }
   }
 
   .card_select {
@@ -182,6 +194,59 @@ input:focus {
     min-width: 200px;
     width: fit-content;
     height: fit-content;
+
+    @include custom-width($cardBoard) {
+      display: none;
+    }
+  }
+
+  .mobile_card_select__show {
+    @include custom-width($cardBoard) {
+      display: block;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 45px;
+      transform: translateY(-50%);
+    }
+    @include custom-width(400px) {
+      padding-right: 40px;
+    }
+  }
+
+  .mobile_menu_search_icon {
+    @extend .item;
+    width: 30px;
+    flex: none;
+    position: relative;
+    display: none;
+
+    &::before {
+      @extend %fa-icon;
+      @extend .fas;
+      content: fa-content($fa-var-search);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: $black;
+      font-size: 20px;
+    }
+
+    &:hover {
+      &::before {
+        color: $black;
+      }
+    }
+
+    @include custom-width($cardBoard) {
+      display: block;
+    }
+  }
+
+  .mobile_menu_search_icon__current {
+    @extend .mobile_menu_search_icon;
+    background-color: $gray_lighter;
   }
 
   //coordinate with customstyles(react-datepicker's prop)
@@ -229,6 +294,10 @@ input:focus {
     font-size: 14px;
     background-color: $gray_lighter2;
     position: relative;
+
+    @include custom-width($cardBoard) {
+      display: none;
+    }
 
     //popup menu
     .invitation_container {
@@ -287,6 +356,13 @@ input:focus {
     flex: auto;
   }
 
+  .space_board {
+    flex: auto;
+    @include custom-width($cardBoard) {
+      display: none;
+    }
+  }
+
   //user info shown when signed in
   .user_icon {
     @extend .item;
@@ -302,6 +378,22 @@ input:focus {
 
     &:hover {
       box-shadow: 0 0 3px 1px $gray_lighter, 0 0 5px 1px $gray_lighter;
+    }
+  }
+
+  .user_icon_cardBoard {
+    @extend .user_icon;
+
+    @include custom-width($cardBoard) {
+      display: none;
+    }
+  }
+
+  .user_icon_itineraryBoard {
+    @extend .user_icon;
+
+    @include custom-width($cardBoard) {
+      display: none;
     }
   }
 
@@ -334,6 +426,14 @@ input:focus {
       }
     }
   }
+
+  .user_buttons_cardBoard {
+    @extend .user_icon;
+
+    @include custom-width($cardBoard) {
+      display: none;
+    }
+  }
 }
 
 .popup_background {
@@ -343,4 +443,135 @@ input:focus {
   top: 0;
   left: 0;
   z-index: 1;
+}
+
+.mobile_menu_icon {
+  @extend .item;
+  width: 30px;
+  flex: none;
+  position: relative;
+  display: none;
+
+  &::before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-bars);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $black;
+    font-size: 20px;
+  }
+
+  @include custom-width($cardBoard) {
+    display: block;
+  }
+}
+
+.mobile_menu {
+  width: 100vw;
+  height: 0vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  .container {
+    width: 500px;
+    max-width: 100%;
+    height: 100vh;
+    padding: 50px 20px 20px 20px;
+    box-sizing: border-box;
+    background-color: $white;
+    box-shadow: 0 0 10px 5px $gray;
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    transform: translateX(0%);
+    transition: transform 1s ease;
+
+    .tools {
+      flex: auto;
+
+      .button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        background-color: $gray_lighter;
+        border-radius: 5px;
+        font-size: $h4;
+        color: $black;
+      }
+    }
+
+    .user {
+      .info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .img {
+          width: 40px;
+          height: 40px;
+          margin-right: 10px;
+          border-radius: 50%;
+          line-height: 40px;
+          text-align: center;
+          color: $white;
+        }
+
+        .details {
+          flex: auto;
+
+          .name {
+            width: 100%;
+            font-size: $h4;
+            font-weight: bold;
+            color: $black;
+            margin-bottom: 5px;
+          }
+          .email {
+            width: 100%;
+            font-size: $h5;
+            color: $gray_darker;
+          }
+        }
+      }
+    }
+
+    .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50px;
+      height: 50px;
+
+      &::before {
+        @extend %fa-icon;
+        @extend .fas;
+        content: fa-content($fa-var-times);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: $gray;
+        font-size: 25px;
+      }
+      &:hover {
+        &::before {
+          color: $black;
+        }
+      }
+    }
+  }
+
+  .container__closed {
+    @extend .container;
+    transform: translateX(-100%);
+    box-shadow: none;
+    transition: transform 1s ease, box-shadow 1s 0.3s ease-in-out;
+  }
 }

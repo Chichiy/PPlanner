@@ -27,244 +27,303 @@
   flex: none;
 }
 
-//side bar: card list
 .sidebar {
   width: 200px;
   height: 100vh;
-  padding-top: 55px;
+  padding: 50px 20px 10px 20px;
   box-sizing: border-box;
   background-color: $white;
   display: flex;
   flex-direction: column;
   z-index: 30;
 
-  // .sidebar_space {
-  //   width: 100%;
-  //   height: 60px;
-  // }
-
-  .sidebar_filter {
+  @include mid-width {
     width: 100%;
-    padding: 10px;
+    height: 100px;
+    padding: 0 10px;
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    box-shadow: 0 0 10px 2px $gray;
+  }
+
+  .sidebar_title {
+    width: 100%;
+    height: 60px;
+    padding: 10px 0px;
     box-sizing: border-box;
+    background-color: $white;
+    font-size: $h5;
+    line-height: 40px;
+    color: black;
+    flex: none;
+    position: relative;
 
-    .sidebar_filter__title {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid $white;
-      box-sizing: border-box;
-      background-color: $white;
-
-      border-radius: 3px;
+    @include mid-width {
       font-size: $h5;
-      color: black;
-      position: relative;
+      line-height: 20px;
+      height: fit-content;
+    }
+
+    .sidebar_filter_icon {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: 15px;
+      right: 0px;
+      cursor: pointer;
+
+      @include mid-width {
+        width: 25px;
+        height: 25px;
+        top: 7px;
+      }
 
       &:after {
         @extend %fa-icon;
-        @extend .fa;
-        content: fa-content($fa-var-chevron-up);
+        @extend .fas;
+        content: fa-content($fa-var-filter);
         position: absolute;
         top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-
-        line-height: 14px;
-        font-size: 14px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        line-height: 12px;
+        font-size: 12px;
         color: $gray;
       }
 
       &:hover {
-        border: 1px solid $gray;
-        // background-color: $gray_lighter;
+        background-color: $gray_lighter;
         border-radius: 3px;
-
         &::after {
           color: $gray_darker;
         }
       }
     }
 
-    .filter_close {
-      &:after {
-        transform: translateY(-50%) rotate(180deg);
+    .sidebar_filter_icon__open {
+      @extend .sidebar_filter_icon;
+      background-color: $gray_lighter;
+      border-radius: 3px;
+      &::after {
+        color: $gray_darker;
+      }
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .sidebar_filter {
+    width: 100%;
+    height: 90px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    flex: none;
+    overflow: hidden;
+    visibility: visible;
+    transition: height 1s ease-in-out, margin 0.7s 0.3s ease-in;
+
+    @include mid-width {
+      height: 50px;
+    }
+
+    .sidebar_filter_caption {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: $h6;
+      color: $black;
+      @include mid-width {
+        margin-bottom: 5px;
       }
     }
 
-    .sidebar_filter__list {
+    .label_container {
       width: 100%;
-      padding: 10px;
-      height: 230px;
-      box-sizing: border-box;
-      visibility: visible;
-      transition: height 1s ease-in-out, padding 0.7s 0.3s ease-in;
+      display: flex;
+      flex-wrap: wrap;
 
-      .label {
-        width: 90%;
-        height: 35px;
-        color: $black;
-        display: flex;
-        align-items: center;
+      @include mid-width {
+        height: 40px;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+      }
+    }
+
+    .label {
+      width: 50%;
+      padding: 5px 0;
+      color: $black;
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      @include mid-width {
+        width: 60px;
+        padding: 0;
+        flex: none;
+      }
+
+      input {
+        //hide default
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      span {
+        font-size: $h6;
+        margin: 0px;
+        cursor: pointer;
+      }
+
+      //custom checkbox
+      .checkmark {
+        display: block;
+        height: 10px;
+        width: 10px;
+        margin: 0px 5px;
         position: relative;
+        cursor: pointer;
 
-        input {
-          //hide default
+        &:before {
+          @extend %fa-icon;
+          @extend .fa;
+          content: fa-content($fa-var-square);
           position: absolute;
-          opacity: 0;
-          cursor: pointer;
-          height: 0;
-          width: 0;
-        }
-
-        span {
-          font-size: $h5;
-          margin: 0px;
-          cursor: pointer;
-        }
-
-        //custom checkbox
-        .checkmark {
-          display: block;
-          height: 10px;
-          width: 10px;
-          margin: 0px 5px;
-          position: relative;
-          cursor: pointer;
-
-          &:before {
-            @extend %fa-icon;
-            @extend .fa;
-            content: fa-content($fa-var-square);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 10px;
-            color: $gray_lighter;
-          }
-        }
-
-        &:hover input ~ .checkmark {
-          &:before {
-            color: $gray;
-          }
-        }
-
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $main;
-          }
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 10px;
+          color: $gray_lighter;
         }
       }
 
-      .label__food {
-        @extend .label;
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $food;
-          }
+      &:hover input ~ .checkmark {
+        &:before {
+          color: $gray;
         }
       }
 
-      .label__hotel {
-        @extend .label;
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $hotel;
-          }
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $main;
         }
       }
+    }
 
-      .label__activity {
-        @extend .label;
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $activity;
-          }
+    .label__food {
+      @extend .label;
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $food;
         }
       }
+    }
 
-      .label__site {
-        @extend .label;
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $site;
-          }
+    .label__hotel {
+      @extend .label;
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $hotel;
         }
       }
+    }
 
-      .label__commute {
-        @extend .label;
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $commute;
-          }
+    .label__activity {
+      @extend .label;
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $activity;
         }
       }
+    }
 
-      .label__default {
-        @extend .label;
-        input:checked ~ .checkmark {
-          &:before {
-            content: fa-content($fa-var-check-square);
-            color: $default;
-          }
+    .label__site {
+      @extend .label;
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $site;
+        }
+      }
+    }
+
+    .label__commute {
+      @extend .label;
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $commute;
+        }
+      }
+    }
+
+    .label__default {
+      @extend .label;
+      input:checked ~ .checkmark {
+        &:before {
+          content: fa-content($fa-var-check-square);
+          color: $default;
         }
       }
     }
   }
 
-  .sidebar_cards {
+  .sidebar_cards_container {
     width: 100%;
-    padding: 10px;
-    padding-top: 0px;
     box-sizing: border-box;
     background-color: $white;
     flex: auto;
     z-index: 3;
     overflow-y: scroll;
     display: flex;
-    flex-direction: column;
 
-    .sidebar_cards__title {
-      width: 100%;
-      height: fit-content;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: $white;
-      font-size: $h5;
-      color: black;
-      flex: none;
+    @include mid-width {
+      height: 40px;
+      padding-bottom: 10px;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      overflow-y: visible;
+      overflow-x: scroll;
     }
 
-    .cardList {
+    .card_list {
       width: 100%;
       flex: auto;
       box-sizing: border-box;
-
       background-color: $white;
-
       display: flex;
       flex-wrap: wrap;
+      flex-direction: row;
       justify-content: center;
       align-content: flex-start;
 
+      @include mid-width {
+        height: 40px;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+      }
+
       .card {
-        //text view
-        width: 90%;
+        width: 98%;
         height: 35px;
         margin-top: 2px;
-
         border-radius: 3px;
         background-color: $white;
         line-height: 35px;
-
         display: flex;
         align-items: center;
         user-select: none;
@@ -273,6 +332,14 @@
 
         &:hover {
           box-shadow: 0 0 2px 1px $gray_lighter;
+        }
+
+        @include mid-width {
+          max-width: 120px;
+          width: fit-content;
+          padding-right: 5px;
+          box-sizing: border-box;
+          margin-right: 5px;
         }
 
         .title {
@@ -290,10 +357,6 @@
           margin: 0 5px;
           box-sizing: border-box;
           border-radius: 50%;
-          // position: absolute;
-          // top: 50%;
-          // left: 0px;
-          // transform: translateY(-50%);
         }
       }
     }
@@ -309,16 +372,20 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  overflow-x: hidden;
   overflow-y: scroll;
   font-size: $h4;
   position: relative;
   user-select: none;
 
+  @include mid-width {
+    height: calc(100% - 100px);
+  }
+
   table {
     margin-top: 59px;
     width: 100%;
     border-collapse: collapse;
-    // border: 1px solid $gray;
     text-align: center;
   }
 
@@ -348,6 +415,10 @@
       box-sizing: border-box;
       height: 60px;
       vertical-align: middle;
+
+      @include mid-width {
+        padding: 10px 0px;
+      }
     }
   }
 
@@ -355,6 +426,10 @@
     margin-left: 200px;
     width: 5.5%;
     min-width: 45px;
+
+    @include mid-width {
+      margin-left: 0px;
+    }
   }
 
   .datesHeader_day {
@@ -382,6 +457,8 @@
   .hourHeader {
     width: 5.5%;
     min-width: 45px;
+
+    flex: none;
     border-left: 0px;
     border-bottom: 0px;
     font-size: $h6;
@@ -411,13 +488,23 @@
     border-top: 0px;
   }
 
+  .appointment_display {
+    padding: 2px 6px;
+    box-sizing: border-box;
+    position: absolute;
+    border-radius: 5px;
+    border: 1px solid white;
+    overflow: hidden;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
   .appointment_title {
     margin-bottom: 5px;
     font-size: $h6;
     color: $white;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
     opacity: 0.9;
   }
 
@@ -479,14 +566,11 @@
 }
 
 //for cardlist
-.appointment_title {
+.appointment_title__pending {
   line-height: 140%;
   margin-bottom: 5px;
   font-size: $h6;
   color: $white;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
   opacity: 0.9;
 }
 

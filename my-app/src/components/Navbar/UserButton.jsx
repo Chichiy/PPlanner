@@ -2,8 +2,10 @@ import React from "react"
 import { useSelector } from "react-redux"
 import styles from "./Navbar.module.scss"
 import { getColor } from "../../utils/lib"
+import { useParams } from "react-router-dom"
 
 const UserButton = ({ isShowing, setShowing }) => {
+  const { boardType } = useParams()
   const user = useSelector((state) => state.user)
   const isLoggedIn = user.id ? true : false
 
@@ -11,10 +13,19 @@ const UserButton = ({ isShowing, setShowing }) => {
     isShowing !== "user" ? setShowing("user") : setShowing(false)
   }
 
+  const switchClass = (type) => {
+    if (boardType === "cards") {
+      return styles[`user_${type}_cardBoard`]
+    }
+    if (boardType === "itineraries") {
+      return styles[`user_${type}_itineraryBoard`]
+    } else return styles[`user_${type}`]
+  }
+
   if (isLoggedIn) {
     return (
       <div
-        className={styles.user_icon}
+        className={switchClass("icon")}
         onClick={togglePopup}
         style={{ backgroundColor: getColor(user.id) }}
       >
@@ -23,7 +34,7 @@ const UserButton = ({ isShowing, setShowing }) => {
     )
   } else {
     return (
-      <div className={styles.user_buttons}>
+      <div className={switchClass("buttons")}>
         <div
           className={styles.sign_in_button}
           onClick={() => {

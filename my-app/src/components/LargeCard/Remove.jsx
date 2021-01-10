@@ -2,9 +2,12 @@ import React from "react"
 import { useRouteMatch, useParams, useHistory } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
 import { removeCard_Fs } from "../../firebase/Config"
+import { getFloatStyle } from "../../utils/lib"
+import { useWindowSize } from "../../utils/customHooks"
 
 const Remove = ({ isfloating, setFloat }) => {
   const { projectId, cardId } = useParams()
+  const windowSize = useWindowSize()
   const history = useHistory()
   const match = useRouteMatch()
 
@@ -18,12 +21,7 @@ const Remove = ({ isfloating, setFloat }) => {
     <div
       aria-label="remove"
       className={styles.remove_container}
-      style={{
-        position: "fixed",
-        width: `${isfloating.position.width}px`,
-        left: `${isfloating.position.x}px`,
-        top: `${isfloating.position.y + 40}px`,
-      }}
+      style={getFloatStyle(isfloating, windowSize)}
     >
       <div aria-label="remove" className={styles.remove_span}>
         此動作將無法復原，確定要將這張卡片刪除嗎？

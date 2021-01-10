@@ -1,6 +1,7 @@
 import React, { useRef } from "react"
 import { useParams } from "react-router-dom"
 import styles from "./Navbar.module.scss"
+import { getInvitationUrl } from "../../utils/lib"
 
 const InvitationButton = ({ isShowing, setShowing }) => {
   const clickOnInvitation = (e) => {
@@ -12,10 +13,6 @@ const InvitationButton = ({ isShowing, setShowing }) => {
   }
 
   const { projectId } = useParams()
-  const getInvitationUrl = () => {
-    const origin = window.location.origin
-    return origin + `/joinProject/${projectId}`
-  }
 
   const handleFocus = (e) => {
     e.target.select()
@@ -46,7 +43,7 @@ const InvitationButton = ({ isShowing, setShowing }) => {
             readOnly
             type="text"
             className={styles.url}
-            value={getInvitationUrl()}
+            value={getInvitationUrl(projectId)}
             onFocus={handleFocus}
           />
           <div className={styles.buttons}>

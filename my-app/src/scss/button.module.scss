@@ -1,0 +1,165 @@
+@import "./const.module.scss";
+
+//side bar
+.caption {
+  font-weight: 400;
+  font-size: $h6;
+  color: $black;
+  margin-bottom: 10px;
+}
+
+.sidebar_button_modal {
+  width: 100%;
+  padding: 10px 0 10px 30px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background-color: $gray_lighter;
+
+  font-size: $h5;
+  font-weight: 400;
+  color: $black;
+  line-height: $h5;
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+.button_addtodo {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .far;
+    content: fa-content($fa-var-check-square);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.button_addlink {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-paperclip);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 15px;
+    line-height: 20px;
+  }
+}
+
+.button_expenditure {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-dollar-sign);
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.button_addtime {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .far;
+    content: fa-content($fa-var-calendar-alt);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.button_redirect {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-sign-out-alt);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.button_remove {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .far;
+    content: fa-content($fa-var-trash-alt);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.button_signout {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-power-off);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.button_manage {
+  @extend .sidebar_button_modal;
+
+  &:before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-th);
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

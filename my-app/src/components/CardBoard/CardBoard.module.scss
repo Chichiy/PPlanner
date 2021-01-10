@@ -2,10 +2,11 @@
 
 .container {
   width: 100%;
-  padding: 70px 50px 50px 50px;
+  margin-top: 50px;
   box-sizing: border-box;
   background-color: $gray_lighter;
 
+  flex: none;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;

@@ -244,3 +244,27 @@ export const resetTime = (date) => {
   temp.setMilliseconds(0)
   return temp
 }
+
+export const getInvitationUrl = (projectId) => {
+  const origin = window.location.origin
+  return origin + `/joinProject/${projectId}`
+}
+
+export const copyToClipboard = (value) => {
+  const tempInput = document.createElement("input")
+  tempInput.value = value
+  document.body.appendChild(tempInput)
+  tempInput.select()
+  document.execCommand("copy")
+  document.body.removeChild(tempInput)
+}
+
+export const getFloatStyle = (isfloating, windowSize) => {
+  return {
+    position: "fixed",
+    width: `${isfloating.position.width}px`,
+    left: `${isfloating.position.x}px`,
+    top: windowSize.width > 700 && `${isfloating.position.y + 35}px`,
+    bottom: windowSize.width < 700 && `10px`,
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   useRouteMatch,
   useParams,
@@ -16,6 +16,7 @@ import { nanoid } from "@reduxjs/toolkit"
 
 const CardBoard = () => {
   const cards = useSelector((state) => state.cards)
+
   const { projectId } = useParams()
   const project = useSelector((state) =>
     state.projects.find((project) => project.id === projectId)
@@ -88,20 +89,29 @@ const CardBoard = () => {
     }
   }
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const padding = (windowWidth % 240) / 2
+
+  useEffect(() => {
+    window.addEventListener("resize", () => setWindowWidth(window.innerWidth))
+  }, [])
+
   return (
     <div
       id="cardBoardContainer"
+      // ref={cardBoardContainer}
       className={styles.container}
+      style={{ padding: `0px ${padding}px` }}
       onClick={handleAddCard}
     >
       {filteredCard().map((card) => {
-        return <SmallCard key={nanoid()} card={card} />
+        return <SmallCard key={card.id} card={card} />
       })}
       {addCard ? (
         <AddCard pendingInfo={pendingInfo} setPendingInfo={setPendingInfo} />
       ) : null}
       <Switch>
-        <Route path={`${match.path}/:cardId`}>
+        <Route path={`/projects/:projectId/:boardType/:cardId`}>
           <LargeCard />
         </Route>
       </Switch>
@@ -112,4 +122,9 @@ const CardBoard = () => {
   )
 }
 
-export default CardBoard
+const areEqual = (prevProps, nextProps) => {
+  return true
+}
+
+const MemorizeCardBoard = React.memo(CardBoard, areEqual)
+export default MemorizeCardBoard

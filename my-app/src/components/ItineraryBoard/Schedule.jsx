@@ -7,7 +7,7 @@ import { updateCard_Fs } from "../../firebase/Config"
 import Appointments from "./Appointments"
 import TimeTable from "./TimeTable"
 
-const Dayplans = () => {
+const Schedule = () => {
   //set start time
   const cards = useSelector((state) => state.cards)
   const location = useLocation()
@@ -137,4 +137,4 @@ const Dayplans = () => {
   )
 }
 
-export default Dayplans
+export default Schedule
