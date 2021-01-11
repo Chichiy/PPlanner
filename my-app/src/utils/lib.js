@@ -268,3 +268,13 @@ export const getFloatStyle = (isfloating, windowSize) => {
     bottom: windowSize.width < 700 && `10px`,
   }
 }
+
+export const hasPlan = (plannedCards, compareDate) => {
+  return (
+    plannedCards.findIndex(
+      (card) =>
+        new Date(card.start_time) - compareDate > 0 &&
+        new Date(card.start_time) - compareDate < 24 * 60 * 60 * 1000
+    ) > -1
+  )
+}

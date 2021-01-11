@@ -267,16 +267,14 @@ input:focus {
     }
 
     .hasPlan {
-      // background-color: $main_lighter;
-      // border-radius: 50%;
       position: relative;
       &:after {
         content: "・";
         position: absolute;
-        bottom: -20px;
+        bottom: -18px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 40px;
+        font-size: 25px;
         color: $gray;
       }
     }
@@ -428,9 +426,17 @@ input:focus {
   }
 
   .user_buttons_cardBoard {
-    @extend .user_icon;
+    @extend .user_buttons;
 
     @include custom-width($cardBoard) {
+      display: none;
+    }
+  }
+
+  .user_buttons_itineraryBoard {
+    @extend .user_buttons;
+
+    @include mid-width {
       display: none;
     }
   }

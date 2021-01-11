@@ -1,115 +1,65 @@
 import React, { useState, useEffect, useRef } from "react"
-import { useRouteMatch, useLocation, useHistory } from "react-router-dom"
+import { useLocation, useHistory } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { createSelector } from "@reduxjs/toolkit"
 
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import "./react-datepicker-customstyle.scss"
 import styles from "./Navbar.module.scss"
 
-import { resetTime } from "../../utils/lib"
+import { resetTime, hasPlan } from "../../utils/lib"
 
 const DaySelect = () => {
-  const [startDate, setStartDate] = useState(resetTime(new Date()))
-  const plannedCards = useSelector((state) =>
-    state.cards.filter((card) => card.status === 1)
+  const history = useHistory()
+  const location = useLocation()
+  const selectPlannedCards = createSelector(
+    (state) => state.cards,
+    (cards) => cards.filter((card) => card.status === 1)
   )
+  const plannedCards = useSelector(selectPlannedCards)
+  const [startDate, setStartDate] = useState(resetTime(new Date()))
+  const newStartDate = useRef(null)
 
-  // automacticllu set date with first planned card
-  // let currentDateRange
-  // if (plannedCards.length > 0) {
-  //   currentDateRange = plannedCards.reduce((prev, curr) => {
-  //     try {
-  //       let currDate = new Date(curr.start_time)
-  //       let diffDay = Math.floor((currDate - startDate) / (24 * 60 * 60 * 1000))
-  //       if (diffDay > -1 && diffDay < 7) {
-  //         return [...prev, ...currDate]
-  //       }
-  //     } catch { }
-  //   }, [])
-  //   console.log(currentDateRange)
-  // }
-
-  // useEffect(() => {
-  //   if (plannedCards.length > 0) {
-  //     // let currentDateRange = plannedCards.reduce(function (prev, curr) {
-  //     //   let currDate = new Date(curr.start_time)
-  //     //   let diffDay = Math.floor(((currDate - startDate) / 24) * 60 * 60 * 1000)
-  //     //   if (diffDay > -1 && diffDay < 7) {
-  //     //     return [...prev, ...currDate]
-  //     //   }
-  //     // }, [])
-  //     setStartDate(resetTime(new Date(plannedCards[0].start_time)))
-  //   }
-  // }, [plannedCards[0]])
-
-  //update start date through location.state
-  let history = useHistory()
-  let match = useRouteMatch()
-  let location = useLocation()
-  const previousDate = useRef()
-  const handleDateChange = () => {
-    location = {
-      pathname: match.url,
-      state: { startDate: startDate },
+  const handleDateChange = (date) => {
+    const newLocation = {
+      pathname: location.pathname,
+      state: { startDate: date },
     }
-    history.push(location)
+    newStartDate.current = date
+    history.replace(newLocation)
   }
+
   useEffect(() => {
-    if (previousDate.current !== startDate) {
-      //prevent repeatly redirect
-      previousDate.current = startDate
-      handleDateChange()
+    const findfirstDate = (cards) => {
+      const startTimes = cards.map((card) =>
+        new Date(card.start_time).getTime()
+      )
+      return resetTime(new Date(Math.min(...startTimes)))
     }
-  }, [startDate])
 
-  //show dates with plans
-
-  const getDate = (type, string) => {
-    switch (type) {
-      case "dateObj": {
-        let time = new Date(string)
-        return time
+    if (newStartDate.current !== startDate) {
+      //firstly, display with choosen date
+      if (location.state?.startDate) {
+        newStartDate.current = location.state.startDate
+        setStartDate(location.state.startDate)
+      } else if (
+        //if not, display date with first planned card
+        plannedCards &&
+        newStartDate.current !== findfirstDate(plannedCards)
+      ) {
+        const firstDate = findfirstDate(plannedCards)
+        newStartDate.current = firstDate
+        handleDateChange(firstDate)
       }
-
-      case "date": {
-        let time = new Date(string)
-        return time.getDate()
-      }
-      case "month": {
-        let time = new Date(string)
-        return time.getMonth()
-      }
-      case "year": {
-        let time = new Date(string)
-        return time.getFullYear()
-      }
-      default: {
-        break
-      }
+      // otherwise, display with today by using default state
     }
-  }
-
-  //find current date has plan or not
-  const hasPlan = (compareDate) => {
-    if (
-      plannedCards.findIndex(
-        (card) =>
-          0 < getDate("dateObj", card.start_time) - compareDate &&
-          getDate("dateObj", card.start_time) - compareDate <
-            24 * 60 * 60 * 1000
-      ) > -1
-    ) {
-      return true
-    } else {
-      return false
-    }
-  }
+  }, [location.state, plannedCards])
 
   return (
     <DatePicker
       selected={startDate}
-      onChange={(date) => setStartDate(date)}
+      onChange={(date) => handleDateChange(date)}
       className={styles.daySelect}
       dateFormat="yyyy年MM月"
       popperModifiers={{
@@ -123,8 +73,7 @@ const DaySelect = () => {
           boundariesElement: "viewport",
         },
       }}
-      wrapperClassName={styles.wrapper}
-      dayClassName={(date) => (hasPlan(date) ? styles.hasPlan : null)}
+      dayClassName={(date) => hasPlan(plannedCards, date) && styles.hasPlan}
     />
   )
 }

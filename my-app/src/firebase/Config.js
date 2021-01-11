@@ -159,7 +159,7 @@ export const listenToMembers = (
         })
       } else {
         //changes have been saved
-        console.log("data has been saved to cloud database")
+        // console.log("data has been saved to cloud database")
       }
     })
   return unsubscribe
@@ -203,7 +203,7 @@ export const listenToProjects = (
         })
       } else {
         //changes have been saved
-        console.log("data has been saved to cloud database")
+        // console.log("data has been saved to cloud database")
       }
     })
   return unsubscribe
@@ -269,7 +269,7 @@ export const listenToDayplans = (
         })
       } else {
         //changes have been saved
-        console.log("data has been saved to cloud database")
+        // console.log("data has been saved to cloud database")
       }
     })
   return unsubscribe
@@ -318,7 +318,7 @@ export const listenToCard = (
         })
       } else {
         //changes have been saved
-        console.log("data has been saved to cloud database")
+        // console.log("data has been saved to cloud database")
       }
     })
   return unsubscribe
@@ -426,7 +426,7 @@ export const listenToComments = (
         })
       } else {
         //changes have been saved
-        console.log("data has been saved to cloud database")
+        // console.log("data has been saved to cloud database")
         // console.log("comments")
       }
     })
@@ -446,8 +446,6 @@ export const listenToLinks = (
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
-      // console.log(source, snapshot, docChange)
 
       //local data needs to be changed
       if (docChange.length > 0) {
@@ -474,7 +472,7 @@ export const listenToLinks = (
         })
       } else {
         //changes have been saved
-        console.log("data has been saved to cloud database")
+        // console.log("data has been saved to cloud database")
       }
     })
   return unsubscribe

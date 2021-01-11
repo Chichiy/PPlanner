@@ -97,7 +97,6 @@ export const cardSlice = createSlice({
       // start checking cards state in thunk
     },
     [modifyCardWithCheck.fulfilled]: (state, action) => {
-      console.log(action)
       let target = action.payload
       let index = state.findIndex((card) => card.id === target.id)
       state.splice(index, 1, target)

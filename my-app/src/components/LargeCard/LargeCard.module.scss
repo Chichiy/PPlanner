@@ -815,8 +815,16 @@
   }
 
   .hasPlan {
-    background-color: $main_lighter;
-    border-radius: 50%;
+    position: relative;
+    &:after {
+      content: "・";
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 25px;
+      color: $gray;
+    }
   }
 }
 
