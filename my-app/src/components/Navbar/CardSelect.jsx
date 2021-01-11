@@ -45,11 +45,6 @@ const CardSelect = () => {
   )
   const cardsTags = useSelector(selectCardsTags)
 
-  //prepare options
-  // const tags = project ? project.tags : []
-  // const cards = useSelector((state) => state.cards)
-  // const [options, setOptions] = useState([])
-
   const options = categories.map((category) => ({
     value: category,
     label: categoryTitle(category),

@@ -1,5 +1,5 @@
-import React from "react"
-import { useHistory, useRouteMatch } from "react-router-dom"
+import React, { memo } from "react"
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom"
 import styles from "./CardBoard.module.scss"
 import SavedDate from "./SavedDate"
 import SavedTags from "./SavedTags"
@@ -9,8 +9,12 @@ import { colorCode } from "../../utils/lib"
 const SmallCard = ({ card }) => {
   const match = useRouteMatch()
   const history = useHistory()
+  const location = useLocation()
   const toggleLargeCard = () => {
-    history.push(`${match.url}/${card.id}`)
+    history.push({
+      state: location.state,
+      pathname: `${match.url}/${card.id}`,
+    })
   }
 
   return (
@@ -36,9 +40,5 @@ const SmallCard = ({ card }) => {
   )
 }
 
-const areEqual = (prevProps, nextProps) => {
-  return true
-}
-
-const MemorizeSamllCard = React.memo(SmallCard, areEqual)
+const MemorizeSamllCard = memo(SmallCard)
 export default MemorizeSamllCard
