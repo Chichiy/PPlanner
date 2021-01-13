@@ -278,3 +278,7 @@ export const hasPlan = (plannedCards, compareDate) => {
     ) > -1
   )
 }
+
+export const deepCopy = (input) => {
+  return JSON.parse(JSON.stringify(input))
+}

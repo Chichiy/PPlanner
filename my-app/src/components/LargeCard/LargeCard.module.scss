@@ -871,13 +871,6 @@
     }
   }
 
-  .addTag_button {
-    @extend .button;
-    margin: 10px 0;
-    width: fit-content;
-    box-sizing: border-box;
-  }
-
   .tag_container {
     width: 100%;
     display: flex;
@@ -901,7 +894,7 @@
 
       &:hover {
         padding-left: 15px;
-        opacity: 80%;
+        opacity: 0.7;
       }
     }
 

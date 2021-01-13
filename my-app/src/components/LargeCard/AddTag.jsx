@@ -1,157 +1,121 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-
 import styles from "./LargeCard.module.scss"
-
 import { updateCard_Fs, updateProject_Fs } from "../../firebase/Config"
-import { nanoid } from "@reduxjs/toolkit"
+import { colorCode, deepCopy } from "../../utils/lib"
 
-import { colorCode } from "../../utils/lib"
-
-const AddTag = ({ card, isfloating, setFloat }) => {
+const AddTag = ({ card, isfloating }) => {
   const { projectId, cardId } = useParams()
-
   const tags = useSelector(
     (state) => state.projects.find((project) => project.id === projectId).tags
   )
-
-  const toggleTag = (e) => {
-    let index = card.tags.findIndex((tag) => tag === e.target.dataset.tagid)
-    let newTags
-    if (index > -1) {
-      //delete if tag exists
-      newTags = Array.from(card.tags)
-      newTags.splice(index, 1)
-
-      let change = {
-        tags: newTags,
-      }
-      updateCard_Fs(projectId, cardId, change)
-    } else {
-      //add if not exists
-      newTags = Array.from(card.tags)
-      newTags.push(e.target.dataset.tagid)
-
-      let change = {
-        tags: newTags,
-      }
-      updateCard_Fs(projectId, cardId, change)
-    }
-  }
-
   const [isEditing, setEditing] = useState(false)
-  const [onChangeTagId, setChangingTag] = useState(null)
   const [pending, setPending] = useState("")
+  const inputRef = useRef(null)
 
-  const handleEditTag = (tagId, tagName) => {
-    if (isEditing) {
-      setPending(tagName)
-      setChangingTag(tagId)
-    } else {
-      setPending(tagName)
-      setChangingTag(tagId)
-      setEditing(true)
+  const toggleTag = (tagId) => {
+    const index = card.tags.findIndex((tag) => tag === tagId)
+    const shouldAddTag = index < 0
+    const change = {
+      tags: Array.from(card.tags),
     }
+    shouldAddTag ? change.tags.push(tagId) : change.tags.splice(index, 1)
+    updateCard_Fs(projectId, cardId, change)
   }
 
-  const saveEditTag = () => {
-    if (
-      isEditing &&
-      tags.find((tag) => tag.id === onChangeTagId).name !== pending
-    ) {
-      let newTags = []
-      tags.forEach((tag) => {
-        let temp = {}
-        for (let key in tag) {
-          temp[key] = tag[key]
-        }
-        newTags.push(temp)
-      })
-      newTags.find((tag) => tag.id === onChangeTagId).name = pending
+  const startEdit = (tagId, tagName) => {
+    setPending(tagName)
+    setEditing(tagId)
+    inputRef.current?.focus() // enable autofocus when switch input between tags
+  }
 
-      let change = {
-        tags: newTags,
+  const saveTagName = () => {
+    const shouldSave = tags.find((tag) => tag.id === isEditing).name !== pending
+
+    if (shouldSave) {
+      const change = {
+        tags: deepCopy(tags),
       }
-
+      change.tags.forEach((tag) => {
+        if (tag.id === isEditing) tag.name = pending
+      })
       updateProject_Fs(projectId, change)
-      setPending("")
-      setChangingTag(null)
+    }
+
+    setEditing(false) // close input no matter should save or not
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 27) {
+      // press on ESC
       setEditing(false)
     }
+    if (e.keyCode === 13) {
+      // press on Enter
+      saveTagName()
+    }
   }
 
-  try {
-    return (
-      <div
-        style={{
-          top: `${isfloating.position.y + 32}px`,
-          left: `${isfloating.position.x}px`,
-        }}
-        className={styles.addTag_container}
-        aria-label="addTag"
-      >
-        {!isEditing ? (
-          <span aria-label="addTag" className={styles.addTag_span}>
-            標籤
-          </span>
-        ) : (
-          <input
-            aria-label="addTag"
-            type="text"
-            value={pending}
-            onChange={(e) => {
-              setPending(e.target.value)
-            }}
-            placeholder="請輸入標籤標題..."
-            className={styles.input}
-            autoFocus
-          />
-        )}
-
-        {tags.map((tag, index) => {
-          return (
-            <div key={nanoid()} className={styles.tag_container}>
-              <div
-                aria-label="addTag"
-                data-tagid={tag.id}
-                className={
-                  ` ${styles.tag}` +
-                  `  ${card.tags.includes(tag.id) && styles.active}` +
-                  `  ${onChangeTagId === tag.id && styles.editing}`
-                }
-                style={{ backgroundColor: colorCode[tag.color] }}
-                onClick={toggleTag}
-              >
-                {tag.name}
-              </div>
-              <div
-                aria-label="addTag"
-                data-tagid={tag.id}
-                className={
-                  onChangeTagId === tag.id ? styles.onEdit : styles.edit
-                }
-                onClick={() => {
-                  handleEditTag(tag.id, tag.name)
-                }}
-              ></div>
-            </div>
-          )
-        })}
-        <div
+  return (
+    <div
+      style={{
+        top: `${isfloating.position.y + 32}px`,
+        left: `${isfloating.position.x}px`,
+      }}
+      className={styles.addTag_container}
+      aria-label="addTag"
+    >
+      {!isEditing ? (
+        <span aria-label="addTag" className={styles.addTag_span}>
+          標籤
+        </span>
+      ) : (
+        <input
+          ref={inputRef}
           aria-label="addTag"
-          className={styles.addTag_button}
-          onClick={() => {
-            saveEditTag()
+          type="text"
+          value={pending}
+          onChange={(e) => {
+            setPending(e.target.value)
           }}
-        >
-          新增
-        </div>
-      </div>
-    )
-  } catch {
-    return null
-  }
+          onBlur={saveTagName}
+          onKeyDown={handleKeyDown}
+          placeholder="請輸入標籤標題..."
+          className={styles.input}
+          autoFocus
+        />
+      )}
+
+      {tags.map((tag) => {
+        return (
+          <div key={tag.id} className={styles.tag_container}>
+            <div
+              aria-label="addTag"
+              className={
+                ` ${styles.tag}` +
+                `  ${card.tags.includes(tag.id) && styles.active}` +
+                `  ${isEditing === tag.id && styles.editing}`
+              }
+              style={{ backgroundColor: colorCode[tag.color] }}
+              onClick={() => {
+                toggleTag(tag.id)
+              }}
+            >
+              {tag.name}
+            </div>
+            <div
+              aria-label="addTag"
+              className={isEditing === tag.id ? styles.onEdit : styles.edit}
+              onClick={() => {
+                startEdit(tag.id, tag.name)
+              }}
+            ></div>
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 export default AddTag

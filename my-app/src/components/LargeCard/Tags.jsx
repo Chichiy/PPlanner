@@ -1,10 +1,9 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { nanoid } from "@reduxjs/toolkit"
 import { colorCode, categoryTitle } from "../../utils/lib"
 
-const Tags = ({ projectId, card, isfloating, setFloat }) => {
+const Tags = ({ projectId, card, setFloat }) => {
   const project = useSelector((state) =>
     state.projects.find((project) => project.id === projectId)
   )
@@ -43,12 +42,12 @@ const Tags = ({ projectId, card, isfloating, setFloat }) => {
 
           {/* regular tags */}
           {card.tags.map((tag) => {
-            let target = project.tags.find((item) => item.id === tag)
+            const target = project.tags.find((item) => item.id === tag)
 
             return (
               <div
                 aria-label="addTag"
-                key={nanoid()}
+                key={tag}
                 className={styles.tag}
                 style={{
                   backgroundColor: colorCode[target.color],
@@ -59,6 +58,7 @@ const Tags = ({ projectId, card, isfloating, setFloat }) => {
               </div>
             )
           })}
+
           <div
             aria-label="addTag"
             className={styles.tag}
