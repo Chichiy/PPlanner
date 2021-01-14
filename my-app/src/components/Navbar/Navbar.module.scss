@@ -201,14 +201,11 @@ input:focus {
   .mobile_card_select__show {
     @include custom-width($cardBoard) {
       display: block;
-      width: 100%;
+      width: calc(100% - 90px);
       position: absolute;
       top: 50%;
-      left: 45px;
+      left: 40px;
       transform: translateY(-50%);
-    }
-    @include custom-width(400px) {
-      padding-right: 40px;
     }
   }
 
@@ -239,12 +236,18 @@ input:focus {
 
     @include custom-width($cardBoard) {
       display: block;
+
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 
   .mobile_menu_search_icon__current {
     @extend .mobile_menu_search_icon;
-    background-color: $gray_lighter;
+    &:hover {
+      background-color: $gray_lighter;
+    }
   }
 
   //coordinate with customstyles(react-datepicker's prop)

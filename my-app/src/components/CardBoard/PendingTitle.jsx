@@ -1,15 +1,9 @@
 import React, { useState } from "react"
-
 import styles from "./CardBoard.module.scss"
-import { colorCode, categoryTitle } from "../../utils/lib"
 
-import { nanoid } from "@reduxjs/toolkit"
-
-const PendingTitle = (props) => {
+const PendingTitle = ({ pendingTitle, handleTitleUpdate, addCardRef }) => {
   const [isEditing, setEditing] = useState(true)
   const [pending, setPending] = useState("")
-
-  let { pendingTitle, handleTitleUpdate } = props
 
   const toggleInputTitle = (e) => {
     if (e.target.id === "pendingTitle") {
@@ -31,6 +25,7 @@ const PendingTitle = (props) => {
   if (isEditing) {
     return (
       <input
+        ref={addCardRef}
         type="text"
         className={styles.inputTitle}
         placeholder="請輸入標題"

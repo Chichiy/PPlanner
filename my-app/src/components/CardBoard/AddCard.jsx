@@ -5,7 +5,12 @@ import SelectCategory from "./SelectCategory"
 import PendingTitle from "./PendingTitle"
 import PendingDescription from "./PendingDescription"
 
-export const AddCard = ({ pendingInfo, setPendingInfo, shouldAddCard }) => {
+export const AddCard = ({
+  pendingInfo,
+  setPendingInfo,
+  addCardRef,
+  saveCard,
+}) => {
   const [selectCategory, setCategory] = useState(false)
   const toggleCategorySelect = (e) => {
     if (e.target.id === "pendingCategory") {
@@ -47,6 +52,7 @@ export const AddCard = ({ pendingInfo, setPendingInfo, shouldAddCard }) => {
       <div className={styles.info}>
         <div className={styles.details}>
           <PendingTitle
+            addCardRef={addCardRef}
             pendingTitle={pendingInfo.title}
             handleTitleUpdate={updateTitle}
           />

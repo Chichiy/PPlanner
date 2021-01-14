@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import styles from "./CardBoard.module.scss"
 
-const PendingDescription = (props) => {
+const PendingDescription = ({
+  pendingDescription,
+  handleDescriptionUpdate,
+}) => {
   const [isEditing, setEditing] = useState(true)
   const [pending, setPending] = useState("")
-
-  let { pendingDescription, handleDescriptionUpdate } = props
 
   const toggleInputDescription = (e) => {
     if (e.target.id === "pendingDescription") {

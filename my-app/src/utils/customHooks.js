@@ -25,3 +25,21 @@ export const useWindowSize = () => {
 
   return windowSize
 }
+
+export const useKeyDown = (callback) => {
+  const [keyDown, setKeyDown] = useState(null)
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      callback(e.keyCode)
+      setKeyDown(e.keyCode)
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    //detach listener
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [])
+
+  return keyDown
+}

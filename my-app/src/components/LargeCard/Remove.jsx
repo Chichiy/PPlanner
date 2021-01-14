@@ -14,7 +14,8 @@ const Remove = ({ isfloating, setFloat }) => {
   const handleRemove = () => {
     removeCard_Fs(projectId, cardId)
     setFloat(false)
-    history.replace({ pathname: match.url.slice(0, -(cardId.length + 1)) })
+    // history.replace({ pathname: match.url.slice(0, -(cardId.length + 1)) })
+    history.goBack()
   }
 
   return (

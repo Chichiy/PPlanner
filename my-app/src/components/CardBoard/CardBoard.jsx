@@ -1,8 +1,8 @@
-import React, { memo, useState, useEffect } from "react"
+import React, { memo, useState, useRef, useEffect } from "react"
 import { useParams, Route, Switch } from "react-router-dom"
 import styles from "./CardBoard.module.scss"
 import { AddCard_Fs } from "../../firebase/Config"
-import { useWindowSize } from "../../utils/customHooks"
+import { useWindowSize, useKeyDown } from "../../utils/customHooks"
 import FilteredCards from "./FilteredCards"
 import AddCard from "./AddCard"
 import LargeCard from "../LargeCard/LargeCard"
@@ -24,45 +24,49 @@ const CardBoard = () => {
   const [pendingInfo, setPendingInfo] = useState(emptyCard)
 
   const handleAddCard = (e) => {
-    let triggerElementId = ["cardBoardContainer"]
-    if (triggerElementId.includes(e.target.id)) {
-      let shouldAddCard = !(
-        JSON.stringify(pendingInfo) === JSON.stringify(emptyCard)
-      )
-
-      switch (shouldAddCard) {
-        case true: {
-          AddCard_Fs(projectId, pendingInfo)
-
-          toggleAddCard(!addCard)
-          setPendingInfo(emptyCard)
-
-          break
-        }
-
-        default: {
-          toggleAddCard(!addCard)
-          break
-        }
+    const shouldAddCard = pendingInfo.title || pendingInfo.description
+    if (shouldAddCard) {
+      if (e.target?.id === "cardBoardContainer") {
+        AddCard_Fs(projectId, pendingInfo)
+        toggleAddCard(!addCard)
+        setPendingInfo(emptyCard)
+      }
+    } else {
+      if (e.target?.id === "cardBoardContainer") {
+        toggleAddCard(!addCard)
       }
     }
   }
 
   const windowSize = useWindowSize()
   const padding = (windowSize?.width % 240) / 2
+  const addCardRef = useRef(null)
+
+  const handleClickAddCard = () => {
+    toggleAddCard(true)
+
+    addCardRef.current?.scrollIntoView({ behavior: "smooth" })
+    setTimeout(() => {
+      addCardRef.current?.focus()
+    }, 500)
+  }
 
   return (
     <div
       id="cardBoardContainer"
       className={styles.container}
-      style={{ padding: `0px ${padding}px` }}
+      style={{ padding: `20px ${padding}px` }}
       onClick={handleAddCard}
     >
       <FilteredCards />
 
-      {addCard ? (
-        <AddCard pendingInfo={pendingInfo} setPendingInfo={setPendingInfo} />
-      ) : null}
+      {addCard && (
+        <AddCard
+          addCardRef={addCardRef}
+          pendingInfo={pendingInfo}
+          setPendingInfo={setPendingInfo}
+        />
+      )}
 
       <Switch>
         <Route path={`/projects/:projectId/:boardType/:cardId`}>
@@ -70,7 +74,7 @@ const CardBoard = () => {
         </Route>
       </Switch>
 
-      <div className={styles.addCardButton} onClick={() => toggleAddCard(true)}>
+      <div className={styles.addCardButton} onClick={handleClickAddCard}>
         <div className={styles.tooltip_text}>新增卡片</div>
       </div>
     </div>
