@@ -158,11 +158,11 @@ input:focus {
   //bar that includes different features on different page
   .board_bar {
     box-sizing: border-box;
-    flex: auto;
     display: flex;
     align-items: center;
     @include custom-width($cardBoard) {
       justify-content: flex-end;
+      flex: auto;
     }
   }
 
@@ -189,11 +189,9 @@ input:focus {
 
   .card_select {
     @extend .select;
-    flex: auto;
-    max-width: 80%;
     min-width: 200px;
-    width: fit-content;
     height: fit-content;
+    flex: auto;
 
     @include custom-width($cardBoard) {
       display: none;
@@ -420,7 +418,7 @@ input:focus {
 
       &:hover {
         background-color: $main;
-        opacity: 80%;
+        opacity: 0.8;
       }
     }
   }

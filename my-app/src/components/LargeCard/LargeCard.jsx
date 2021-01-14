@@ -130,7 +130,7 @@ const LargeCard = () => {
               setFloat={setFloat}
             />
 
-            {/* discription section */}
+            {/* description section */}
             <Description
               description={card.description}
               handleUpdateDescription={updateDescription}

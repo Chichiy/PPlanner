@@ -131,11 +131,7 @@ const Appointments = React.memo(
     useEffect(() => {}, [])
 
     return (
-      <Droppable
-        key={nanoid()}
-        droppableId="appointments"
-        isDropDisabled={true}
-      >
+      <Droppable droppableId="appointments" isDropDisabled={true}>
         {(provided) => (
           <div
             id="appointments"

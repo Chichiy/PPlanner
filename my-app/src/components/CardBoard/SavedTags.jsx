@@ -19,7 +19,7 @@ const SavedTags = ({ tags }) => {
         const target = projectTags.find((item) => item.id === tag)
         return (
           <div
-            key={nanoid()}
+            key={tag}
             style={{ backgroundColor: colorCode[target?.color] }}
             className={styles.small_card_icon__tag}
           ></div>

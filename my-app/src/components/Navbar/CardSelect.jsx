@@ -72,7 +72,7 @@ const CardSelect = () => {
   const handleChange = (e) => {
     let params = []
     let location
-    if (e) {
+    if (e.length > 0) {
       e.forEach((tag) => {
         params.push(tag.value)
       })

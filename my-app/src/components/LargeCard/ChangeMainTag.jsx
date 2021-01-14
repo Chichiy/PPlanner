@@ -34,7 +34,7 @@ const ChangeMainTag = ({ card, isfloating, setFloat }) => {
 
       {categories.map((category) => {
         return (
-          <div key={nanoid()} className={styles.tag_container}>
+          <div key={category} className={styles.tag_container}>
             <div
               aria-label="changeMainTag"
               data-category={category}

@@ -93,9 +93,8 @@ const AddTag = ({ card, isfloating }) => {
             <div
               aria-label="addTag"
               className={
-                ` ${styles.tag}` +
-                `  ${card.tags.includes(tag.id) && styles.active}` +
-                `  ${isEditing === tag.id && styles.editing}`
+                `${card.tags.includes(tag.id) ? styles.active : styles.tag}` +
+                ` ${isEditing === tag.id ? styles.editing : ""}`
               }
               style={{ backgroundColor: colorCode[tag.color] }}
               onClick={() => {

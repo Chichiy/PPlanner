@@ -1,17 +1,16 @@
 import React from "react"
 import styles from "./CardBoard.module.scss"
 import { colorCode, categoryTitle } from "../../utils/lib"
-import { nanoid } from "@reduxjs/toolkit"
 
 const SelectCategory = ({ selected, handleSelectCategory }) => {
   const categories = ["hotel", "activity", "site", "food", "commute", "default"]
 
   return (
     <div className={styles.selectCategory}>
-      {categories.map((category) => {
+      {categories.map((category, index) => {
         return (
           <option
-            key={nanoid()}
+            key={index}
             value={category}
             style={{
               backgroundColor: colorCode[category],

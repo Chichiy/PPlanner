@@ -171,7 +171,7 @@
 
         font-size: $h5;
         line-height: 26px;
-        font-weight: boldm;
+        font-weight: bold;
         color: $white;
 
         flex: none;
@@ -899,6 +899,7 @@
     }
 
     .active {
+      @extend .tag;
       position: relative;
 
       &::after {
@@ -915,7 +916,7 @@
 
     .editing {
       padding-left: 15px;
-      opacity: 80%;
+      opacity: 0.7;
     }
 
     .edit {

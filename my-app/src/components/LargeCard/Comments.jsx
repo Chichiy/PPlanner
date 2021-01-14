@@ -51,7 +51,7 @@ const Comments = ({ cardId, projectId }) => {
         {/* comment */}
         <AddComment cardId={cardId} userId={userId} />
         {comments.map((comment) => {
-          return <Comment key={nanoid()} comment={comment} userId={userId} />
+          return <Comment key={comment.id} comment={comment} userId={userId} />
         })}
       </div>
     </div>

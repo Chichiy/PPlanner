@@ -1,5 +1,4 @@
 import React from "react"
-import { nanoid } from "nanoid"
 import { Droppable } from "react-beautiful-dnd"
 import styles from "./ItineraryBoard.module.scss"
 import DayJS from "react-dayjs"
@@ -10,12 +9,12 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
     let temp = []
     for (let i = 0; i < 8; i++) {
       if (i === 0) {
-        temp.push(<td className={styles.datesHeader_space} key={nanoid()}></td>)
+        temp.push(<td className={styles.datesHeader_space} key={i}></td>)
       } else {
         let date = new Date(startDate.getTime() + (i - 1) * 24 * 60 * 60 * 1000)
 
         temp.push(
-          <td key={nanoid()}>
+          <td key={i}>
             <div className={styles.datesHeader_day}>
               {getDateHeader(date, "Day")}
             </div>
@@ -83,18 +82,19 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
         if (j === 0) {
           if (i % 2 === 0) {
             //hour header
-            let hour = i / 2
+            const hour = i / 2
             data.push(
-              <td rowSpan="2" className={styles.hourHeader} key={nanoid()}>
+              <td rowSpan="2" className={styles.hourHeader} key={hour}>
                 {hourHeader(hour, i)}
               </td>
             )
           }
         } else {
           // time slots
-          let time = timeSlot(j - 1, i)
+          const time = timeSlot(j - 1, i)
+          const timeId = String(time.getTime())
           data.push(
-            <Droppable key={nanoid()} droppableId={String(time.getTime())}>
+            <Droppable key={timeId} droppableId={timeId}>
               {(provided, snapshot) => {
                 return (
                   <td
@@ -125,7 +125,7 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
         }
       }
 
-      rows.push(<tr key={nanoid()}>{data}</tr>)
+      rows.push(<tr>{data}</tr>)
     }
     return rows
   }
@@ -138,9 +138,7 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
         onMouseMove={handlePosition}
         onMouseUp={handleExpandEnd}
       >
-        <tr key={nanoid()} className={styles.datesHeader_row}>
-          {datesHeader()}
-        </tr>
+        <tr className={styles.datesHeader_row}>{datesHeader()}</tr>
         {getRow()}
       </tbody>
     </table>
