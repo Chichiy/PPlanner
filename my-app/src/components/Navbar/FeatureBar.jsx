@@ -10,7 +10,7 @@ const FeatureBar = () => {
   const { boardType } = useParams()
 
   const [mobileShow, setShow] = useState(false)
-  const toggleMoibleCardSelect = () => {
+  const toggleMobileCardSelect = () => {
     setShow(!mobileShow)
   }
 
@@ -38,7 +38,7 @@ const FeatureBar = () => {
               ? styles.mobile_menu_search_icon__current
               : styles.mobile_menu_search_icon
           }
-          onClick={toggleMoibleCardSelect}
+          onClick={toggleMobileCardSelect}
         ></div>
       )}
 

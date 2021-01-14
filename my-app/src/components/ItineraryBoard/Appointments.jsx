@@ -20,43 +20,6 @@ const Appointments = React.memo(
   }) => {
     const cardHasPlan = cards.filter((card) => card.status === 1)
 
-    //display responsive time on appointment card
-    const time = (card, snapshot) => {
-      let hoverTime = new Date(Number(snapshot.draggingOver))
-      let timeSpan = new Date(card.end_time) - new Date(card.start_time)
-      let hoverEndTime = new Date(hoverTime.getTime() + timeSpan)
-
-      if (!snapshot.isDragging) {
-        return (
-          <div className={styles.appointment_time}>
-            <DayJS format="HH:mm">{card.start_time}</DayJS>
-            <span>-</span>
-            <DayJS format="HH:mm">{card.end_time}</DayJS>
-          </div>
-        )
-      } else {
-        return (
-          <div className={styles.appointment_time}>
-            {isNaN(hoverTime.getHours()) ? null : (
-              <div>
-                <time>
-                  {hoverTime.getHours()}:
-                  {hoverTime.getMinutes() < 30 ? "00" : "30"}
-                </time>
-
-                <span>-</span>
-
-                <time>
-                  {hoverEndTime.getHours()}:
-                  {hoverEndTime.getMinutes() < 30 ? "00" : "30"}
-                </time>
-              </div>
-            )}
-          </div>
-        )
-      }
-    }
-
     const windowSize = useWindowSize()
 
     const style = (card, snapshot, provided, type) => {
@@ -144,7 +107,12 @@ const Appointments = React.memo(
           >
             {cardHasPlan.map((card, index) => {
               return (
-                <Draggable key={card.id} draggableId={card.id} index={index}>
+                <Draggable
+                  key={card.id}
+                  draggableId={card.id}
+                  index={index}
+                  isDragDisabled={card.isDragging ? true : false}
+                >
                   {(provided, snapshot) => {
                     return (
                       <div
@@ -153,7 +121,6 @@ const Appointments = React.memo(
                         style={style(card, snapshot, provided, "sensor")}
                         ref={provided.innerRef}
                         data-cardid={card.id}
-                        isDragDisabled={card.isDragging ? true : false}
                       >
                         <div
                           data-displayid={card.id}
@@ -183,7 +150,9 @@ const Appointments = React.memo(
                             data-cardid={card.id}
                             className={styles.expandHandle_lower}
                           ></div>
-                          <IsDraggingUser isDragging={card.isDragging} />
+                          {card.isDragging && (
+                            <IsDraggingUser isDragging={card.isDragging} />
+                          )}
                         </div>
                       </div>
                     )
