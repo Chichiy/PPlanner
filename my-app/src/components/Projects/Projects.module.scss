@@ -86,10 +86,15 @@
 
   .addProject_container {
     @extend .project;
+
     color: $gray_lighter;
     padding-top: 20px;
     background-color: $white;
     opacity: 0.8;
+
+    @include mid-width {
+      min-height: fit-content;
+    }
 
     .projectTitle {
       display: block;
@@ -115,6 +120,7 @@
 
       @include mid-width {
         height: 130px;
+        min-height: fit-content;
       }
 
       .main {

@@ -96,6 +96,16 @@
     &:focus {
       border: 2px solid $gray;
     }
+    @include mid-width {
+      width: calc(100% - 30px);
+
+      input[type="text"] {
+        /* Remove iOS preset */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+    }
   }
 
   .card_close {

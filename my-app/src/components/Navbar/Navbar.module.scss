@@ -487,9 +487,9 @@ input:focus {
     width: 500px;
     max-width: 100%;
     height: 100vh;
-    padding: 50px 20px 50px 20px;
+    padding: 50px 20px 80px 20px;
     box-sizing: border-box;
-    background-color: $white;
+    background: linear-gradient(0deg, $gray -10%, $white 15%);
     box-shadow: 0 0 10px 5px $gray;
 
     display: flex;

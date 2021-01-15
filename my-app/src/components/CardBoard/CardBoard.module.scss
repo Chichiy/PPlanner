@@ -132,6 +132,9 @@
         &:focus {
           outline: none;
         }
+        @include mid-width {
+          height: 40px;
+        }
       }
     }
 
