@@ -7,6 +7,7 @@ import InvitationButton from "./InvitationButton"
 import UserButton from "./UserButton"
 import Popup from "../Popup/Popup"
 import MobileMenu from "./MobileMenu"
+import { useSelector } from "react-redux"
 
 const Navbar = () => {
   const location = useLocation()
@@ -17,8 +18,8 @@ const Navbar = () => {
   }
 
   useEffect(checkShouldShowPopup, [location])
-
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const isSignIn = useSelector((state) => state.user.id)
 
   return (
     <div className={styles.navbar}>
@@ -45,7 +46,10 @@ const Navbar = () => {
         </Route>
 
         <Route path="/">
-          <Link to="/projects" className={styles.logo}></Link>
+          <Link
+            to={isSignIn ? "/projects" : "/"}
+            className={styles.logo}
+          ></Link>
           <div className={styles.space}></div>
           <UserButton isShowing={isShowing} setShowing={setShowing} />
         </Route>

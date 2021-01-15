@@ -14,7 +14,7 @@ const Landing = () => {
   const handleClick = () => {
     isLoggedIn
       ? history.push("/projects")
-      : history.push({ pathname: "/", state: { showPopup: "signIn" } })
+      : history.replace({ pathname: "/", state: { showPopup: "signIn" } })
   }
 
   return (
