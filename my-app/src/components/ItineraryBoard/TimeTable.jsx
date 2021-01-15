@@ -9,12 +9,14 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
     let temp = []
     for (let i = 0; i < 8; i++) {
       if (i === 0) {
-        temp.push(<td className={styles.datesHeader_space} key={i}></td>)
+        temp.push(
+          <td className={styles.datesHeader_space} key={"emptySpace"}></td>
+        )
       } else {
         let date = new Date(startDate.getTime() + (i - 1) * 24 * 60 * 60 * 1000)
 
         temp.push(
-          <td key={i}>
+          <td key={date.getDate()}>
             <div className={styles.datesHeader_day}>
               {getDateHeader(date, "Day")}
             </div>
@@ -25,7 +27,7 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
                   : styles.datesHeader_date
               }
             >
-              <DayJS format="DD">{date}</DayJS>
+              <DayJS format="DD">{date.toString()}</DayJS>
             </div>
           </td>
         )
@@ -125,7 +127,7 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
         }
       }
 
-      rows.push(<tr>{data}</tr>)
+      rows.push(<tr key={i}>{data}</tr>)
     }
     return rows
   }
