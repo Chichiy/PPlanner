@@ -1,14 +1,10 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-
 import styles from "./LargeCard.module.scss"
-
-import { updateCard_Fs } from "../../firebase/lib"
-import { nanoid } from "@reduxjs/toolkit"
-
+import { FS } from "../../firebase/lib"
 import { colorCode, getCategoryTitle, categories } from "../../utils/lib"
 
-const ChangeMainTag = ({ card, isFloating, setFloat }) => {
+const ChangeMainTag = ({ card, isFloating }) => {
   const { projectId, cardId } = useParams()
 
   const handleChangeMainTag = (e) => {
@@ -16,7 +12,7 @@ const ChangeMainTag = ({ card, isFloating, setFloat }) => {
       category: e.target.dataset.category,
     }
 
-    updateCard_Fs(projectId, cardId, change)
+    FS.cards.update(projectId, cardId, change)
   }
 
   return (

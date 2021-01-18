@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 
 import styles from "./LargeCard.module.scss"
 
-import { updateLink_Fs, removeLink_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 
 import { getDiffTime } from "../../utils/lib"
 
@@ -45,7 +45,7 @@ const Link = ({ data }) => {
     let change = {
       title: input,
     }
-    updateLink_Fs(data.id, change)
+    FS.links.update(data.id, change)
   }
 
   const removeLink = (e) => {
@@ -53,7 +53,7 @@ const Link = ({ data }) => {
       let yes = window.confirm("你確定要刪除這個附件嗎？")
 
       if (yes) {
-        removeLink_Fs(data.id)
+        FS.links.remove(data.id)
       }
     }
   }

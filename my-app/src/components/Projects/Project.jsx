@@ -14,7 +14,7 @@ import CardBoard from "../CardBoard/CardBoard"
 
 import {
   listenToCard,
-  listenToCard2,
+  listenToCards,
   listenToMembers,
 } from "../../firebase/lib"
 
@@ -114,12 +114,8 @@ const Project = () => {
 
   //init and listen to changes
   useEffect(() => {
-    // const unsubscribeToCard =
-    //   access &&
-    //   listenToCard(projectId, handleAddCard, checkModifyCard, handleRemoveCard)
-
     const unsubscribeToCard =
-      access && listenToCard2(projectId, handleUpdateCard)
+      access && listenToCards(projectId, handleUpdateCard)
 
     const unsubscribeToMembers =
       access &&

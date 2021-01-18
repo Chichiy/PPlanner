@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-
 import styles from "./LargeCard.module.scss"
-
-import { updateCard_Fs } from "../../firebase/lib"
-
+import { FS } from "../../firebase/lib"
 import { getPureDate, getFloatStyle } from "../../utils/lib"
 import DaySelect from "./DaySelect"
 import { useWindowSize } from "../../utils/customHooks"
@@ -42,7 +39,7 @@ const AddTime = ({ card, isFloating, setFloat }) => {
         start_time: startDate,
         end_time: endDate,
       }
-      updateCard_Fs(projectId, cardId, change)
+      FS.cards.update(projectId, cardId, change)
       setFloat(false)
     }
   }

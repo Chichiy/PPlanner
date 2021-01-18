@@ -12,7 +12,7 @@ import styles from "./ItineraryBoard.module.scss"
 
 //functions
 import { OnDragEnd } from "../../utils/itineraryBoardLib"
-import { updateCard_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import {
   modifyCardProperties,
   updateCardsOrder,
@@ -87,7 +87,7 @@ const ItineraryBoard = () => {
             isDragging: false,
           }
           //update to cloud database
-          updateCard_Fs(projectId, result.draggableId, change)
+          FS.cards.update(projectId, result.draggableId, change)
           break
         }
 
@@ -118,7 +118,7 @@ const ItineraryBoard = () => {
             }
 
             //update to cloud database to cancel isDragging
-            updateCard_Fs(projectId, targetCardId, change)
+            FS.cards.update(projectId, targetCardId, change)
             break
           }
 
@@ -139,7 +139,7 @@ const ItineraryBoard = () => {
             modifyCardProperties({ change: convertedChange, id: targetCardId })
           )
           //update to cloud database
-          updateCard_Fs(projectId, targetCardId, change)
+          FS.cards.update(projectId, targetCardId, change)
           break
         }
 
@@ -172,7 +172,7 @@ const ItineraryBoard = () => {
             modifyCardProperties({ change: convertedChange, id: targetCardId })
           )
           //update to cloud database
-          updateCard_Fs(projectId, targetCardId, change)
+          FS.cards.update(projectId, targetCardId, change)
 
           break
         }
@@ -200,7 +200,7 @@ const ItineraryBoard = () => {
             modifyCardProperties({ change: convertedChange, id: targetCardId })
           )
           //update to cloud database
-          updateCard_Fs(projectId, targetCardId, change)
+          FS.cards.update(projectId, targetCardId, change)
 
           break
         }
@@ -222,7 +222,7 @@ const ItineraryBoard = () => {
             modifyCardProperties({ change: convertedChange, id: targetCardId })
           )
           //update to cloud database
-          updateCard_Fs(projectId, targetCardId, change)
+          FS.cards.update(projectId, targetCardId, change)
 
           break
         }
@@ -243,7 +243,7 @@ const ItineraryBoard = () => {
         modifyCardProperties({ change: convertedChange, id: targetCardId })
       )
       //update to cloud database
-      updateCard_Fs(projectId, targetCardId, change)
+      FS.cards.update(projectId, targetCardId, change)
     }
   }
 
@@ -260,7 +260,7 @@ const ItineraryBoard = () => {
     }
 
     //update to cloud database with blocking listening again
-    updateCard_Fs(projectId, targetCardId, change)
+    FS.cards.update(projectId, targetCardId, change)
   }
 
   return (

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useParams, useHistory } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { updateCard_Fs, listenToLinks } from "../../firebase/lib"
+import { FS, listenToLinks } from "../../firebase/lib"
 import Tags from "./Tags"
 import RedirectButton from "./RedirectButton"
 import FloatMenu from "./FloatMenu"
@@ -24,7 +24,7 @@ const LargeCard = () => {
     let change = {
       description: input,
     }
-    updateCard_Fs(projectId, cardId, change)
+    FS.cards.update(projectId, cardId, change)
   }
 
   //handle close

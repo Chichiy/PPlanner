@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import styles from "./Projects.module.scss"
-import { addProject_Fs, updateProjectInUser_Fs } from "../../firebase/lib"
+import { FS, updateProjectInUser_Fs } from "../../firebase/lib"
 import { emptyProject } from "../../utils/lib"
 
 const AddProject = ({ userId }) => {
@@ -16,7 +16,7 @@ const AddProject = ({ userId }) => {
       emptyProject.title = pendingTitle
       emptyProject.members.push(userId)
       emptyProject.created_time = new Date()
-      addProject_Fs(emptyProject).then((res) => {
+      FS.projects.add(emptyProject).then((res) => {
         updateProjectInUser_Fs(userId, "add", res.id)
       })
 

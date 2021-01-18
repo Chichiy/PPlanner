@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { updateCard_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 
 const CardTitle = ({ title }) => {
   const { projectId, cardId } = useParams()
@@ -13,7 +13,7 @@ const CardTitle = ({ title }) => {
       e.target.blur()
     }
     if (e.type === "blur") {
-      updateCard_Fs(projectId, cardId, {
+      FS.cards.update(projectId, cardId, {
         title: e.target.value,
       })
       setEditing(!isEditing)

@@ -1,8 +1,8 @@
-import React, { memo, useState, useRef, useEffect } from "react"
+import { memo, useState, useRef } from "react"
 import { useParams, Route, Switch } from "react-router-dom"
 import styles from "./CardBoard.module.scss"
-import { AddCard_Fs } from "../../firebase/lib"
-import { useWindowSize, useKeyDown } from "../../utils/customHooks"
+import { FS } from "../../firebase/lib"
+import { useWindowSize } from "../../utils/customHooks"
 import FilteredCards from "./FilteredCards"
 import AddCard from "./AddCard"
 import LargeCard from "../LargeCard/LargeCard"
@@ -27,7 +27,7 @@ const CardBoard = () => {
     const shouldAddCard = pendingInfo.title || pendingInfo.description
     if (shouldAddCard) {
       if (e.target?.id === "cardBoardContainer") {
-        AddCard_Fs(projectId, pendingInfo)
+        FS.cards.add(projectId, pendingInfo)
         toggleAddCard(!addCard)
         setPendingInfo(emptyCard)
       }

@@ -1,7 +1,7 @@
 import React from "react"
 import styles from "./Popup.module.scss"
 import {
-  removeProject_Fs,
+  FS,
   updateProjectMember_Fs,
   updateProjectInUser_Fs,
 } from "../../firebase/lib"
@@ -11,7 +11,7 @@ const RemoveProject = ({ isConfirming, setConfirm }) => {
   const handleClickOnConfirm = (e) => {
     if (e.target.ariaLabel === "remove") {
       if (removeAuthority) {
-        removeProject_Fs(isConfirming).then((res) => {
+        FS.projects.remove(isConfirming).then((res) => {
           console.log(res, "fire")
         })
       } else {

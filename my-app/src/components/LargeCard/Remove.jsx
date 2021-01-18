@@ -1,7 +1,6 @@
-import React from "react"
-import { useRouteMatch, useParams, useHistory } from "react-router-dom"
+import { useParams, useHistory } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { removeCard_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import { getFloatStyle } from "../../utils/lib"
 import { useWindowSize } from "../../utils/customHooks"
 
@@ -9,12 +8,10 @@ const Remove = ({ isFloating, setFloat }) => {
   const { projectId, cardId } = useParams()
   const windowSize = useWindowSize()
   const history = useHistory()
-  const match = useRouteMatch()
 
   const handleRemove = () => {
-    removeCard_Fs(projectId, cardId)
+    FS.cards.remove(projectId, cardId)
     setFloat(false)
-    // history.replace({ pathname: match.url.slice(0, -(cardId.length + 1)) })
     history.goBack()
   }
 

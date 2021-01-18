@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams, useLocation } from "react-router-dom"
 import styles from "./ItineraryBoard.module.scss"
 import { modifyCardProperties } from "../../redux/slices/cardSlice"
-import { updateCard_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import Appointments from "./Appointments"
 import TimeTable from "./TimeTable"
 
@@ -68,7 +68,7 @@ const Schedule = () => {
         modifyCardProperties({ change: convertedChange, id: targetCardId })
       )
       //update to cloud database
-      updateCard_Fs(projectId, targetCardId, change)
+      FS.cards.update(projectId, targetCardId, change)
 
       //turn off listening
       setExpanding(false)

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { addComment_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import { getColor } from "../../utils/lib"
 
 const AddComment = ({ cardId, userId }) => {
@@ -17,7 +17,7 @@ const AddComment = ({ cardId, userId }) => {
         date: new Date(),
       }
       //update cloud data
-      addComment_Fs(input)
+      FS.comments.add(input)
       setPending("")
     }
   }

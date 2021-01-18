@@ -9,7 +9,7 @@ import Project from "./Project"
 import AddProject from "./AddProject"
 import RemoveProject from "../Popup/RemoveProject"
 
-import { listenToProjects2 } from "../../firebase/lib"
+import { listenToProjects } from "../../firebase/lib"
 import { updateProjects } from "../../redux/slices/projectsSlice"
 import { getGradient } from "../../utils/lib"
 
@@ -25,7 +25,7 @@ const Projects = () => {
 
   useEffect(() => {
     const unsubscribe = userId
-      ? listenToProjects2(userId, handleUpdate)
+      ? listenToProjects(userId, handleUpdate)
       : () => {}
 
     return () => {

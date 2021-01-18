@@ -7,14 +7,9 @@ import firebaseConfig from "./config"
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 
-//abbreviation
-var db = firebase.firestore()
-var au = firebase.auth()
-export const toDate = firebase.firestore.Timestamp.toDate
-
-////////////////////////////////////
-//          user-related          //
-////////////////////////////////////
+// Abbreviation
+const db = firebase.firestore()
+const au = firebase.auth()
 
 export const checkUserStatus = (handleUser, handleNoUser) => {
   au.onAuthStateChanged(function (user) {
@@ -105,8 +100,6 @@ export const listenToUser = (userId, updateState) => {
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
       let data = snapshot.data()
       data.id = snapshot.id
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-      // console.log(source, snapshot, data)
       updateState(data)
     })
   return unsubscribe
@@ -125,8 +118,6 @@ export const listenToMembers = (
       var docChange = snapshot.docChanges()
       var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
 
-      // console.log(source, snapshot, docChange)
-
       //local data needs to be changed
       if (docChange.length > 0) {
         snapshot.docChanges().forEach(function (change) {
@@ -147,59 +138,12 @@ export const listenToMembers = (
             handleRemove(data, source)
           }
         })
-      } else {
-        //changes have been saved
-        // console.log("data has been saved to cloud database")
       }
     })
   return unsubscribe
 }
 
-export const listenToProjects = (
-  userId,
-  handleAdd,
-  handleModify,
-  handleRemove
-) => {
-  let unsubscribe = db
-    .collection("projects")
-    .where("members", "array-contains", userId)
-    .orderBy("created_time", "desc")
-    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
-      //local data needs to be changed
-      if (docChange.length > 0) {
-        snapshot.docChanges().forEach(function (change) {
-          let type = change.type
-          let id = change.doc.id
-          let data = change.doc.data()
-
-          //add id to data
-          data.id = id
-          //conver time object to string
-          data.created_time = data.created_time.toDate().toString()
-
-          if (type === "added") {
-            handleAdd(data, source)
-          }
-          if (type === "modified") {
-            handleModify(data, source)
-          }
-          if (type === "removed") {
-            handleRemove(data, source)
-          }
-        })
-      } else {
-        //changes have been saved
-        // console.log("data has been saved to cloud database")
-      }
-    })
-  return unsubscribe
-}
-
-export const listenToProjects2 = (userId, handleUpdate) => {
+export const listenToProjects = (userId, handleUpdate) => {
   return db
     .collection("projects")
     .where("members", "array-contains", userId)
@@ -221,100 +165,7 @@ export const listenToProjects2 = (userId, handleUpdate) => {
     })
 }
 
-export const listenToDayplans = (
-  itineraryId,
-  handleAdd,
-  handleModify,
-  handleRemove
-) => {
-  let unsubscribe = db
-    .collection("dayplans")
-    .where("itinerary_id", "==", itineraryId)
-    .orderBy("date", "asc")
-    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
-      //local data needs to be changed
-      if (docChange.length > 0) {
-        snapshot.docChanges().forEach(function (change) {
-          let type = change.type
-          let id = change.doc.id
-          let data = change.doc.data()
-
-          //add id to data
-          data.id = id
-          //conver time object to string
-          data.date = data.date.toDate().toString()
-
-          if (type === "added") {
-            handleAdd(data, source)
-          }
-          if (type === "modified") {
-            handleModify(data, source)
-          }
-          if (type === "removed") {
-            handleRemove(data, source)
-          }
-        })
-      } else {
-        //changes have been saved
-        // console.log("data has been saved to cloud database")
-      }
-    })
-  return unsubscribe
-}
-
-export const listenToCard = (
-  projectId,
-  handleAdd,
-  handleModify,
-  handleRemove
-) => {
-  let unsubscribe = db
-    .collection("projects")
-    .doc(projectId)
-    .collection("cards")
-    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
-      //local data needs to be changed
-      if (docChange.length > 0) {
-        snapshot.docChanges().forEach(function (change) {
-          let type = change.type
-          let id = change.doc.id
-          let data = change.doc.data()
-
-          // console.log(source, type, id, data)
-          //add id to data
-          data.id = id
-
-          if (data.start_time) {
-            //conver time object to string
-            data.start_time = data.start_time.toDate().toString()
-            data.end_time = data.end_time.toDate().toString()
-          }
-
-          if (type === "added") {
-            handleAdd(data, source)
-          }
-          if (type === "modified") {
-            handleModify(data, source)
-          }
-          if (type === "removed") {
-            handleRemove(data, source)
-          }
-        })
-      } else {
-        //changes have been saved
-        // console.log("data has been saved to cloud database")
-      }
-    })
-  return unsubscribe
-}
-
-export const listenToCard2 = (projectId, handleUpdate) => {
+export const listenToCards = (projectId, handleUpdate) => {
   return db
     .collection("projects")
     .doc(projectId)
@@ -338,14 +189,7 @@ export const listenToCard2 = (projectId, handleUpdate) => {
     })
 }
 
-export const ListenToCardsRelatedData = (
-  field,
-  cardId,
-  // handleAdd,
-  // handleModify,
-  // handleRemove,
-  handleChange
-) => {
+export const ListenToCardsRelatedData = (field, cardId, handleChange) => {
   const unsubscribe = db
     .collection(field)
     .where("card_id", "==", cardId)
@@ -359,17 +203,6 @@ export const ListenToCardsRelatedData = (
           const data = change.doc.data()
           data.id = change.doc.id
           data.date = data.date.toDate().toString()
-
-          // if (change.type === "added") {
-          //   handleAdd(data, source)
-          // }
-          // if (change.type === "modified") {
-          //   handleModify(data, source)
-          // }
-          // if (change.type === "removed") {
-          //   handleRemove(data, source)
-          // }
-
           handleChange(change.type, data, source)
         })
       }
@@ -397,11 +230,7 @@ export const listenToComments = (
           let type = change.type
           let id = change.doc.id
           let data = change.doc.data()
-          // console.log(source, type, id, data)
-
-          //add id to data
           data.id = id
-          //conver time object to string
           data.date = data.date.toDate().toString()
 
           if (type === "added") {
@@ -414,10 +243,6 @@ export const listenToComments = (
             handleRemove(data, source)
           }
         })
-      } else {
-        //changes have been saved
-        // console.log("data has been saved to cloud database")
-        // console.log("comments")
       }
     })
   return unsubscribe
@@ -443,11 +268,7 @@ export const listenToLinks = (
           let type = change.type
           let id = change.doc.id
           let data = change.doc.data()
-          // console.log(source, type, id, data)
-
-          //add id to data
           data.id = id
-          //conver time object to string
           data.date = data.date.toDate().toString()
 
           if (type === "added") {
@@ -466,42 +287,6 @@ export const listenToLinks = (
       }
     })
   return unsubscribe
-}
-
-//////update cloud data//////
-
-//basic function
-export const update = (collection, doc, fileds) => {
-  let docRef = db.collection(collection).doc(doc)
-
-  return docRef
-    .update(fileds)
-    .then(function () {
-      console.log("Document successfully updated!")
-    })
-    .then(docRef.update({ onChange: "" }))
-    .catch(function (error) {
-      // The document probably doesn't exist.
-      console.error("Error updating document: ", error)
-    })
-}
-
-//update project title in nav bar
-
-export const addProject_Fs = (input) => {
-  let docRef = db.collection("projects")
-
-  return docRef.add(input).catch(function (error) {
-    console.error("Error adding document: ", error)
-  })
-}
-
-export const updateProject_Fs = (projectId, change) => {
-  let docRef = db.collection("projects").doc(projectId)
-
-  return docRef.update(change).catch(function (error) {
-    console.error("Error updating document: ", error)
-  })
 }
 
 export const updateProjectMember_Fs = (projectId, type, targetUserId) => {
@@ -524,166 +309,9 @@ export const updateProjectMember_Fs = (projectId, type, targetUserId) => {
   })
 }
 
-export const removeProject_Fs = (projectId) => {
-  let docRef = db.collection("projects").doc(projectId)
-
-  return docRef.delete().catch(function (error) {
-    console.error("Error deleting document: ", error)
-  })
-}
-
-//////cards related//////
-export const AddCard_Fs = (projectId, input) => {
-  let docRef = db.collection("projects").doc(projectId).collection("cards")
-
-  return docRef.add(input).catch(function (error) {
-    console.error("Error adding document: ", error)
-  })
-}
-
-export const updateCard_Fs = (projectId, cardId, change) => {
-  // expected format:
-  // let change = {
-  //   title: input,
-  // }
-
-  let docRef = db
-    .collection("projects")
-    .doc(projectId)
-    .collection("cards")
-    .doc(cardId)
-
-  return docRef.update(change).catch(function (error) {
-    console.error("Error updating document: ", error)
-  })
-}
-
-export const removeCard_Fs = (projectId, cardId) => {
-  let docRef = db
-    .collection("projects")
-    .doc(projectId)
-    .collection("cards")
-    .doc(cardId)
-
-  return docRef.delete().catch(function (error) {
-    console.error("Error deleting document: ", error)
-  })
-}
-
-export const getCommentsNumber_Fs = (cardId) => {
-  return db
-    .collection("comments")
-    .where("card_id", "==", cardId)
-    .get()
-    .then(function (querySnapshot) {
-      let temp = []
-      querySnapshot.forEach(function (doc) {
-        temp.push(doc.data())
-      })
-      return temp.length
-    })
-
-    .catch(function (error) {
-      console.log("Error getting documents: ", error)
-    })
-}
-
-export const addComment_Fs = (input) => {
-  // expected format:
-  // let input = {
-  // card_id: cardId,
-  // sender_id: userId,
-  // content: pending,
-  // date: date object,
-  // }
-
-  let docRef = db.collection("comments")
-
-  return docRef.add(input).catch(function (error) {
-    console.error("Error adding document: ", error)
-  })
-}
-
-export const updateComment_Fs = (commentId, change) => {
-  // expected format:
-  // let change = {
-  //   content: input,
-  // }
-
-  let docRef = db.collection("comments").doc(commentId)
-
-  return docRef.update(change).catch(function (error) {
-    console.error("Error updating document: ", error)
-  })
-}
-
-export const removeComment_Fs = (commentId) => {
-  let docRef = db.collection("comments").doc(commentId)
-
-  return docRef.delete().catch(function (error) {
-    console.error("Error deleting document: ", error)
-  })
-}
-
-export const getLinksNumber_Fs = (cardId) => {
-  return db
-    .collection("links")
-    .where("card_id", "==", cardId)
-    .get()
-    .then(function (querySnapshot) {
-      let temp = []
-      querySnapshot.forEach(function (doc) {
-        temp.push(doc.data())
-      })
-      return temp.length
-    })
-
-    .catch(function (error) {
-      console.log("Error getting documents: ", error)
-    })
-}
-
-export const addLink_Fs = (input) => {
-  // expected format:
-  // let input = {
-  // card_id: cardId,
-  // url: url,
-  // title: string,
-  // date: date object,
-  // }
-
-  let docRef = db.collection("links")
-
-  return docRef.add(input).catch(function (error) {
-    console.error("Error adding document: ", error)
-  })
-}
-
-export const updateLink_Fs = (linkId, change) => {
-  // expected format:
-  // let change = {
-  //   title: input,
-  // }
-
-  let docRef = db.collection("links").doc(linkId)
-
-  return docRef.update(change).catch(function (error) {
-    console.error("Error updating document: ", error)
-  })
-}
-
-export const removeLink_Fs = (linkId) => {
-  let docRef = db.collection("links").doc(linkId)
-
-  return docRef.delete().catch(function (error) {
-    console.error("Error deleting document: ", error)
-  })
-}
-
 //get info once
-
 export const getProject_Fs = (projectId) => {
-  let docRef = db.collection("projects").doc(projectId)
+  const docRef = db.collection("projects").doc(projectId)
 
   return docRef
     .get()
@@ -695,92 +323,72 @@ export const getProject_Fs = (projectId) => {
     })
 }
 
-export const addDayplan_Fs = (input) => {
-  let docRef = db.collection("dayplans")
-
-  return docRef
-    .add(input)
-    .then(function (newDayplan) {
-      newDayplan.update({
-        id: newDayplan.id,
-      })
-    })
-    .catch(function (error) {
-      console.error("Error adding document: ", error)
-    })
+const getDocRef = (method, type, docId) => {
+  if (Array.isArray(type)) {
+    if (method === "add") {
+      return db.collection(type[0]).doc(docId[0]).collection(type[1])
+    } else {
+      return db
+        .collection(type[0])
+        .doc(docId[0])
+        .collection(type[1])
+        .doc(docId[1])
+    }
+  } else {
+    if (method === "add") {
+      return db.collection(type)
+    } else {
+      return db.collection(type).doc(docId)
+    }
+  }
 }
 
-export function getFsData_Itinerary(project_id, field, operators, value) {
-  return db
-    .collection("projects")
-    .doc(project_id)
-    .collection("itineraries")
-    .orderBy("created_time", "desc") //get the latest version of itineray
-    .limit(1)
-    .get()
-    .then(function (querySnapshot) {
-      let temp
-      querySnapshot.forEach(function (doc) {
-        temp = doc.data()
+const updateData = (method, type, docId, input) => {
+  const docRef = getDocRef(method, type, docId)
+
+  switch (method) {
+    case "add": {
+      return docRef.add(input).catch(function (error) {
+        console.error("Error adding document: ", error)
       })
-      return temp
-    })
-    .then((res) => {
-      //conver time object to string
-      res.created_time = res.created_time.toDate().toString()
-      return res
-    })
-    .catch(function (error) {
-      console.log("Error getting documents: ", error)
-    })
-}
+    }
 
-//not sure what to do
-
-export const listenToData = (callback) => {
-  db.collection("test")
-    .doc("2eddU3pn48Llu7Ji60Nz")
-    .onSnapshot(function (doc) {
-      var source = doc.metadata.hasPendingWrites ? "Local" : "Server"
-      let data = doc.data()
-      callback(data)
-    })
-}
-
-export const updateCards = (projectId, cardId, changes) => {
-  let docRef = db
-    .collection("project")
-    .doc(projectId)
-    .collection("cards")
-    .doc(cardId)
-
-  return (
-    docRef
-      .update(changes)
-      .then(function () {
-        console.log("Document successfully updated!")
+    case "remove": {
+      return docRef.delete().catch(function (error) {
+        console.error("Error deleting document: ", error)
       })
-      // .then(docRef.update({ onChange: "" }))
-      .catch(function (error) {
-        // The document probably doesn't exist.
+    }
+
+    default: {
+      return docRef.update(input).catch(function (error) {
         console.error("Error updating document: ", error)
       })
-  )
+    }
+  }
 }
 
-export const updateSchedule = (dayplanId, changes) => {
-  let docRef = db.collection("dayplans").doc(dayplanId)
-
-  return (
-    docRef
-      .update({ schedule: changes })
-      .then(function () {
-        console.log("Document successfully updated!")
-      })
-      // .then(docRef.update({ onChange: "" }))
-      .catch(function (error) {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error)
-      })
-  )
+export const FS = {
+  projects: {
+    add: (input) => updateData("add", "projects", null, input),
+    update: (docId, input) => updateData("update", "projects", docId, input),
+    remove: (docId) => updateData("remove", "projects", docId),
+  },
+  cards: {
+    add: (projectId, input) =>
+      updateData("add", ["projects", "cards"], [projectId], input),
+    update: (projectId, cardId, input) =>
+      updateData("update", ["projects", "cards"], [projectId, cardId], input),
+    remove: (projectId, cardId) =>
+      updateData("remove", ["projects", "cards"], [projectId, cardId]),
+  },
+  links: {
+    add: (input) => updateData("add", "links", null, input),
+    update: (docId, input) => updateData("update", "links", docId, input),
+    remove: (docId) => updateData("remove", "links", docId),
+  },
+  comments: {
+    add: (input) => updateData("add", "comments", null, input),
+    update: (docId, input) => updateData("update", "comments", docId, input),
+    remove: (docId) => updateData("remove", "comments", docId),
+  },
 }

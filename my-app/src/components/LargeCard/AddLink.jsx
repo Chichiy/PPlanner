@@ -1,6 +1,6 @@
 import { useState } from "react"
 import styles from "./LargeCard.module.scss"
-import { addLink_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import { getFloatStyle, getLinkInfo } from "../../utils/lib"
 import { useWindowSize } from "../../utils/customHooks"
 
@@ -12,7 +12,7 @@ const AddLink = ({ isFloating, setFloat, cardId }) => {
     setFloat(false)
     const link = await getLinkInfo(url)
 
-    addLink_Fs({
+    FS.links.add({
       card_id: cardId,
       url: url,
       title: link.title,

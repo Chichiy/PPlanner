@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { updateComment_Fs, removeComment_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import { getDiffTime, getColor } from "../../utils/lib"
 
 const Comment = ({ comment, userId }) => {
@@ -25,7 +25,7 @@ const Comment = ({ comment, userId }) => {
     let change = {
       content: input,
     }
-    updateComment_Fs(comment.id, change)
+    FS.comments.update(comment.id, change)
   }
 
   const removeComment = (e) => {
@@ -33,7 +33,7 @@ const Comment = ({ comment, userId }) => {
       let yes = window.confirm("你確定要刪除這則留言嗎？")
 
       if (yes) {
-        removeComment_Fs(comment.id)
+        FS.comments.remove(comment.id)
       }
     }
   }

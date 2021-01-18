@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { updateCard_Fs, updateProject_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import { colorCode, deepCopy_JSON } from "../../utils/lib"
 
 const AddTag = ({ card, isFloating }) => {
@@ -21,7 +21,7 @@ const AddTag = ({ card, isFloating }) => {
       tags: Array.from(card.tags),
     }
     shouldAddTag ? change.tags.push(tagId) : change.tags.splice(index, 1)
-    updateCard_Fs(projectId, cardId, change)
+    FS.cards.update(projectId, cardId, change)
   }
 
   const startEdit = (tagId, tagName) => {
@@ -40,7 +40,7 @@ const AddTag = ({ card, isFloating }) => {
       change.tags.forEach((tag) => {
         if (tag.id === isEditing) tag.name = pending
       })
-      updateProject_Fs(projectId, change)
+      FS.projects.update(projectId, change)
     }
 
     setEditing(false) // close input no matter should save or not

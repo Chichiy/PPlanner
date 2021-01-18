@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { createSelector } from "@reduxjs/toolkit"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { updateProject_Fs } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import styles from "./Navbar.module.scss"
 
 const ProjectTitle = () => {
@@ -25,7 +25,7 @@ const ProjectTitle = () => {
       const change = {
         title: e.target.value,
       }
-      updateProject_Fs(projectId, change)
+      FS.projects.update(projectId, change)
       setEditing(!isEditing)
     }
   }
