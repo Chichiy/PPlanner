@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-// import { getFsData } from "../../../../firebase/Config"
+// import { getFsData } from "../../../../firebase/lib"
 
 export const dayplanSlice = createSlice({
   name: "dayplans",

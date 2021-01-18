@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useHistory } from "react-router-dom"
-import { checkUserStatus, listenToUser } from "../../firebase/Config"
+import { checkUserStatus, listenToUser } from "../../firebase/lib"
 import { initUser } from "../../redux/slices/userSlice"
 
 const CheckUser = () => {

@@ -1,7 +1,7 @@
 import React, { memo, useState, useRef, useEffect } from "react"
 import { useParams, Route, Switch } from "react-router-dom"
 import styles from "./CardBoard.module.scss"
-import { AddCard_Fs } from "../../firebase/Config"
+import { AddCard_Fs } from "../../firebase/lib"
 import { useWindowSize, useKeyDown } from "../../utils/customHooks"
 import FilteredCards from "./FilteredCards"
 import AddCard from "./AddCard"

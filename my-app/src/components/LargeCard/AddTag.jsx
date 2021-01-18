@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { updateCard_Fs, updateProject_Fs } from "../../firebase/Config"
+import { updateCard_Fs, updateProject_Fs } from "../../firebase/lib"
 import { colorCode, deepCopy_JSON } from "../../utils/lib"
 
 const AddTag = ({ card, isFloating }) => {

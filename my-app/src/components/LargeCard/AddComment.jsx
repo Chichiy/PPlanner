@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { addComment_Fs } from "../../firebase/Config"
+import { addComment_Fs } from "../../firebase/lib"
 import { getColor } from "../../utils/lib"
 
 const AddComment = ({ cardId, userId }) => {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 
 import styles from "./LargeCard.module.scss"
 
-import { updateCard_Fs } from "../../firebase/Config"
+import { updateCard_Fs } from "../../firebase/lib"
 import { nanoid } from "@reduxjs/toolkit"
 
 import { colorCode, getCategoryTitle, categories } from "../../utils/lib"

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { updateCard_Fs } from "../../firebase/Config"
+import { updateCard_Fs } from "../../firebase/lib"
 
 const CardTitle = ({ title }) => {
   const { projectId, cardId } = useParams()

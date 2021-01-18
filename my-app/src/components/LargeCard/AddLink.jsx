@@ -1,6 +1,6 @@
 import { useState } from "react"
 import styles from "./LargeCard.module.scss"
-import { addLink_Fs } from "../../firebase/Config"
+import { addLink_Fs } from "../../firebase/lib"
 import { getFloatStyle, getLinkInfo } from "../../utils/lib"
 import { useWindowSize } from "../../utils/customHooks"
 

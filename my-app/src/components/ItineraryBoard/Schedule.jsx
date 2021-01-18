@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams, useLocation } from "react-router-dom"
 import styles from "./ItineraryBoard.module.scss"
 import { modifyCardProperties } from "../../redux/slices/cardSlice"
-import { updateCard_Fs } from "../../firebase/Config"
+import { updateCard_Fs } from "../../firebase/lib"
 import Appointments from "./Appointments"
 import TimeTable from "./TimeTable"
 

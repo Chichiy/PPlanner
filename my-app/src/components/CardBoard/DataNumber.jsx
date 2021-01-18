@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import styles from "./CardBoard.module.scss"
-import { ListenToCardsRelatedData } from "../../firebase/Config"
+import { ListenToCardsRelatedData } from "../../firebase/lib"
 
 const DataNumber = ({ cardId, dataType }) => {
   const [counts, setCounts] = useState(0)

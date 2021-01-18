@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { updateComment_Fs, removeComment_Fs } from "../../firebase/Config"
+import { updateComment_Fs, removeComment_Fs } from "../../firebase/lib"
 import { getDiffTime, getColor } from "../../utils/lib"
 
 const Comment = ({ comment, userId }) => {

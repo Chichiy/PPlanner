@@ -31,7 +31,7 @@ const DaySelect = () => {
   }
 
   useEffect(() => {
-    const findfirstDate = (cards) => {
+    const findFirstDate = (cards) => {
       const startTimes = cards.map((card) =>
         new Date(card.start_time).getTime()
       )
@@ -39,16 +39,16 @@ const DaySelect = () => {
     }
 
     if (newStartDate.current !== startDate) {
-      //firstly, display with choosen date
+      //firstly, display with chosen date
       if (location.state?.startDate) {
         newStartDate.current = location.state.startDate
         setStartDate(location.state.startDate)
       } else if (
         //if not, display date with first planned card
         plannedCards &&
-        newStartDate.current !== findfirstDate(plannedCards)
+        newStartDate.current !== findFirstDate(plannedCards)
       ) {
-        const firstDate = findfirstDate(plannedCards)
+        const firstDate = findFirstDate(plannedCards)
         newStartDate.current = firstDate
         handleDateChange(firstDate)
       }

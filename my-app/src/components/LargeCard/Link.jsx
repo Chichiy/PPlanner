@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 
 import styles from "./LargeCard.module.scss"
 
-import { updateLink_Fs, removeLink_Fs } from "../../firebase/Config"
+import { updateLink_Fs, removeLink_Fs } from "../../firebase/lib"
 
 import { getDiffTime } from "../../utils/lib"
 

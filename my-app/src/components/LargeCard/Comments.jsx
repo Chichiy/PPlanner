@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { listenToComments } from "../../firebase/Config"
+import { listenToComments } from "../../firebase/lib"
 import { nanoid } from "@reduxjs/toolkit"
 import AddComment from "./AddComment"
 import Comment from "./Comment"

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { createSelector } from "@reduxjs/toolkit"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { updateProject_Fs } from "../../firebase/Config"
+import { updateProject_Fs } from "../../firebase/lib"
 import styles from "./Navbar.module.scss"
 
 const ProjectTitle = () => {

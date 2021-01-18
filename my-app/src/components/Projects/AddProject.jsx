@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import styles from "./Projects.module.scss"
-import { addProject_Fs, updateProjectInUser_Fs } from "../../firebase/Config"
+import { addProject_Fs, updateProjectInUser_Fs } from "../../firebase/lib"
 import { emptyProject } from "../../utils/lib"
 
 const AddProject = ({ userId }) => {

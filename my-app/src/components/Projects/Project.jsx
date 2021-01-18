@@ -16,7 +16,7 @@ import {
   listenToCard,
   listenToCard2,
   listenToMembers,
-} from "../../firebase/Config"
+} from "../../firebase/lib"
 
 import {
   addCard,

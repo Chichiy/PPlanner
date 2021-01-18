@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 import styles from "./Popup.module.scss"
 
-import { signUp_Native } from "../../firebase/Config"
+import { signUp_Native } from "../../firebase/lib"
 
 const SignUp = ({ closePopUp, setShowing }) => {
   const [name, setName] = useState("")

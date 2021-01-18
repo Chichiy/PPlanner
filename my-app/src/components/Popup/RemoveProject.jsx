@@ -4,7 +4,7 @@ import {
   removeProject_Fs,
   updateProjectMember_Fs,
   updateProjectInUser_Fs,
-} from "../../firebase/Config"
+} from "../../firebase/lib"
 import { useSelector } from "react-redux"
 
 const RemoveProject = ({ isConfirming, setConfirm }) => {

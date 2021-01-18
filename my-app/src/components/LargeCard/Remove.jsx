@@ -1,7 +1,7 @@
 import React from "react"
 import { useRouteMatch, useParams, useHistory } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { removeCard_Fs } from "../../firebase/Config"
+import { removeCard_Fs } from "../../firebase/lib"
 import { getFloatStyle } from "../../utils/lib"
 import { useWindowSize } from "../../utils/customHooks"
 

@@ -9,7 +9,7 @@ import Project from "./Project"
 import AddProject from "./AddProject"
 import RemoveProject from "../Popup/RemoveProject"
 
-import { listenToProjects2 } from "../../firebase/Config"
+import { listenToProjects2 } from "../../firebase/lib"
 import { updateProjects } from "../../redux/slices/projectsSlice"
 import { getGradient } from "../../utils/lib"
 

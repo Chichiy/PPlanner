@@ -9,7 +9,7 @@ import {
   getProject_Fs,
   updateProjectMember_Fs,
   updateProjectInUser_Fs,
-} from "../../firebase/Config"
+} from "../../firebase/lib"
 
 export const JoinProject = () => {
   const { projectId } = useParams()

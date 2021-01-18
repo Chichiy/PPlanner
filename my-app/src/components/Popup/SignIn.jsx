@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import styles from "./Popup.module.scss"
-import { signIn_Native } from "../../firebase/Config"
+import { signIn_Native } from "../../firebase/lib"
 
 const SignIn = ({ closePopUp, setShowing }) => {
   const [email, setEmail] = useState("")

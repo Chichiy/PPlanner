@@ -12,7 +12,7 @@ import styles from "./ItineraryBoard.module.scss"
 
 //functions
 import { OnDragEnd } from "../../utils/itineraryBoardLib"
-import { updateCard_Fs } from "../../firebase/Config"
+import { updateCard_Fs } from "../../firebase/lib"
 import {
   modifyCardProperties,
   updateCardsOrder,

@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { useHistory, useParams } from "react-router-dom"
-import { signOut } from "../../firebase/Config"
+import { signOut } from "../../firebase/lib"
 import { getColor, getInvitationUrl, copyToClipboard } from "../../utils/lib"
 import styles from "./Navbar.module.scss"
 
