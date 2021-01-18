@@ -42,7 +42,7 @@ const Description = ({ description, handleUpdateDescription }) => {
 
   return (
     <div className={styles.description_section}>
-      <div className={styles.controll_bar}>
+      <div className={styles.control_bar}>
         <div className={styles.title}>描述</div>
 
         {/* edit/save btn */}

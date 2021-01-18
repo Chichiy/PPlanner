@@ -12,12 +12,10 @@ const db = firebase.firestore()
 const au = firebase.auth()
 
 export const checkUserStatus = (handleUser, handleNoUser) => {
-  au.onAuthStateChanged(function (user) {
+  au.onAuthStateChanged((user) => {
     if (user) {
-      // User is signed in.
       handleUser(user)
     } else {
-      // No user is signed in.
       handleNoUser()
     }
   })
@@ -26,10 +24,10 @@ export const checkUserStatus = (handleUser, handleNoUser) => {
 export const signUp_Native = (input, handleSuccess) => {
   au.createUserWithEmailAndPassword(input.email, input.password)
     .then((result) => {
-      let user = result.user
-      let docRef = db.collection("users").doc(user.uid)
+      const user = result.user
+      const docRef = db.collection("users").doc(user.uid)
 
-      let update = {
+      const update = {
         name: input.name,
         email: user.email,
         picture: user.photoURL,
@@ -42,10 +40,7 @@ export const signUp_Native = (input, handleSuccess) => {
       handleSuccess()
     })
     .catch((error) => {
-      var errorCode = error.code
-      var errorMessage = error.message
-      alert(errorMessage)
-      // ..
+      alert(error.message)
     })
 }
 
@@ -53,46 +48,24 @@ export const signIn_Native = (input, handleSuccess) => {
   return au
     .signInWithEmailAndPassword(input.email, input.password)
     .then((user) => {
-      // Signed in
-      // ...
       handleSuccess()
     })
     .catch((error) => {
-      var errorCode = error.code
-      var errorMessage = error.message
-      alert(errorMessage)
+      alert(error.message)
     })
 }
 
 export const signOut = (redirect) => {
   return au
     .signOut()
-    .then(function () {
-      // Sign-out successful.
+    .then(() => {
       redirect()
     })
-    .catch(function (error) {
-      // An error happened.
+    .catch((error) => {
+      alert(error.message)
     })
 }
 
-export const updateProjectInUser_Fs = (userId, type, projectId) => {
-  const docRef = db.collection("users").doc(userId)
-  const change = {}
-
-  if (type === "add") {
-    change.projects = firebase.firestore.FieldValue.arrayUnion(projectId)
-  }
-  if (type === "remove") {
-    change.projects = firebase.firestore.FieldValue.arrayRemove(projectId)
-  }
-
-  return docRef.update(change).catch(function (error) {
-    console.error("Error updating document: ", error)
-  })
-}
-
-//////listening to cloud data///////
 export const listenToUser = (userId, updateState) => {
   let unsubscribe = db
     .collection("users")
@@ -210,83 +183,20 @@ export const ListenToCardsRelatedData = (field, cardId, handleChange) => {
   return unsubscribe
 }
 
-export const listenToComments = (
-  cardId,
-  handleAdd,
-  handleModify,
-  handleRemove
-) => {
-  let unsubscribe = db
-    .collection("comments")
-    .where("card_id", "==", cardId)
-    .orderBy("date", "asc")
-    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
+export const updateProjectInUser_Fs = (userId, type, projectId) => {
+  const docRef = db.collection("users").doc(userId)
+  const change = {}
 
-      //local data needs to be changed
-      if (docChange.length > 0) {
-        snapshot.docChanges().forEach(function (change) {
-          let type = change.type
-          let id = change.doc.id
-          let data = change.doc.data()
-          data.id = id
-          data.date = data.date.toDate().toString()
+  if (type === "add") {
+    change.projects = firebase.firestore.FieldValue.arrayUnion(projectId)
+  }
+  if (type === "remove") {
+    change.projects = firebase.firestore.FieldValue.arrayRemove(projectId)
+  }
 
-          if (type === "added") {
-            handleAdd(data, source)
-          }
-          if (type === "modified") {
-            handleModify(data, source)
-          }
-          if (type === "removed") {
-            handleRemove(data, source)
-          }
-        })
-      }
-    })
-  return unsubscribe
-}
-
-export const listenToLinks = (
-  cardId,
-  handleAdd,
-  handleModify,
-  handleRemove
-) => {
-  let unsubscribe = db
-    .collection("links")
-    .where("card_id", "==", cardId)
-    .orderBy("date", "asc")
-    .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
-      //local data needs to be changed
-      if (docChange.length > 0) {
-        snapshot.docChanges().forEach(function (change) {
-          let type = change.type
-          let id = change.doc.id
-          let data = change.doc.data()
-          data.id = id
-          data.date = data.date.toDate().toString()
-
-          if (type === "added") {
-            handleAdd(data, source)
-          }
-          if (type === "modified") {
-            handleModify(data, source)
-          }
-          if (type === "removed") {
-            handleRemove(data, source)
-          }
-        })
-      } else {
-        //changes have been saved
-        // console.log("data has been saved to cloud database")
-      }
-    })
-  return unsubscribe
+  return docRef.update(change).catch(function (error) {
+    console.error("Error updating document: ", error)
+  })
 }
 
 export const updateProjectMember_Fs = (projectId, type, targetUserId) => {

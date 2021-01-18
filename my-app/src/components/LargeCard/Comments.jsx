@@ -1,54 +1,54 @@
 import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { listenToComments } from "../../firebase/lib"
-import { nanoid } from "@reduxjs/toolkit"
+import { ListenToCardsRelatedData } from "../../firebase/lib"
 import AddComment from "./AddComment"
 import Comment from "./Comment"
 
-//////Comments//////
-
-const Comments = ({ cardId, projectId }) => {
+const Comments = () => {
+  const { cardId } = useParams()
   const userId = useSelector((state) => state.user.id)
   const [comments, setComments] = useState([])
-  //get data from cloud
-  useEffect(() => {
-    let unsubscribe = listenToComments(
-      cardId,
-      handleAdd,
-      handleModify,
-      handleRemove
-    )
 
+  useEffect(() => {
+    const unsubscribe = ListenToCardsRelatedData(
+      "comments",
+      cardId,
+      handleChange
+    )
     return unsubscribe
   }, [])
 
-  const handleAdd = (res, source) => {
-    //prevent repeatly adding when itinitallizing
-    if (comments.findIndex((comment) => comment.id === res.id) < 0) {
-      setComments((prev) => [...prev, res])
+  const handleChange = (type, res) => {
+    switch (type) {
+      case "added": {
+        //prevent repeatedly addition when initializing
+        if (comments.findIndex((comment) => comment.id === res.id) < 0) {
+          setComments((prev) => [...prev, res])
+        }
+        break
+      }
+      case "removed": {
+        setComments((prev) => prev.filter((comment) => comment.id !== res.id))
+        break
+      }
+      default: {
+        setComments((prev) =>
+          prev.map((comment) => {
+            return comment.id === res.id ? res : comment
+          })
+        )
+      }
     }
-  }
-
-  const handleModify = (res) => {
-    setComments((prev) =>
-      prev.map((comment) => {
-        return comment.id === res.id ? res : comment
-      })
-    )
-  }
-
-  const handleRemove = (res, source) => {
-    setComments((prev) => prev.filter((comment) => comment.id !== res.id))
   }
 
   return (
     <div className={styles.comments_section}>
-      <div className={styles.controll_bar}>
+      <div className={styles.control_bar}>
         <div className={styles.title}>留言</div>
       </div>
       <div className={styles.container}>
-        {/* comment */}
         <AddComment cardId={cardId} userId={userId} />
         {comments.map((comment) => {
           return <Comment key={comment.id} comment={comment} userId={userId} />

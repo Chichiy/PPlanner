@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState, memo } from "react"
 import styles from "./CardBoard.module.scss"
 import { ListenToCardsRelatedData } from "../../firebase/lib"
 
 const DataNumber = ({ cardId, dataType }) => {
   const [counts, setCounts] = useState(0)
-  const CountDataNumber = (changeType) => {
-    if (changeType === "added") {
+  const countDataNumber = (type) => {
+    if (type === "added") {
       setCounts((counts) => counts + 1)
     }
-    if (changeType === "removed") {
+    if (type === "removed") {
       setCounts((counts) => counts - 1)
     }
   }
@@ -17,7 +17,7 @@ const DataNumber = ({ cardId, dataType }) => {
     const unsubscribe = ListenToCardsRelatedData(
       dataType,
       cardId,
-      CountDataNumber
+      countDataNumber
     )
     return unsubscribe
   }, [dataType, cardId])
@@ -27,6 +27,6 @@ const DataNumber = ({ cardId, dataType }) => {
   ) : null
 }
 
-const MemorizeDataNumber = React.memo(DataNumber)
+const MemorizeDataNumber = memo(DataNumber)
 
 export default MemorizeDataNumber

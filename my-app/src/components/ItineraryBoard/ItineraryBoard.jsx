@@ -1,17 +1,9 @@
-//tools
-import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Switch, Route, useParams } from "react-router-dom"
 import { DragDropContext } from "react-beautiful-dnd"
-
-//components and scss
-
 import Sidebar from "./Sidebar"
 import Schedule from "./Schedule"
 import styles from "./ItineraryBoard.module.scss"
-
-//functions
-import { OnDragEnd } from "../../utils/itineraryBoardLib"
 import { FS } from "../../firebase/lib"
 import {
   modifyCardProperties,

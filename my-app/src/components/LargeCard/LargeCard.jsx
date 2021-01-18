@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 import { useSelector } from "react-redux"
 import { useParams, useHistory } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
-import { FS, listenToLinks } from "../../firebase/lib"
+import { FS } from "../../firebase/lib"
 import Tags from "./Tags"
 import RedirectButton from "./RedirectButton"
 import FloatMenu from "./FloatMenu"
@@ -74,37 +74,6 @@ const LargeCard = () => {
     }
   }
 
-  //links
-  const [links, setLinks] = useState([])
-  useEffect(() => {
-    const unsubscribe = listenToLinks(
-      cardId,
-      handleAddLink,
-      handleModifyLink,
-      handleRemoveLink
-    )
-
-    return unsubscribe
-  }, [])
-
-  const handleAddLink = (res) => {
-    if (links.findIndex((link) => link.id === res.id) < 0) {
-      setLinks((prev) => [...prev, res])
-    }
-  }
-
-  const handleModifyLink = (res) => {
-    setLinks((prev) =>
-      prev.map((link) => {
-        return link.id === res.id ? res : link
-      })
-    )
-  }
-
-  const handleRemoveLink = (res, source) => {
-    setLinks((prev) => prev.filter((link) => link.id !== res.id))
-  }
-
   try {
     return (
       <div
@@ -122,29 +91,18 @@ const LargeCard = () => {
 
           {/* main */}
           <div className={styles.card_main}>
-            {/* tag section */}
             <Tags
               card={card}
               projectId={projectId}
               isFloating={isFloating}
               setFloat={setFloat}
             />
-
-            {/* description section */}
             <Description
               description={card.description}
               handleUpdateDescription={updateDescription}
             />
-            {links.length > 0 && (
-              <Links
-                links={links}
-                isFloating={isFloating}
-                setFloat={setFloat}
-              />
-            )}
-
-            {/* comments section */}
-            <Comments cardId={cardId} projectId={projectId} />
+            <Links isFloating={isFloating} setFloat={setFloat} />
+            <Comments />
           </div>
 
           {/* side bar */}
