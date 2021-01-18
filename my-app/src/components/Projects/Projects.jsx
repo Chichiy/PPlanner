@@ -11,7 +11,7 @@ import RemoveProject from "../Popup/RemoveProject"
 
 import { listenToProjects2 } from "../../firebase/Config"
 import { updateProjects } from "../../redux/slices/projectsSlice"
-import { getGradiet } from "../../utils/lib"
+import { getGradient } from "../../utils/lib"
 
 const Projects = () => {
   const dispatch = useDispatch()
@@ -57,7 +57,7 @@ const Projects = () => {
               return (
                 <div
                   key={project.id}
-                  style={getGradiet(project.id)}
+                  style={getGradient(project.id)}
                   className={styles.project}
                   onClick={(e) => handleToProject(e, project.id)}
                 >

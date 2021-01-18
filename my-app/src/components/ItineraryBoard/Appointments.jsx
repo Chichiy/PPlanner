@@ -8,6 +8,7 @@ import { colorCode } from "../../utils/lib"
 import { responsiveTime } from "../../utils/itineraryBoardLib"
 import IsDraggingUser from "./IsDraggingUser"
 import { useWindowSize } from "../../utils/customHooks"
+import AppointmentTime from "./AppointmentTime"
 
 const Appointments = React.memo(
   ({
@@ -133,7 +134,12 @@ const Appointments = React.memo(
                           >
                             {card.title}
                           </div>
-                          {responsiveTime(card, snapshot, isExpanding)}
+                          {responsiveTime(
+                            AppointmentTime,
+                            card,
+                            snapshot,
+                            isExpanding
+                          )}
 
                           <div
                             aria-label="upper"

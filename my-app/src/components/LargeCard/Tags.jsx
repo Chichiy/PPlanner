@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
-import { colorCode, categoryTitle } from "../../utils/lib"
+import { colorCode, getCategoryTitle } from "../../utils/lib"
 
 const Tags = ({ projectId, card, setFloat }) => {
   const project = useSelector((state) =>
@@ -37,7 +37,7 @@ const Tags = ({ projectId, card, setFloat }) => {
             style={{ backgroundColor: colorCode[card.category] }}
             onClick={toggleChangeMainTag}
           >
-            {categoryTitle(card.category)}
+            {getCategoryTitle(card.category)}
           </div>
 
           {/* regular tags */}

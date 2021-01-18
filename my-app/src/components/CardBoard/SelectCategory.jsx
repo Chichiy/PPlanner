@@ -1,10 +1,8 @@
 import React from "react"
 import styles from "./CardBoard.module.scss"
-import { colorCode, categoryTitle } from "../../utils/lib"
+import { categories, colorCode, getCategoryTitle } from "../../utils/lib"
 
 const SelectCategory = ({ selected, handleSelectCategory }) => {
-  const categories = ["hotel", "activity", "site", "food", "commute", "default"]
-
   return (
     <div className={styles.selectCategory}>
       {categories.map((category, index) => {
@@ -22,7 +20,7 @@ const SelectCategory = ({ selected, handleSelectCategory }) => {
             }
             onClick={handleSelectCategory}
           >
-            {categoryTitle(category)}
+            {getCategoryTitle(category)}
           </option>
         )
       })}

@@ -19,7 +19,6 @@ export const useWindowSize = () => {
     //initial window size
     handleResize()
 
-    //detach listener
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
@@ -37,7 +36,6 @@ export const useKeyDown = (callback) => {
 
     window.addEventListener("keydown", handleKeyDown)
 
-    //detach listener
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
 

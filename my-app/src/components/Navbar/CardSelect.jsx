@@ -12,8 +12,8 @@ import makeAnimated from "react-select/animated"
 
 import {
   categories,
-  categoryTitle,
-  tagsTitle,
+  getCategoryTitle,
+  getTagTitle,
   reactSelectsCustomStyles,
 } from "../../utils/lib"
 
@@ -47,7 +47,7 @@ const CardSelect = () => {
 
   const options = categories.map((category) => ({
     value: category,
-    label: categoryTitle(category),
+    label: getCategoryTitle(category),
   }))
 
   if (cardsTags.length > 0 && projectTags.length > 0) {
@@ -56,7 +56,7 @@ const CardSelect = () => {
 
       options.push({
         value: tag,
-        label: curr.name === "" ? tagsTitle(curr.color) : curr.name,
+        label: curr.name === "" ? getTagTitle(curr.color) : curr.name,
       })
     })
   }

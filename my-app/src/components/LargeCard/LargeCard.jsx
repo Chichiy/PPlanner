@@ -32,7 +32,7 @@ const LargeCard = () => {
     let triggerElementId = ["closeBtn", "largeCardBackground"]
 
     // close floating menu if onblur
-    if (isfloating && e.target.ariaLabel !== isfloating.type) {
+    if (isFloating && e.target.ariaLabel !== isFloating.type) {
       //prevent close on react-datepicker
       if (
         e.target.className.slice(0, 5) === "react" ||
@@ -57,13 +57,13 @@ const LargeCard = () => {
   }
 
   //float menu
-  const [isfloating, setFloat] = useState(false)
+  const [isFloating, setFloat] = useState(false)
   const sideBar_addLink = useRef(null)
   const sideBar_addTime = useRef(null)
   const sideBar_remove = useRef(null)
 
   const handleFloatMenu = (type, ref) => {
-    if (!isfloating) {
+    if (!isFloating) {
       const float = {
         type: type,
         position: ref.current.getBoundingClientRect(),
@@ -126,7 +126,7 @@ const LargeCard = () => {
             <Tags
               card={card}
               projectId={projectId}
-              isfloating={isfloating}
+              isFloating={isFloating}
               setFloat={setFloat}
             />
 
@@ -138,7 +138,7 @@ const LargeCard = () => {
             {links.length > 0 && (
               <Links
                 links={links}
-                isfloating={isfloating}
+                isFloating={isFloating}
                 setFloat={setFloat}
               />
             )}
@@ -190,7 +190,7 @@ const LargeCard = () => {
           <FloatMenu
             card={card}
             cardId={cardId}
-            isfloating={isfloating}
+            isFloating={isFloating}
             setFloat={setFloat}
           />
         </div>

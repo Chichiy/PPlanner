@@ -2,11 +2,11 @@ import React, { useRef } from "react"
 import styles from "./LargeCard.module.scss"
 import Link from "./Link"
 
-const Links = ({ links, isfloating, setFloat }) => {
+const Links = ({ links, isFloating, setFloat }) => {
   const toggleAddLinkBtnRef = useRef(1)
 
   const toggleAddLinkBtn = (e) => {
-    if (isfloating.type === "addLink") {
+    if (isFloating.type === "addLink") {
       setFloat(false)
     } else {
       let float = {

@@ -3,9 +3,9 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import styles from "./LargeCard.module.scss"
 import { updateCard_Fs, updateProject_Fs } from "../../firebase/Config"
-import { colorCode, deepCopy } from "../../utils/lib"
+import { colorCode, deepCopy_JSON } from "../../utils/lib"
 
-const AddTag = ({ card, isfloating }) => {
+const AddTag = ({ card, isFloating }) => {
   const { projectId, cardId } = useParams()
   const tags = useSelector(
     (state) => state.projects.find((project) => project.id === projectId).tags
@@ -35,7 +35,7 @@ const AddTag = ({ card, isfloating }) => {
 
     if (shouldSave) {
       const change = {
-        tags: deepCopy(tags),
+        tags: deepCopy_JSON(tags),
       }
       change.tags.forEach((tag) => {
         if (tag.id === isEditing) tag.name = pending
@@ -60,8 +60,8 @@ const AddTag = ({ card, isfloating }) => {
   return (
     <div
       style={{
-        top: `${isfloating.position.y + 32}px`,
-        left: `${isfloating.position.x}px`,
+        top: `${isFloating.position.y + 32}px`,
+        left: `${isFloating.position.x}px`,
       }}
       className={styles.addTag_container}
       aria-label="addTag"

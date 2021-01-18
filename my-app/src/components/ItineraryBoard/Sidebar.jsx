@@ -7,6 +7,7 @@ import { colorCode, categories } from "../../utils/lib"
 import { responsiveTime } from "../../utils/itineraryBoardLib"
 import PendingCardsFilter from "./PendingCardsFilter"
 import { useWindowSize } from "../../utils/customHooks"
+import AppointmentTime from "./AppointmentTime"
 
 const Sidebar = () => {
   const windowSize = useWindowSize()
@@ -113,7 +114,9 @@ const Sidebar = () => {
                           >
                             {card.title}
                           </div>
-                          {isOutside ? responsiveTime(card, snapshot) : null}
+                          {isOutside
+                            ? responsiveTime(AppointmentTime, card, snapshot)
+                            : null}
                         </div>
                       )
                     }}

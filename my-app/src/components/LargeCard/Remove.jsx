@@ -5,7 +5,7 @@ import { removeCard_Fs } from "../../firebase/Config"
 import { getFloatStyle } from "../../utils/lib"
 import { useWindowSize } from "../../utils/customHooks"
 
-const Remove = ({ isfloating, setFloat }) => {
+const Remove = ({ isFloating, setFloat }) => {
   const { projectId, cardId } = useParams()
   const windowSize = useWindowSize()
   const history = useHistory()
@@ -22,7 +22,7 @@ const Remove = ({ isfloating, setFloat }) => {
     <div
       aria-label="remove"
       className={styles.remove_container}
-      style={getFloatStyle(isfloating, windowSize)}
+      style={getFloatStyle(isFloating, windowSize)}
     >
       <div aria-label="remove" className={styles.remove_span}>
         此動作將無法復原，確定要將這張卡片刪除嗎？

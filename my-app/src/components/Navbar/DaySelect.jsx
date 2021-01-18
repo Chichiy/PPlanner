@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import "./react-datepicker-customstyle.scss"
 import styles from "./Navbar.module.scss"
 
-import { resetTime, hasPlan } from "../../utils/lib"
+import { getPureDate, hasPlan } from "../../utils/lib"
 
 const DaySelect = () => {
   const history = useHistory()
@@ -18,7 +18,7 @@ const DaySelect = () => {
     (cards) => cards.filter((card) => card.status === 1)
   )
   const plannedCards = useSelector(selectPlannedCards)
-  const [startDate, setStartDate] = useState(resetTime(new Date()))
+  const [startDate, setStartDate] = useState(getPureDate(new Date()))
   const newStartDate = useRef(null)
 
   const handleDateChange = (date) => {
@@ -35,7 +35,7 @@ const DaySelect = () => {
       const startTimes = cards.map((card) =>
         new Date(card.start_time).getTime()
       )
-      return resetTime(new Date(Math.min(...startTimes)))
+      return getPureDate(new Date(Math.min(...startTimes)))
     }
 
     if (newStartDate.current !== startDate) {

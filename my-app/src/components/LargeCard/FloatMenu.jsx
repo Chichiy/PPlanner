@@ -5,31 +5,31 @@ import AddTime from "./AddTime"
 import AddTag from "./AddTag"
 import ChangeMainTag from "./ChangeMainTag"
 
-const FloatMenu = ({ card, cardId, isfloating, setFloat }) => {
-  switch (isfloating.type) {
+const FloatMenu = ({ card, cardId, isFloating, setFloat }) => {
+  switch (isFloating.type) {
     case "addLink": {
       return (
-        <AddLink isfloating={isfloating} setFloat={setFloat} cardId={cardId} />
+        <AddLink isFloating={isFloating} setFloat={setFloat} cardId={cardId} />
       )
     }
     case "addTime": {
-      return <AddTime card={card} isfloating={isfloating} setFloat={setFloat} />
+      return <AddTime card={card} isFloating={isFloating} setFloat={setFloat} />
     }
     case "addTag": {
-      return <AddTag card={card} isfloating={isfloating} setFloat={setFloat} />
+      return <AddTag card={card} isFloating={isFloating} setFloat={setFloat} />
     }
 
     case "changeMainTag": {
       return (
         <ChangeMainTag
           card={card}
-          isfloating={isfloating}
+          isFloating={isFloating}
           setFloat={setFloat}
         />
       )
     }
     case "remove": {
-      return <Remove isfloating={isfloating} setFloat={setFloat} />
+      return <Remove isFloating={isFloating} setFloat={setFloat} />
     }
     default: {
       return null

@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./LargeCard.module.scss"
 import { updateComment_Fs, removeComment_Fs } from "../../firebase/Config"
-import { getTime, getColor } from "../../utils/lib"
+import { getDiffTime, getColor } from "../../utils/lib"
 
 const Comment = ({ comment, userId }) => {
   const isMyComment = userId === comment.sender_id
@@ -54,7 +54,7 @@ const Comment = ({ comment, userId }) => {
         <div className={styles.details}>
           <div className={styles.info}>
             <div className={styles.name}>{sender.name}</div>
-            <div className={styles.time}>{getTime(comment.date)}</div>
+            <div className={styles.time}>{getDiffTime(comment.date)}</div>
           </div>
 
           {isEditing ? (

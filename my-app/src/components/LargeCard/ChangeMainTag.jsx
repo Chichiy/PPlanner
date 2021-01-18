@@ -6,9 +6,9 @@ import styles from "./LargeCard.module.scss"
 import { updateCard_Fs } from "../../firebase/Config"
 import { nanoid } from "@reduxjs/toolkit"
 
-import { colorCode, categoryTitle, categories } from "../../utils/lib"
+import { colorCode, getCategoryTitle, categories } from "../../utils/lib"
 
-const ChangeMainTag = ({ card, isfloating, setFloat }) => {
+const ChangeMainTag = ({ card, isFloating, setFloat }) => {
   const { projectId, cardId } = useParams()
 
   const handleChangeMainTag = (e) => {
@@ -22,8 +22,8 @@ const ChangeMainTag = ({ card, isfloating, setFloat }) => {
   return (
     <div
       style={{
-        top: `${isfloating.position.y + 32}px`,
-        left: `${isfloating.position.x}px`,
+        top: `${isFloating.position.y + 32}px`,
+        left: `${isFloating.position.x}px`,
       }}
       className={styles.addTag_container}
       aria-label="changeMainTag"
@@ -45,7 +45,7 @@ const ChangeMainTag = ({ card, isfloating, setFloat }) => {
               style={{ backgroundColor: colorCode[category] }}
               onClick={handleChangeMainTag}
             >
-              {categoryTitle(category)}
+              {getCategoryTitle(category)}
             </div>
           </div>
         )

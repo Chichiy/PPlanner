@@ -5,17 +5,17 @@ import styles from "./LargeCard.module.scss"
 
 import { updateCard_Fs } from "../../firebase/Config"
 
-import { resetTime, getFloatStyle } from "../../utils/lib"
+import { getPureDate, getFloatStyle } from "../../utils/lib"
 import DaySelect from "./DaySelect"
 import { useWindowSize } from "../../utils/customHooks"
 
-const AddTime = ({ card, isfloating, setFloat }) => {
+const AddTime = ({ card, isFloating, setFloat }) => {
   const { projectId, cardId } = useParams()
   const windowSize = useWindowSize()
 
   //input time holder
-  const [startDate, setStartDate] = useState(resetTime(new Date()))
-  const [endDate, setEndDate] = useState(resetTime(new Date()))
+  const [startDate, setStartDate] = useState(getPureDate(new Date()))
+  const [endDate, setEndDate] = useState(getPureDate(new Date()))
 
   useEffect(() => {
     //update time to the latest value
@@ -51,7 +51,7 @@ const AddTime = ({ card, isfloating, setFloat }) => {
     <div
       aria-label="addTime"
       className={styles.addTime_container}
-      style={getFloatStyle(isfloating, windowSize)}
+      style={getFloatStyle(isFloating, windowSize)}
     >
       <div aria-label="addTime" className={styles.addLink_span}>
         開始時間

@@ -4,7 +4,7 @@ import styles from "./LargeCard.module.scss"
 
 import { updateLink_Fs, removeLink_Fs } from "../../firebase/Config"
 
-import { getTime } from "../../utils/lib"
+import { getDiffTime } from "../../utils/lib"
 
 const Link = ({ data }) => {
   const title = useRef(0)
@@ -90,7 +90,7 @@ const Link = ({ data }) => {
         )}
 
         <div className={styles.tools}>
-          <div className={styles.time}>{getTime(data.date)}</div>
+          <div className={styles.time}>{getDiffTime(data.date)}</div>
           <div
             aria-label="removeBtn"
             className={styles.edit_button}

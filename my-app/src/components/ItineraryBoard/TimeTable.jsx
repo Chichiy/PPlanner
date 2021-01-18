@@ -2,7 +2,7 @@ import React from "react"
 import { Droppable } from "react-beautiful-dnd"
 import styles from "./ItineraryBoard.module.scss"
 import DayJS from "react-dayjs"
-import { getDateHeader, resetTime } from "../../utils/lib"
+import { getDateHeader, getPureDate } from "../../utils/lib"
 
 const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
   const datesHeader = () => {
@@ -22,7 +22,7 @@ const TimeTable = ({ startDate, cards, handleExpandEnd, handlePosition }) => {
             </div>
             <div
               className={
-                date.getTime() === resetTime(new Date()).getTime()
+                date.getTime() === getPureDate(new Date()).getTime()
                   ? `${styles.datesHeader_date} ${styles.datesHeader_date__today}`
                   : styles.datesHeader_date
               }

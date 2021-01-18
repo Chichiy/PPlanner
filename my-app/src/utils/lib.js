@@ -1,24 +1,18 @@
 import { nanoid } from "@reduxjs/toolkit"
 
-//
-//
-//     COLOR
-//
-//
-
-//////get user color//////
-export const getColor = (id) => {
-  const code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
-  return `hsl(${code},95%, 70%)`
+const toHSLColorCode = (id) => {
+  return Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
 }
 
-export const getGradiet = (id) => {
-  const code = Math.floor(id.charCodeAt(0) * 4.86 - 233.28)
-  const nextCode = (code, i) =>
-    code - 40 * i < 0 ? code - 40 * i + 360 : code - 40 * i
-  const colorCode = `hsl(${code},90%, 55%)`
-  const colorCode2 = `hsl(${nextCode(code, 1)},90%, 45%)`
+export const getColor = (id) => {
+  return `hsl(${toHSLColorCode(id)}, 95%, 70%)`
+}
 
+export const getGradient = (id) => {
+  const code = toHSLColorCode(id)
+  const nextCode = code - 40 < 0 ? code - 40 + 360 : code - 40
+  const colorCode = `hsl(${code},90%, 55%)`
+  const colorCode2 = `hsl(${nextCode},90%, 45%)`
   const style = {
     backgroundColor: colorCode,
     background: `linear-gradient(145deg, ${colorCode} 0%, ${colorCode2} 100% `,
@@ -27,7 +21,6 @@ export const getGradiet = (id) => {
   return style
 }
 
-//category color code
 export const colorCode = {
   //category
   food: "#33B679",
@@ -51,17 +44,8 @@ export const colorCode = {
   orange: "#FF9F1A",
 }
 
-export const colorCode_tags = {
-  //tag
-  green: "#61bd4f",
-  yellow: "#F2D600",
-  pink: "#FF78CB",
-  blue: "#00E2C0",
-  orange: "#FF9F1A",
-}
-
-export const tagsTitle = (string) => {
-  const title = {
+export const getTagTitle = (key) => {
+  const tags = {
     green: "綠色標籤",
     yellow: "黃色標籤",
     pink: "粉色標籤",
@@ -69,11 +53,11 @@ export const tagsTitle = (string) => {
     orange: "橘色標籤",
   }
 
-  return title[string]
+  return tags[key]
 }
 
-export const categoryTitle = (string) => {
-  const title = {
+export const getCategoryTitle = (key) => {
+  const categories = {
     hotel: "住宿",
     activity: "活動",
     site: "景點",
@@ -82,7 +66,7 @@ export const categoryTitle = (string) => {
     default: "預設",
   }
 
-  return title[string]
+  return categories[key]
 }
 
 export const categories = [
@@ -157,31 +141,21 @@ export const reactSelectsCustomStyles = {
   }),
 }
 
-//
-//
-//     TIME
-//
-//
-
-//////calculate comment time//////
-export const getTime = (dateString) => {
-  let commentedTime = new Date(dateString).getTime()
-  let currentTime = new Date().getTime()
+export const getDiffTime = (dateString) => {
+  const savedTime = new Date(dateString).getTime()
+  const currentTime = new Date().getTime()
 
   //to second
-  let interval = Math.floor((currentTime - commentedTime) / 1000)
-
+  let interval = Math.floor((currentTime - savedTime) / 1000)
   if (interval < 5) {
     return `目前`
   }
-
   if (interval < 60) {
     return `${interval}秒前`
   }
 
   //to minute
   interval = Math.floor(interval / 60)
-
   if (interval < 60) {
     return `${interval}分鐘前`
   }
@@ -209,7 +183,6 @@ export const getTime = (dateString) => {
   return `${interval}年前`
 }
 
-//////get Date Header//////
 export const getDateHeader = (dateObj, type) => {
   const dateConverter = (dateObj) => {
     const dayNamesEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -235,8 +208,7 @@ export const getDateHeader = (dateObj, type) => {
   }
 }
 
-//get pure date with hour, minute, second and millisecond
-export const resetTime = (date) => {
+export const getPureDate = (date) => {
   let temp = new Date(date.getTime())
   temp.setHours(0)
   temp.setMinutes(0)
@@ -246,8 +218,7 @@ export const resetTime = (date) => {
 }
 
 export const getInvitationUrl = (projectId) => {
-  const origin = window.location.origin
-  return origin + `/joinProject/${projectId}`
+  return `${window.location.origin}/joinProject/${projectId}`
 }
 
 export const copyToClipboard = (value) => {
@@ -259,12 +230,12 @@ export const copyToClipboard = (value) => {
   document.body.removeChild(tempInput)
 }
 
-export const getFloatStyle = (isfloating, windowSize) => {
+export const getFloatStyle = (isFloating, windowSize) => {
   return {
     position: "fixed",
-    width: `${isfloating.position.width}px`,
-    left: `${isfloating.position.x}px`,
-    top: windowSize.width > 700 && `${isfloating.position.y + 35}px`,
+    width: `${isFloating.position.width}px`,
+    left: `${isFloating.position.x}px`,
+    top: windowSize.width > 700 && `${isFloating.position.y + 35}px`,
     bottom: windowSize.width < 700 && `10px`,
   }
 }
@@ -279,6 +250,38 @@ export const hasPlan = (plannedCards, compareDate) => {
   )
 }
 
-export const deepCopy = (input) => {
+export const deepCopy_JSON = (input) => {
   return JSON.parse(JSON.stringify(input))
+}
+
+export const getLinkInfo = async (url) => {
+  const dataParser = (data) => {
+    const parser = new DOMParser()
+    return parser.parseFromString(data, "text/html")
+  }
+
+  const imgPathExtractor = (doc, url) => {
+    let img = doc.querySelector("body").querySelector("img")
+    img = img ? img.src : ""
+
+    const myOrigin = window.location.origin
+    const isUsingRelativePath = img.slice(0, myOrigin.length) === myOrigin
+
+    if (img && isUsingRelativePath) {
+      const correctOrigin = new URL(url).origin
+      const correctImgPath = correctOrigin + img.slice(origin.length)
+      img = correctImgPath
+    }
+
+    return img
+  }
+
+  const cors = "https://cors-anywhere.herokuapp.com/"
+  const res = await fetch(cors + url)
+  const data = await res.text()
+  const doc = dataParser(data)
+  return {
+    title: doc.querySelector("title").textContent,
+    img: imgPathExtractor(doc, url),
+  }
 }
