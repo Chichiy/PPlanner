@@ -67,15 +67,14 @@ export const signOut = (redirect) => {
 }
 
 export const listenToUser = (userId, updateState) => {
-  let unsubscribe = db
+  return db
     .collection("users")
     .doc(userId)
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      let data = snapshot.data()
+      const data = snapshot.data()
       data.id = snapshot.id
       updateState(data)
     })
-  return unsubscribe
 }
 
 export const listenToMembers = (
