@@ -1,8 +1,8 @@
 import firebase from "firebase/app"
+import firebaseConfig from "./config"
 import "firebase/analytics"
 import "firebase/auth"
 import "firebase/firestore"
-import firebaseConfig from "./config"
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -77,42 +77,23 @@ export const listenToUser = (userId, updateState) => {
     })
 }
 
-export const listenToMembers = (
-  projectId,
-  handleAdd,
-  handleModify,
-  handleRemove
-) => {
-  let unsubscribe = db
+export const listenToMembers = (projectId, handleUpdate) => {
+  return db
     .collection("users")
     .where("projects", "array-contains", projectId)
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
-      var source = snapshot.metadata.hasPendingWrites ? "local" : "server"
-
-      //local data needs to be changed
+      const docChange = snapshot.docChanges()
       if (docChange.length > 0) {
-        snapshot.docChanges().forEach(function (change) {
-          let type = change.type
-          let id = change.doc.id
-          let data = change.doc.data()
-
-          //add id to data
-          data.id = id
-
-          if (type === "added") {
-            handleAdd(data, source)
-          }
-          if (type === "modified") {
-            handleModify(data, source)
-          }
-          if (type === "removed") {
-            handleRemove(data, source)
-          }
+        const temp = []
+        docChange.forEach(function (change) {
+          const data = change.doc.data()
+          data.id = change.doc.id
+          data.type = change.type
+          temp.push(data)
         })
+        handleUpdate(temp)
       }
     })
-  return unsubscribe
 }
 
 export const listenToProjects = (userId, handleUpdate) => {
@@ -143,10 +124,10 @@ export const listenToCards = (projectId, handleUpdate) => {
     .doc(projectId)
     .collection("cards")
     .onSnapshot({ includeMetadataChanges: true }, function (snapshot) {
-      var docChange = snapshot.docChanges()
+      const docChange = snapshot.docChanges()
       if (docChange.length > 0) {
         const temp = []
-        snapshot.docChanges().forEach(function (change) {
+        docChange.forEach(function (change) {
           const data = change.doc.data()
           data.id = change.doc.id
           data.type = change.type
@@ -162,7 +143,7 @@ export const listenToCards = (projectId, handleUpdate) => {
 }
 
 export const ListenToCardsRelatedData = (field, cardId, handleChange) => {
-  const unsubscribe = db
+  return db
     .collection(field)
     .where("card_id", "==", cardId)
     .orderBy("date", "asc")
@@ -179,7 +160,6 @@ export const ListenToCardsRelatedData = (field, cardId, handleChange) => {
         })
       }
     })
-  return unsubscribe
 }
 
 export const updateProjectInUser_Fs = (userId, type, projectId) => {

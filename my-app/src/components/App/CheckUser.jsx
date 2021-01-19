@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useHistory } from "react-router-dom"
 import { checkUserStatus, listenToUser } from "../../firebase/lib"
-import { initUser } from "../../redux/slices/userSlice"
+import { updateUser } from "../../redux/slices/userSlice"
 
 const CheckUser = () => {
   const dispatch = useDispatch()
@@ -11,7 +11,7 @@ const CheckUser = () => {
   const user = useSelector((state) => state.user)
 
   const handleUpdate = (res) => {
-    dispatch(initUser(res))
+    dispatch(updateUser(res))
   }
 
   const handleUser = (currentUser) => {

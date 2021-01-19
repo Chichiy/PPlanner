@@ -89,7 +89,8 @@ const Comment = ({ comment, userId }) => {
         </div>
       </div>
     )
-  } catch {
+  } catch (e) {
+    console.log(e)
     return null
   }
 }

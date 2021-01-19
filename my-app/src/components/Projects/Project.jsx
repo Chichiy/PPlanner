@@ -7,26 +7,17 @@ import {
   useHistory,
 } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-
 import Navbar from "../Navbar/Navbar"
 import ItineraryBoard from "../ItineraryBoard/ItineraryBoard"
 import CardBoard from "../CardBoard/CardBoard"
-
+import { listenToCards, listenToMembers } from "../../firebase/lib"
 import {
-  listenToCard,
-  listenToCards,
-  listenToMembers,
-} from "../../firebase/lib"
-
-import {
-  addCard,
-  modifyCard,
-  removeCard,
-  modifyCardWithCheck,
-  clearCardsState,
   initCards,
+  addCard,
+  modifyCardWithCheck,
+  removeCard,
+  clearCardsState,
 } from "../../redux/slices/cardSlice"
-
 import {
   addMember,
   modifyMember,
@@ -35,58 +26,30 @@ import {
 } from "../../redux/slices/membersSlice"
 
 const Project = () => {
-  // console.log("rerender Project component")
-
   const [access, setAccess] = useState(false)
 
   let { projectId } = useParams()
   let match = useRouteMatch()
   const user = useSelector((state) => state.user)
-  let itineraryId = useSelector((state) => state.itinerary.id)
-  const cards = useSelector((state) => state.cards)
   const dispatch = useDispatch()
 
-  const handleAddCard = (res, source) => {
-    dispatch(addCard(res))
-  }
-
-  const handleModifyCard = (res, source) => {
-    dispatch(modifyCard(res))
-  }
-
-  const checkModifyCard = (res) => {
-    dispatch(modifyCardWithCheck(res))
-  }
-
-  const handleRemoveCard = (res, source) => {
-    dispatch(removeCard(res))
-  }
-
-  const handleAddMember = (res, source) => {
-    let input = {
-      id: res.id,
-      name: res.name,
-      picture: res.picture,
-    }
-    dispatch(addMember(input))
-  }
-
-  const handleModifyMember = (res, source) => {
-    let input = {
-      id: res.id,
-      name: res.name,
-      picture: res.picture,
-    }
-    dispatch(modifyMember(input))
-  }
-
-  const handleRemoveMember = (res, source) => {
-    let input = {
-      id: res.id,
-      name: res.name,
-      picture: res.picture,
-    }
-    dispatch(removeMember(input))
+  const handleUpdateMembers = (res) => {
+    res.forEach((member) => {
+      const input = {
+        id: member.id,
+        name: member.name,
+        picture: member.picture,
+      }
+      if (member.type === "added") {
+        dispatch(addMember(input))
+      }
+      if (member.type === "modified") {
+        dispatch(modifyMember(input))
+      }
+      if (member.type === "removed") {
+        dispatch(removeMember(input))
+      }
+    })
   }
 
   const isInit = useRef(true)
@@ -118,20 +81,14 @@ const Project = () => {
       access && listenToCards(projectId, handleUpdateCard)
 
     const unsubscribeToMembers =
-      access &&
-      listenToMembers(
-        projectId,
-        handleAddMember,
-        handleModifyMember,
-        handleRemoveMember
-      )
+      access && listenToMembers(projectId, handleUpdateMembers)
 
     return () => {
       if (access) {
         unsubscribeToCard()
         unsubscribeToMembers()
 
-        //reset cards and memebers' state
+        //reset cards and members' state
         dispatch(clearCardsState())
         dispatch(clearMembersState())
       }
@@ -140,7 +97,6 @@ const Project = () => {
 
   //check if user is in the project or not
   const history = useHistory()
-
   useEffect(() => {
     if (user.id && user.projects.includes(projectId)) {
       setAccess(true)

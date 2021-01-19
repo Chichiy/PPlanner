@@ -10,9 +10,9 @@ export const userSlice = createSlice({
     projects: [],
   },
   reducers: {
-    initUser: (state, action) => action.payload,
+    updateUser: (state, action) => action.payload,
   },
 })
 
-export const { initUser } = userSlice.actions
+export const { updateUser } = userSlice.actions
 export default userSlice.reducer

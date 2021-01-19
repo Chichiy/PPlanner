@@ -11,8 +11,6 @@ export const modifyCardWithCheck = createAsyncThunk(
       const { cards, user } = getState()
       const target = cards.find((card) => card.id === res.id)
 
-      // Check if update needed.
-
       // First, check if the card is being dragged or not.
       // If it's dragged by myself, then stop updating
       // in order to prevent interrupting drag and drop process.
@@ -22,7 +20,7 @@ export const modifyCardWithCheck = createAsyncThunk(
 
       // Second, check if response data is different from local state,
       // meaning that changes haven't been updated locally,
-      // then allow update. Otherwise, prevent repeatly update
+      // then allow update. Otherwise, prevent repeatedly update
 
       return !deepEqual(res, target)
     },
@@ -33,43 +31,37 @@ export const cardSlice = createSlice({
   name: "cards",
   initialState: [],
   reducers: {
-    clearCardsState: (state, action) => {
-      state.splice(0, state.length)
+    initCards: (state, action) => {
+      const cards = action.payload.map((card) => {
+        delete card.type
+        return card
+      })
+      return cards
     },
-
     addCard: (state, action) => {
-      let target = action.payload
-
-      //prevent repeatly adding when itinitallizing
+      const target = action.payload
+      //prevent repeatedly adding when initializing
       if (state.findIndex((card) => card.id === target.id) < 0) {
         state.push(target)
       }
     },
-    modifyCard: (state, action) => {
-      let target = action.payload
-      let index = state.findIndex((card) => card.id === target.id)
-      state.splice(index, 1, target)
-    },
-
     modifyCardProperties: (state, action) => {
-      let target = action.payload
-      let change = target.change
-      let index = state.findIndex((card) => card.id === target.id)
+      const target = action.payload
+      const change = target.change
+      const index = state.findIndex((card) => card.id === target.id)
       for (let key in change) {
         state[index][key] = change[key]
       }
     },
-
     removeCard: (state, action) => {
-      let target = action.payload
-      let index = state.findIndex((card) => card.id === target.id)
+      const target = action.payload
+      const index = state.findIndex((card) => card.id === target.id)
       state.splice(index, 1)
     },
-
     updateCardsOrder: (state, action) => {
       let result = action.payload.result
 
-      //use cardId to find original postion in whole cards array
+      //use cardId to find original position in whole cards array
       let souIndex = state.findIndex((card) => card.id === result.draggableId)
       let desIndex = state.findIndex(
         (card) => card.id === action.payload.destinationId
@@ -84,13 +76,7 @@ export const cardSlice = createSlice({
       //put in new position
       state.splice(desIndex, 0, reorderItem)
     },
-    initCards: (state, action) => {
-      const cards = action.payload.map((card) => {
-        delete card.type
-        return card
-      })
-      return cards
-    },
+    clearCardsState: () => [],
   },
   extraReducers: {
     [modifyCardWithCheck.pending]: (state, action) => {
@@ -105,13 +91,12 @@ export const cardSlice = createSlice({
 })
 
 export const {
-  addCard,
-  removeCard,
-  modifyCard,
-  updateCardsOrder,
-  modifyCardProperties,
-  clearCardsState,
   initCards,
+  addCard,
+  modifyCardProperties,
+  removeCard,
+  updateCardsOrder,
+  clearCardsState,
 } = cardSlice.actions
 
 export default cardSlice.reducer
