@@ -45,7 +45,7 @@ const DaySelect = () => {
         setStartDate(location.state.startDate)
       } else if (
         //if not, display date with first planned card
-        plannedCards &&
+        plannedCards.length > 0 &&
         newStartDate.current !== findFirstDate(plannedCards)
       ) {
         const firstDate = findFirstDate(plannedCards)
