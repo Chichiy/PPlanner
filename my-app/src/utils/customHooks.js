@@ -7,11 +7,16 @@ export const useWindowSize = () => {
   })
 
   useEffect(() => {
+    let timer
+
     const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        })
+      }, 500)
     }
 
     window.addEventListener("resize", handleResize)

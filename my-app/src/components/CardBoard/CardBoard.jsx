@@ -39,7 +39,8 @@ const CardBoard = () => {
   }
 
   const windowSize = useWindowSize()
-  const padding = (windowSize?.width % 240) / 2
+  const CARD_WIDTH = 241
+  const padding = (windowSize?.width % CARD_WIDTH) / 2
   const addCardRef = useRef(null)
 
   const handleClickAddCard = () => {
@@ -55,7 +56,7 @@ const CardBoard = () => {
     <div
       id="cardBoardContainer"
       className={styles.container}
-      style={{ padding: `20px ${padding}px` }}
+      style={{ paddingLeft: `${padding}px`, paddingRight: `${padding}px` }}
       onClick={handleAddCard}
     >
       <FilteredCards />

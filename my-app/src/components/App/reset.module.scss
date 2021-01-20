@@ -112,8 +112,8 @@ section {
 body {
   line-height: 1;
 }
-// turn off scrollbar
-body::-webkit-scrollbar {
+// quick-fix turn off scrollbar
+::-webkit-scrollbar {
   display: none;
 }
 ol,
