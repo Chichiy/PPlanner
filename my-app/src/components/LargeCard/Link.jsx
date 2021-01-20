@@ -1,10 +1,8 @@
 import React, { useState, useRef } from "react"
-
 import styles from "./LargeCard.module.scss"
-
 import { FS } from "../../firebase/lib"
-
 import { getDiffTime } from "../../utils/lib"
+import LinkImg from "./LinkImg"
 
 const Link = ({ data }) => {
   const title = useRef(0)
@@ -56,7 +54,7 @@ const Link = ({ data }) => {
         target="_blank"
         rel="noreferrer"
       >
-        {data.img ? <img src={data.img} alt="Link" /> : "Link"}
+        <LinkImg src={data.img} />
       </a>
       <div className={styles.link_info}>
         {isEditing ? (

@@ -262,6 +262,7 @@ export const getLinkInfo = async (url) => {
 
   const imgPathExtractor = (doc, url) => {
     let img = doc.querySelector("body").querySelector("img")
+
     img = img ? img.src : ""
 
     const myOrigin = window.location.origin
