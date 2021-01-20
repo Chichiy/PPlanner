@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { ListenToCardsRelatedData } from "../../firebase/lib"
+import { useWindowSize } from "../../utils/customHooks"
 import styles from "./LargeCard.module.scss"
 import Link from "./Link"
 
@@ -38,14 +39,21 @@ const Links = ({ isFloating, setFloat }) => {
   }
 
   const toggleAddLinkBtnRef = useRef(1)
-
+  const windowSize = useWindowSize()
   const toggleAddLinkBtn = (e) => {
     if (isFloating.type === "addLink") {
       setFloat(false)
     } else {
-      let float = {
+      const float = {
         type: "addLink",
         position: toggleAddLinkBtnRef.current.getBoundingClientRect(),
+      }
+
+      // fix position for addLink button inside links section
+      float.position.width = 200
+      if (windowSize.width < 700) {
+        float.position.width = windowSize.width - 20
+        float.position.x = 10
       }
 
       setFloat(float)
