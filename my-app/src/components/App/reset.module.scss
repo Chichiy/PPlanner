@@ -112,6 +112,10 @@ section {
 body {
   line-height: 1;
 }
+// turn off scrollbar
+body::-webkit-scrollbar {
+  display: none;
+}
 ol,
 ul {
   list-style: none;
