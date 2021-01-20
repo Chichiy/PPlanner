@@ -10,16 +10,6 @@ const Link = ({ data }) => {
   const title = useRef(0)
 
   const getTitle = () => {
-    //slice the title more precisely, but only works when re-render
-    // if (title.current.scrollHeight > title.current.clientHeight) {
-    //   while (title.current.scrollHeight > title.current.clientHeight) {
-    //     title.current.textContent = title.current.textContent.slice(0, -1)
-    //   }
-    //   title.current.textContent = title.current.textContent.slice(0, -3) + "..."
-    //   return title.current.textContent
-    // }
-
-    // for the first render, slice with rough length
     if (data.title.length > 43) {
       return data.title.slice(0, 43) + "..."
     } else {
@@ -66,8 +56,7 @@ const Link = ({ data }) => {
         target="_blank"
         rel="noreferrer"
       >
-        Link
-        {data.img && <img src={data.img} alt="link" />}
+        {data.img ? <img src={data.img} alt="Link" /> : "Link"}
       </a>
       <div className={styles.link_info}>
         {isEditing ? (
