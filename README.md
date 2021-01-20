@@ -4,7 +4,7 @@ A website that allows users to create trip plans, save travel information and ar
 
 ## Demo
 
-![image](./PPlanner-pic/pplanner_general.png)
+![image](./README/pplanner_general.png)
 
 Link: https://pplanner-bfb1a.web.app/
 
@@ -13,33 +13,33 @@ User: test@gmail.com Password: 123456
 ## Technologies
 
 - Front-End Fundamental
-  - HTML / CSS / JavaScript
-  - SCSS
-  - RWD
+- HTML / CSS / JavaScript
+- SCSS
+- RWD
 - Front-End Frameworks/ Libraries
-  - React (Hooks)
-  - React Redux
-  - Redux Toolkit
-  - React Router
+- React (Hook)
+- React Redux
+- Redux Toolkit
+- React Router
 - Firebase
-  - Authentication
-  - Firestore
-  - Hosting
+- Authentication
+- Firestore
+- Hosting
 - Others
-  - react-beautiful-dnd
-  - react-datepicker
-  - react-dayjs
-  - react-select
+- react-beautiful-dnd
+- react-datepicker
+- react-dayjs
+- react-select
 
 ## Flow Chart ( 2021.01 )
 
-![image](./PPlanner-pic/flowChart.png)
+![image](./README/flowChart.png)
 
 ## Features
 
 ### Save Travel Information to Cards
 
-![image](./PPlanner-pic/addCard.gif)
+![image](./README/addCard.gif)
 Types of data can be saved:
 
 - Title
@@ -52,19 +52,19 @@ Types of data can be saved:
 
 ### Add Card to Timetable
 
-![image](./PPlanner-pic/addTime.gif)
+![image](./README/addTime.gif)
 
 ### Invite others to join project
 
-![image](./PPlanner-pic/invite.gif)
+![image](./README/invite.gif)
 
 ### Online Collaboration
 
-![image](./PPlanner-pic/collaboration.gif)
+![image](./README/collaboration.gif)
 
 ## Future Features
 
-- Adding new appointment directly on time table
+- Add new card directly on time table
 - Display more information about project, such as cards number, planned dates, members, etc..
 
 ## Contact
