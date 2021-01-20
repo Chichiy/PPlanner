@@ -13,23 +13,23 @@ User: test@gmail.com Password: 123456
 ## Technologies
 
 - Front-End Fundamental
-- HTML / CSS / JavaScript
-- SCSS
-- RWD
+  - HTML / CSS / JavaScript
+  - SCSS
+  - RWD
 - Front-End Frameworks/ Libraries
-- React (Hook)
-- React Redux
-- Redux Toolkit
-- React Router
+  - React (Hook)
+  - React Redux
+  - Redux Toolkit
+  - React Router
 - Firebase
-- Authentication
-- Firestore
-- Hosting
+  - Authentication
+  - Firestore
+  - Hosting
 - Others
-- react-beautiful-dnd
-- react-datepicker
-- react-dayjs
-- react-select
+  - react-beautiful-dnd
+  - react-datepicker
+  - react-dayjs
+  - react-select
 
 ## Flow Chart ( 2021.01 )
 
